@@ -6,3 +6,4 @@
 7. Usa la librería Fquery junto para la gestión de datos asíncronos.
 8. Usa el sistema de diseño Shadcn para la construcción de la UI.
 9. Usa el dot shorthand para la declaración de propiedades y los parámetros de funciones.
+10. Este es un sistema para el control de estudiantes de una escuela primaria. Debe manejar los datos de los estudiantes, sus representantes, los grados y las secciones. Todo dividido por periodos y lapsos.

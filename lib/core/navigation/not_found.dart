@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:sistema_escolar_bnl/core/navigation/routes.dart';
 
 class NotFound extends StatelessWidget {
   const NotFound({super.key});
@@ -57,7 +58,7 @@ class NotFound extends StatelessWidget {
 
             ShadButton(
               child: const Text('Ir al inicio'),
-              onPressed: () => context.go('/'),
+              onPressed: () => context.go(AppRoutes.home.path),
             ),
           ],
         ),

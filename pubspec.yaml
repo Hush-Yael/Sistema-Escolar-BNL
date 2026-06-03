@@ -29,6 +29,7 @@ dependencies:
   shared_preferences: ^2.5.5
   trina_grid: ^1.6.0
   window_manager: ^0.5.1
+  cryptography_plus: ^3.0.0
   flutter_solidart: ^2.7.4
 
 dev_dependencies:

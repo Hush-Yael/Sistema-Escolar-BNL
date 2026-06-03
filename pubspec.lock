@@ -177,6 +177,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.7"
+  cryptography_plus:
+    dependency: "direct main"
+    description:
+      name: cryptography_plus
+      sha256: edf96fc96518368b11bb1ba33b515f59aa5a55b0aa7533c0e1813399cf81130e
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   dart_style:
     dependency: transitive
     description:
@@ -323,6 +331,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.3"
+  flutter_solidart:
+    dependency: "direct main"
+    description:
+      name: flutter_solidart
+      sha256: ce534495550e91897676d09395bcd873397916ab8922f8d4763ef250d159b5d5
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.7.4"
   flutter_svg:
     dependency: transitive
     description:
@@ -883,7 +899,7 @@ packages:
     source: hosted
     version: "4.15.0"
   solidart:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: solidart
       sha256: "2b795d21b23ad943b729d4339847c60eb8e973749a7a9596455be1520cf42e2f"

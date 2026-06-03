@@ -16,6 +16,10 @@ class AppTheme {
   static final ShadThemeData darkTheme = _extendBaseTheme(
     ShadThemeData(brightness: Brightness.dark),
   );
+
+  /// When input is invalid, use this style for labels instead of the default, since the latter uses the same color as error color
+  static TextStyle labelStyles(BuildContext context) =>
+      TextStyle(color: ShadTheme.of(context).colorScheme.foreground);
 }
 
 extension AppThemeExtension on BuildContext {
