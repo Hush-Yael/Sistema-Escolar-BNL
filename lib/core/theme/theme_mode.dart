@@ -1,6 +1,6 @@
 import 'package:disco/disco.dart';
 import 'package:flutter/material.dart';
-import 'package:solidart/solidart.dart';
+import 'package:flutter_solidart/flutter_solidart.dart';
 import 'package:sistema_escolar_bnl/core/shared_prefs_service.dart';
 
 class ThemeModeState {
@@ -31,5 +31,31 @@ class ThemeModeState {
         : t == 'dark'
         ? ThemeMode.dark
         : ThemeMode.light;
+  }
+}
+
+extension ThemeModeOptionsData on ThemeMode {
+  /// Returns the icon of the theme mode
+  IconData get icon {
+    switch (this) {
+      case ThemeMode.light:
+        return Icons.sunny;
+      case ThemeMode.dark:
+        return Icons.nightlight_round;
+      case ThemeMode.system:
+        return Icons.brightness_6;
+    }
+  }
+
+  /// Returns the label of the theme mode
+  String get label {
+    switch (this) {
+      case ThemeMode.light:
+        return 'Claro';
+      case ThemeMode.dark:
+        return 'Oscuro';
+      case ThemeMode.system:
+        return 'Sistema';
+    }
   }
 }
