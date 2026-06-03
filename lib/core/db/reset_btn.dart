@@ -17,11 +17,13 @@ class WithResetBtn extends StatelessWidget {
     return Stack(
       children: [
         widget,
-
         Positioned(
           bottom: 0,
           right: 0,
-          child: ShadButton(
+          child: ShadIconButton.ghost(
+            icon: const Icon(Icons.delete),
+            height: 30,
+            width: 30,
             onPressed: () async {
               final db = AppDatabase.instance.of(context);
               final m = drift.Migrator(db);
@@ -51,7 +53,6 @@ class WithResetBtn extends StatelessWidget {
 
               print('Database seeded successfully.');
             },
-            child: const Icon(Icons.delete),
           ),
         ),
       ],
