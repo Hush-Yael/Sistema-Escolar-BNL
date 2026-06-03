@@ -4,6 +4,7 @@ import 'package:drift_flutter/drift_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sistema_escolar_bnl/constants/auth_constants.dart';
+import 'package:sistema_escolar_bnl/core/db/seed.dart';
 import 'package:sistema_escolar_bnl/models/auth_models.dart';
 import 'package:path/path.dart' as p;
 import 'dart:io';
@@ -23,12 +24,12 @@ class AppDatabase extends _$AppDatabase {
       onCreate: (m) async {
         await m.createAll();
       },
-      /* beforeOpen: (details) async {
+      beforeOpen: (details) async {
         // Enable foreign keys immediately upon opening the database
         await customStatement('PRAGMA foreign_keys = ON');
 
         if (details.wasCreated && kDebugMode) await seed(this);
-      }, */
+      },
     );
   }
 

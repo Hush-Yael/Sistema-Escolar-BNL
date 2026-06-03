@@ -4,6 +4,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:sistema_escolar_bnl/core/db/db.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:sistema_escolar_bnl/core/db/seed.dart';
 
 /// Used to recreate the database applying changes without migrations in dev mode
 class WithResetBtn extends StatelessWidget {
@@ -46,7 +47,7 @@ class WithResetBtn extends StatelessWidget {
               print('Database was reset successfully. Seeding...');
 
               await db.customStatement('PRAGMA foreign_keys = ON');
-              // await seed(db);
+              await seed(db);
 
               print('Database seeded successfully.');
             },
