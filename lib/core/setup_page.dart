@@ -85,13 +85,14 @@ class Loading extends StatelessWidget {
       darkTheme: AppTheme.darkTheme,
       home: Center(
         child: Column(
-          spacing: 10,
+          spacing: 20,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const ShadProgress(),
+            SizedBox(width: 200, height: 8, child: const ShadProgress()),
+
             Text(
               'Iniciando, por favor espere...',
-              style: TextStyle(fontSize: 16, fontWeight: .bold),
+              style: AppTheme.lightTheme.textTheme.h4,
             ),
           ],
         ),
