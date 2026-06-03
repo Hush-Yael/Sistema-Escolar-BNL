@@ -1,0 +1,8 @@
+1. Usa el idioma español para todo el proyecto.
+3. Usa el patrón de diseño SOLID para la gestión de datos.
+4. Usa el patrón de diseño DRY para la gestión de datos.
+5. Usa el patrón de diseño MVVM para la gestión de datos.
+6. Usa Signals con la librería Solidart para la gestión de estado.
+7. Usa la librería Fquery junto para la gestión de datos asíncronos.
+8. Usa el sistema de diseño Shadcn para la construcción de la UI.
+9. Usa el dot shorthand para la declaración de propiedades y los parámetros de funciones.
