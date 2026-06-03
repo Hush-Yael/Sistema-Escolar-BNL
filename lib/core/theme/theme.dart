@@ -1,5 +1,4 @@
-import 'dart:ui';
-
+import 'package:flutter/widgets.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class AppTheme {
@@ -17,4 +16,8 @@ class AppTheme {
   static final ShadThemeData darkTheme = _extendBaseTheme(
     ShadThemeData(brightness: Brightness.dark),
   );
+}
+
+extension AppThemeExtension on BuildContext {
+  ShadThemeData get theme => ShadTheme.of(this);
 }
