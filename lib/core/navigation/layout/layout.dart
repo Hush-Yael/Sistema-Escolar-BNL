@@ -52,7 +52,7 @@ class Layout extends StatelessWidget {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(12),
-                      child: navigationShell,
+                      child: Scaffold(body: navigationShell),
                     ),
                   ),
                 ),
