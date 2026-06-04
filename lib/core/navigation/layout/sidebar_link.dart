@@ -4,9 +4,14 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/core/navigation/routes.dart';
 
 class SidebarLink extends StatefulWidget {
+  final StatefulNavigationShell navigationShell;
   final AppRoutes<StatelessWidget Function()> route;
-  final bool current;
-  const SidebarLink({super.key, required this.route, required this.current});
+
+  const SidebarLink({
+    super.key,
+    required this.route,
+    required this.navigationShell,
+  });
 
   @override
   State<SidebarLink> createState() => _SidebarLinkState();
@@ -15,6 +20,9 @@ class SidebarLink extends StatefulWidget {
 class _SidebarLinkState extends State<SidebarLink> {
   bool _isHovered = false;
   bool _isPressed = false;
+  int get currentIndex => AppRoutes.values.indexOf(widget.route);
+  bool get current =>
+      widget.route == AppRoutes.values[widget.navigationShell.currentIndex];
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +35,7 @@ class _SidebarLinkState extends State<SidebarLink> {
         onTapUp: (_) => setState(() => _isPressed = false),
         onTapCancel: () => setState(() => _isPressed = false),
         onTap: () {
-          GoRouter.of(context).go(widget.route.path);
+          widget.navigationShell.goBranch(currentIndex);
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
@@ -51,7 +59,7 @@ class _SidebarLinkState extends State<SidebarLink> {
   Color? resolveForeground() {
     final theme = ShadTheme.of(context);
 
-    return widget.current
+    return current
         ? theme.colorScheme.primaryForeground
         : theme.colorScheme.mutedForeground;
   }
@@ -59,7 +67,7 @@ class _SidebarLinkState extends State<SidebarLink> {
   Color resolveColor() {
     final theme = ShadTheme.of(context);
 
-    if (widget.current) {
+    if (current) {
       if (_isPressed) {
         return theme.colorScheme.primary.withValues(alpha: 0.7);
       } else if (_isHovered) {

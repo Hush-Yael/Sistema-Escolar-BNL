@@ -2,21 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/core/navigation/layout/header.dart';
-import 'package:sistema_escolar_bnl/core/navigation/routes.dart';
 import 'package:sistema_escolar_bnl/core/navigation/layout/sidebar.dart';
 
 class Layout extends StatelessWidget {
   final GoRouterState state;
-  final Widget currentScreen;
+  final StatefulNavigationShell navigationShell;
 
-  const Layout({super.key, required this.state, required this.currentScreen});
+  const Layout({super.key, required this.state, required this.navigationShell});
 
   @override
   Widget build(BuildContext context) {
-    final currentIndex = AppRoutes.values
-        .byName(state.topRoute?.name ?? AppRoutes.home.name)
-        .index;
-
     final theme = ShadTheme.of(context);
     final isLight = theme.brightness == Brightness.light;
 
@@ -32,13 +27,16 @@ class Layout extends StatelessWidget {
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Sidebar(currentIndex: currentIndex, background: bg),
+          Sidebar(navigationShell: navigationShell, background: bg),
 
           Expanded(
             child: Column(
               mainAxisAlignment: .start,
               children: [
-                Header(currentIndex: currentIndex, background: bg),
+                Header(
+                  currentIndex: navigationShell.currentIndex,
+                  background: bg,
+                ),
 
                 // main content
                 Expanded(
@@ -54,7 +52,7 @@ class Layout extends StatelessWidget {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(12),
-                      child: currentScreen,
+                      child: navigationShell,
                     ),
                   ),
                 ),

@@ -47,15 +47,17 @@ class AppRouter {
           routeBuilder(context, state, const AuthScreen()),
     ),
 
-    ShellRoute(
-      builder: (context, state, currentScreen) {
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) {
         return routeBuilder(
           context,
           state,
-          Layout(state: state, currentScreen: currentScreen),
+          Layout(state: state, navigationShell: navigationShell),
         );
       },
-      routes: AppRoutes.values.map((page) => page.route).toList(),
+      branches: AppRoutes.values
+          .map((page) => StatefulShellBranch(routes: [page.route]))
+          .toList(),
     ),
   ];
 }
