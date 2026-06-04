@@ -1,6 +1,6 @@
 import 'package:disco/disco.dart';
 import 'package:flutter/widgets.dart';
-import 'package:sistema_escolar_bnl/services/auth_service.dart';
+import 'package:sistema_escolar_bnl/repositories/auth_repo.dart';
 import 'package:sistema_escolar_bnl/core/auth_state.dart';
 import 'package:flutter_solidart/flutter_solidart.dart';
 import 'package:sistema_escolar_bnl/view_models/auth/auth_vm_form_mixin.dart';
@@ -9,7 +9,7 @@ import 'package:sistema_escolar_bnl/shared/form_with_async_validation.dart';
 import 'package:sistema_escolar_bnl/shared/password_manager.dart';
 
 class AuthBaseVm extends FormWithAsyncValidation {
-  final AuthService service;
+  final AuthRepository service;
   final BuildContext context;
   final authState = AuthState.instance;
 
@@ -34,7 +34,7 @@ class AuthVm extends AuthBaseVm with FormMixin {
     final db = AppDatabase.instance.of(ctx);
 
     return AuthVm(
-      service: AuthService(db, table: db.users),
+      service: AuthRepository(db, table: db.users),
       context: ctx,
     );
   });
