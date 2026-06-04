@@ -30,10 +30,10 @@ class AuthState extends ChangeNotifier {
 
   bool isAuthenticated() => _user != null;
 
-  bool isAdmin() => _user?.role == UserRole.admin;
+  static bool isAdmin() => AuthState.instance._user?.role == UserRole.admin;
 
-  bool isAtLeast(UserRole reqRole) {
-    final int? currentLevel = _user?.role.level;
+  static bool isAtLeast(UserRole reqRole) {
+    final int? currentLevel = AuthState.instance._user?.role.level;
 
     if (currentLevel == null) return false;
 

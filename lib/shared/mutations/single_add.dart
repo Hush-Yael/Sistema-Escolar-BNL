@@ -33,7 +33,7 @@ createSingleAddMutation<Variables, NewObj extends Object>(
 
   return useMutation(
     (Variables variables) async {
-      if (!AuthState.instance.isAtLeast(.operator)) {
+      if (!AuthState.isAtLeast(.operator)) {
         return Future.error(
           'No tienes permiso para añadir ${params.unauthPluralName}',
         );
