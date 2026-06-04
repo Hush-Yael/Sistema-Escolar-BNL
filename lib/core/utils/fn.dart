@@ -23,17 +23,15 @@ Future<T> delay<T>(
   return awaited;
 }
 
-bool isAdmin(BuildContext context) {
-  final UserRole role =
-      AuthState.instance.of(context).user?.role ?? UserRole.supervisor;
+bool isAdmin() {
+  final UserRole role = AuthState.instance.user?.role ?? UserRole.supervisor;
 
   return role == UserRole.admin;
 }
 
-bool hasPerm(BuildContext context, UserRole reqRole) {
+bool hasPerm(UserRole reqRole) {
   final int currentLevel =
-      AuthState.instance.of(context).user?.role.level ??
-      UserRole.supervisor.level;
+      AuthState.instance.user?.role.level ?? UserRole.supervisor.level;
 
   return currentLevel >= reqRole.level;
 }

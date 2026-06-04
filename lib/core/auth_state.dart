@@ -30,5 +30,7 @@ class AuthState extends ChangeNotifier {
 
   bool isAuthenticated() => _user != null;
 
-  static final instance = Provider((context) => AuthState._internal());
+  static final instance = AuthState._internal();
+
+  static final provide = Provider((context) => instance);
 }

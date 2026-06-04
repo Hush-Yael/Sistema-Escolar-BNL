@@ -2,7 +2,6 @@ import 'package:disco/disco.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fquery/fquery.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
-import 'package:sistema_escolar_bnl/core/auth_state.dart';
 import 'package:sistema_escolar_bnl/core/db/db.dart';
 import 'package:sistema_escolar_bnl/core/shared_prefs_service.dart';
 import 'package:sistema_escolar_bnl/core/theme/theme.dart';
@@ -31,7 +30,6 @@ class SetupPage extends StatelessWidget {
               SharedPrefsService.instance,
               ThemeModeState.instance,
               AppDatabase.instance,
-              AuthState.instance,
             ],
             child: app,
           ),

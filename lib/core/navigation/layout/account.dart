@@ -7,7 +7,7 @@ class Account extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authState = AuthState.instance.of(context);
+    final authState = AuthState.instance;
     final user = authState.user;
     final theme = ShadTheme.of(context);
 

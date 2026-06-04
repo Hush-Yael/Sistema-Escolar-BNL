@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -16,31 +15,29 @@ class AppRouter {
 
   static const String authPath = '/auth';
 
-  late final config = GoRouter(
+  static final config = GoRouter(
     initialLocation: AppRoutes.home.path,
-    refreshListenable: authState,
+    refreshListenable: AuthState.instance,
     routes: appRoutes,
     errorBuilder: (context, state) => const NotFound(),
-    redirect: handleRedirect,
+    redirect: (context, state) {
+      final bool isAuthenticated = AuthState.instance.isAuthenticated();
+
+      // Redirect to login if not authenticated and not already on login
+      if (!isAuthenticated && !state.matchedLocation.contains(authPath)) {
+        return authPath;
+      }
+
+      // Redirect to home if authenticated and on login
+      if (isAuthenticated && state.matchedLocation.contains(authPath)) {
+        return AppRoutes.home.path;
+      }
+
+      return null; // No redirect
+    },
   );
 
-  FutureOr<String?> handleRedirect(BuildContext context, GoRouterState state) {
-    final bool isAuthenticated = authState.isAuthenticated();
-
-    // Redirect to login if not authenticated and not already on login
-    if (!isAuthenticated && !state.matchedLocation.contains(authPath)) {
-      return authPath;
-    }
-
-    // Redirect to home if authenticated and on login
-    if (isAuthenticated && state.matchedLocation.contains(authPath)) {
-      return AppRoutes.home.path;
-    }
-
-    return null; // No redirect
-  }
-
-  final List<RouteBase> appRoutes = [
+  static final List<RouteBase> appRoutes = [
     GoRoute(
       path: authPath,
       builder: (context, state) =>

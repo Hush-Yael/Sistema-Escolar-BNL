@@ -64,7 +64,7 @@ class Header extends StatelessWidget {
                   width: 30,
                   height: 30,
                   iconSize: 16,
-                  onPressed: AuthState.instance.of(context).clearUser,
+                  onPressed: AuthState.instance.clearUser,
                   icon: const Icon(LucideIcons.logOut),
                 ),
               ],
