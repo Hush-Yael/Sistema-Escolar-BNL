@@ -1,37 +1,17 @@
 import 'package:disco/disco.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fquery/fquery.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/core/auth_state.dart';
 import 'package:sistema_escolar_bnl/core/db/db.dart';
 import 'package:sistema_escolar_bnl/core/shared_prefs_service.dart';
 import 'package:sistema_escolar_bnl/core/theme/theme.dart';
 import 'package:sistema_escolar_bnl/core/theme/theme_mode.dart';
-import 'package:window_manager/window_manager.dart';
 
-class SetupPage extends StatefulWidget {
+class SetupPage extends StatelessWidget {
   final Widget app;
-  const SetupPage({super.key, required this.app});
-
-  @override
-  State<SetupPage> createState() => _SetupPageState();
-}
-
-class _SetupPageState extends State<SetupPage> {
-  late final initialization = Future(() async {
-    Intl.defaultLocale = 'es_VE';
-
-    await WindowManager.instance.ensureInitialized();
-
-    await Future.wait([
-      initializeDateFormatting(),
-      WindowManager.instance.setTitle(
-        "Sistema de Control Estudiantil - Bicentenario Natalicio del Libertador",
-      ),
-      SharedPrefsService.setup(),
-    ]);
-  });
+  final Future initialization;
+  const SetupPage({super.key, required this.app, required this.initialization});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +33,7 @@ class _SetupPageState extends State<SetupPage> {
               AppDatabase.instance,
               AuthState.instance,
             ],
-            child: widget.app,
+            child: app,
           ),
         );
       },
