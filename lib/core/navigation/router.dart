@@ -4,13 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sistema_escolar_bnl/core/auth_state.dart';
 import 'package:sistema_escolar_bnl/core/db/reset_btn.dart';
+import 'package:sistema_escolar_bnl/core/navigation/layout/layout.dart';
 import 'package:sistema_escolar_bnl/core/navigation/not_found.dart';
 import 'package:sistema_escolar_bnl/core/navigation/routes.dart';
+import 'package:sistema_escolar_bnl/screens/auth/auth_screen.dart';
 
 class AppRouter {
   final AuthState authState;
 
   AppRouter({required this.authState});
+
+  static const String authPath = '/auth';
 
   late final config = GoRouter(
     initialLocation: AppRoutes.home.path,
@@ -21,7 +25,6 @@ class AppRouter {
   );
 
   FutureOr<String?> handleRedirect(BuildContext context, GoRouterState state) {
-    final String authPath = AppRoutes.auth.path;
     final bool isAuthenticated = authState.isAuthenticated();
 
     // Redirect to login if not authenticated and not already on login
@@ -38,7 +41,22 @@ class AppRouter {
   }
 
   final List<RouteBase> appRoutes = [
-    ...AppRoutes.values.map((route) => route.route),
+    GoRoute(
+      path: authPath,
+      builder: (context, state) =>
+          routeBuilder(context, state, const AuthScreen()),
+    ),
+
+    ShellRoute(
+      builder: (context, state, currentScreen) {
+        return routeBuilder(
+          context,
+          state,
+          Layout(state: state, currentScreen: currentScreen),
+        );
+      },
+      routes: AppRoutes.values.map((page) => page.route).toList(),
+    ),
   ];
 }
 
