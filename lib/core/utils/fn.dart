@@ -1,7 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
-import 'package:sistema_escolar_bnl/constants/auth_constants.dart';
-import 'package:sistema_escolar_bnl/core/auth_state.dart';
 
 void toast({
   required BuildContext context,
@@ -21,17 +19,4 @@ Future<T> delay<T>(
 ]) async {
   final [awaited, _] = await Future.wait([resource, Future.delayed(duration)]);
   return awaited;
-}
-
-bool isAdmin() {
-  final UserRole role = AuthState.instance.user?.role ?? UserRole.supervisor;
-
-  return role == UserRole.admin;
-}
-
-bool hasPerm(UserRole reqRole) {
-  final int currentLevel =
-      AuthState.instance.user?.role.level ?? UserRole.supervisor.level;
-
-  return currentLevel >= reqRole.level;
 }

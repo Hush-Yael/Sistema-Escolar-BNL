@@ -30,6 +30,16 @@ class AuthState extends ChangeNotifier {
 
   bool isAuthenticated() => _user != null;
 
+  bool isAdmin() => _user?.role == UserRole.admin;
+
+  bool isAtLeast(UserRole reqRole) {
+    final int? currentLevel = _user?.role.level;
+
+    if (currentLevel == null) return false;
+
+    return currentLevel >= reqRole.level;
+  }
+
   static final instance = AuthState._internal();
 
   static final provide = Provider((context) => instance);

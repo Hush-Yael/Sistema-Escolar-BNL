@@ -1,4 +1,5 @@
 import 'package:fquery/fquery.dart';
+import 'package:sistema_escolar_bnl/core/auth_state.dart';
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
 import 'package:sistema_escolar_bnl/core/utils/table_utils.dart';
 import 'package:sistema_escolar_bnl/shared/mutations/index.dart';
@@ -32,7 +33,7 @@ createSingleAddMutation<Variables, NewObj extends Object>(
 
   return useMutation(
     (Variables variables) async {
-      if (!hasPerm(.operator)) {
+      if (!AuthState.instance.isAtLeast(.operator)) {
         return Future.error(
           'No tienes permiso para añadir ${params.unauthPluralName}',
         );
