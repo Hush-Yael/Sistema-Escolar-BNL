@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sistema_escolar_bnl/screens/users_screen.dart';
 
 enum AppRoutes<View extends StatelessWidget Function()> {
   home('/home', label: 'Inicio'),
 
-  users('/users', label: 'Usuarios'),
+  users('/users', label: 'Usuarios', view: UsersScreen.new),
 
   representantes('/representantes', label: 'Representantes'),
 
