@@ -1,9 +1,9 @@
 import 'package:drift/drift.dart';
 import 'package:sistema_escolar_bnl/constants/auth_constants.dart';
 import 'package:sistema_escolar_bnl/core/db/db.dart';
-import 'package:sistema_escolar_bnl/shared/services_repository.dart';
+import 'package:sistema_escolar_bnl/shared/repository.dart';
 
-class AuthRepository extends ServiceRepository {
+class AuthRepository extends Repository {
   const AuthRepository(super.db, {required super.table});
 
   /// Used to verify if a user already exists when signing in/up

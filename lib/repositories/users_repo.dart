@@ -2,10 +2,10 @@ import 'package:drift/drift.dart';
 import 'package:sistema_escolar_bnl/core/db/db.dart';
 import 'package:sistema_escolar_bnl/constants/auth_constants.dart';
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
-import 'package:sistema_escolar_bnl/shared/services_repository.dart';
+import 'package:sistema_escolar_bnl/shared/repository.dart';
 import 'package:sistema_escolar_bnl/types/users_types.dart';
 
-class UsersRepository extends ServiceRepository {
+class UsersRepository extends Repository {
   const UsersRepository(super.db, {required super.table});
 
   Future<UsersList> fetchUsers() async =>

@@ -5,11 +5,11 @@ import 'package:sistema_escolar_bnl/core/db/db.dart';
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
 
 /// All the services used in the app must have a db dependency
-class ServiceRepository {
+class Repository {
   final AppDatabase db;
   final TableInfo<Table, dynamic> table;
 
-  const ServiceRepository(this.db, {required this.table});
+  const Repository(this.db, {required this.table});
 
   static const int uniqueConflict = 2067;
   static const int foreignConstraint = 1811;
