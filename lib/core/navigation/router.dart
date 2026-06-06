@@ -44,17 +44,15 @@ class AppRouter {
           routeBuilder(context, state, const AuthScreen()),
     ),
 
-    StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) {
+    ShellRoute(
+      builder: (context, state, currentScreen) {
         return routeBuilder(
           context,
           state,
-          Layout(state: state, navigationShell: navigationShell),
+          Layout(state: state, currentScreen: currentScreen),
         );
       },
-      branches: AppRoutes.values
-          .map((page) => StatefulShellBranch(routes: [page.route]))
-          .toList(),
+      routes: AppRoutes.values.map((page) => page.route).toList(),
     ),
   ];
 }

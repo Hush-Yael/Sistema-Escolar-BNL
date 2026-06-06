@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:sistema_escolar_bnl/core/navigation/routes.dart';
 import 'package:sistema_escolar_bnl/core/navigation/layout/sidebar_link.dart';
 
 class Sidebar extends StatelessWidget {
-  final StatefulNavigationShell navigationShell;
+  final int currentIndex;
   final Color background;
 
   const Sidebar({
     super.key,
-    required this.navigationShell,
+    required this.currentIndex,
     required this.background,
   });
 
@@ -26,8 +25,7 @@ class Sidebar extends StatelessWidget {
         children: AppRoutes.values
             .where((route) => route.shownInSidebar)
             .map(
-              (route) =>
-                  SidebarLink(route: route, navigationShell: navigationShell),
+              (route) => SidebarLink(route: route, currentIndex: currentIndex),
             )
             .toList(),
       ),

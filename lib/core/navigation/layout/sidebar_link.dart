@@ -4,13 +4,13 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/core/navigation/routes.dart';
 
 class SidebarLink extends StatefulWidget {
-  final StatefulNavigationShell navigationShell;
+  final int currentIndex;
   final AppRoutes<StatelessWidget Function()> route;
 
   const SidebarLink({
     super.key,
     required this.route,
-    required this.navigationShell,
+    required this.currentIndex,
   });
 
   @override
@@ -20,9 +20,8 @@ class SidebarLink extends StatefulWidget {
 class _SidebarLinkState extends State<SidebarLink> {
   bool _isHovered = false;
   bool _isPressed = false;
-  int get currentIndex => AppRoutes.values.indexOf(widget.route);
   bool get current =>
-      widget.route == AppRoutes.values[widget.navigationShell.currentIndex];
+      widget.currentIndex == AppRoutes.values.indexOf(widget.route);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +34,7 @@ class _SidebarLinkState extends State<SidebarLink> {
         onTapUp: (_) => setState(() => _isPressed = false),
         onTapCancel: () => setState(() => _isPressed = false),
         onTap: () {
-          widget.navigationShell.goBranch(currentIndex);
+          GoRouter.of(context).go(widget.route.path);
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),

@@ -31,6 +31,7 @@ enum AppRoutes<View extends StatelessWidget Function()> {
   GoRoute get route => .new(
     path: path,
     name: name,
-    builder: (context, state) => view?.call() ?? Text(name),
+    pageBuilder: (context, state) =>
+        NoTransitionPage(child: view?.call() ?? Text(name)),
   );
 }
