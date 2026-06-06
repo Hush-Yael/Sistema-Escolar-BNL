@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:sistema_escolar_bnl/core/db/auto_login.dart';
 import 'package:sistema_escolar_bnl/core/navigation/router.dart';
 import 'package:sistema_escolar_bnl/core/setup_page.dart';
 import 'package:sistema_escolar_bnl/core/shared_prefs_service.dart';
@@ -38,6 +40,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeMode = ThemeModeState.instance.of(context);
+
+    // auto login as admin in debug mode
+    if (kDebugMode) autoLogin(context);
 
     return SignalBuilder(
       builder: (context, child) {
