@@ -71,7 +71,7 @@ createSingleAddMutation<Variables, NewObj extends Object>(
     toast(
       context: params.context,
       message:
-          '${params.successName.toUpperCase()} añadid${params.successMsgVocal}',
+          '${toBeginningOfSentenceCase(params.successName)} añadid${params.successMsgVocal}',
     );
 
     returned!.row.$id = addedId;
