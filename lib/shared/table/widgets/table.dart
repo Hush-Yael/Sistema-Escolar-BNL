@@ -42,10 +42,7 @@ class QueryTable<TData extends List<dynamic>, TError extends Exception>
   final void Function(TrinaGridOnRowsMovedEvent)? onRowsMoved;
   final void Function(TrinaGridOnActiveCellChangedEvent)? onActiveCellChanged;
   final void Function(TrinaGridOnColumnsMovedEvent)? onColumnsMoved;
-  final bool Function(
-    TrinaGridOnBeforeActiveCellChangeEvent event,
-    bool cellIsEditable,
-  )?
+  final bool Function(TrinaGridOnBeforeActiveCellChangeEvent event)?
   onBeforeActiveCellChange;
 
   const QueryTable({
@@ -134,7 +131,7 @@ class QueryTable<TData extends List<dynamic>, TError extends Exception>
         final cellIsEditable = e.newCell.column.enableEditingMode == true;
 
         if (onBeforeActiveCellChange != null) {
-          return onBeforeActiveCellChange!(e, cellIsEditable);
+          return cellIsEditable && onBeforeActiveCellChange!(e);
         }
 
         return cellIsEditable;

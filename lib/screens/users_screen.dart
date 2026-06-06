@@ -43,8 +43,7 @@ class _Table extends HookWidget {
       deleteMutation: deleteMutation,
       createConfig: (baseConfig) => baseConfig.copyWith(selectingMode: .none),
       onLoaded: (e) => e.stateManager.setShowColumnFilter(true),
-      onBeforeActiveCellChange: (e, cellIsEditable) =>
-          cellIsEditable && e.newCell.row.$id != selfId,
+      onBeforeActiveCellChange: (e) => e.newCell.row.$id != selfId,
       onChanged: (event) {
         final field = UsersTableColumns.values.byName(event.column.field);
 
