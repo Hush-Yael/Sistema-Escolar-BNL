@@ -826,7 +826,6 @@ class $SectionsTable extends Sections with TableInfo<$SectionsTable, Section> {
     ),
     type: DriftSqlType.string,
     requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
   );
   static const VerificationMeta _capacityMeta = const VerificationMeta(
     'capacity',
