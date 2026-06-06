@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:sistema_escolar_bnl/types/shared_types.dart';
 import 'package:trina_grid/trina_grid.dart';
-export 'package:fquery_core/src/mutation.dart' show MutationResult;
 export 'single_add.dart';
 
 class MutationCommonParams<
@@ -8,7 +8,7 @@ class MutationCommonParams<
   SideEffect extends Function?
 > {
   final BuildContext context;
-  final List<String> queryKey;
+  final QueryKey queryKey;
   final TrinaGridStateManager? Function() getStateManager;
 
   /// Name to be shown in the success message

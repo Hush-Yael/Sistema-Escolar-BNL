@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_query/flutter_query.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/shared/mutations/index.dart';
 import 'package:flutter_solidart/flutter_solidart.dart';
@@ -8,7 +9,7 @@ import 'package:sistema_escolar_bnl/core/utils/fn.dart';
 
 class FormWithAsyncValidation<
   MutInput,
-  Mutation extends MutationResult<dynamic, Exception, MutInput>
+  Mutation extends MutationResult<dynamic, Exception, MutInput, dynamic>
 > {
   final bool isModal;
   Mutation? mutation;

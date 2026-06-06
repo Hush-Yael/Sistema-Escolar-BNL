@@ -1,6 +1,6 @@
 import 'package:disco/disco.dart';
 import 'package:flutter/widgets.dart';
-import 'package:fquery/fquery.dart';
+import 'package:flutter_query/flutter_query.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/core/db/db.dart';
 import 'package:sistema_escolar_bnl/core/shared_prefs_service.dart';
@@ -23,8 +23,13 @@ class SetupPage extends StatelessWidget {
           return Error(snapshot: snapshot);
         }
 
-        return CacheProvider(
-          cache: .new(),
+        return QueryClientProvider(
+          create: (context) => .new(
+            defaultQueryOptions: .new(
+              refetchOnResume: .never,
+              refetchOnReconnect: .never,
+            ),
+          ),
           child: ProviderScope(
             providers: [
               SharedPrefsService.instance,

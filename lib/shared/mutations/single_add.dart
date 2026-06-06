@@ -1,4 +1,5 @@
-import 'package:fquery/fquery.dart';
+import 'package:flutter_query/flutter_query.dart';
+import 'package:intl/intl.dart';
 import 'package:sistema_escolar_bnl/core/auth_state.dart';
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
 import 'package:sistema_escolar_bnl/core/utils/table_utils.dart';
@@ -6,7 +7,7 @@ import 'package:sistema_escolar_bnl/shared/mutations/index.dart';
 import 'package:trina_grid/trina_grid.dart';
 
 typedef SingleAddMutation<Variables, NewObj extends Object> =
-    MutationResult<int, Exception, Variables>;
+    MutationResult<int, Exception, Variables, ({TrinaRow row, NewObj newObj})>;
 
 typedef SingleAddMutationCb<Variables, AddedObj extends dynamic> =
     Future<AddedObj> Function(Variables variables);
@@ -28,78 +29,74 @@ createSingleAddMutation<Variables, NewObj extends Object>(
   params, {
   required NewObj Function(Variables variables) createNewObj,
   required TrinaRow Function(int rowsLength, NewObj newObj) createRow,
-}) {
-  final cache = CacheProvider.get(params.context);
+}) => useMutation(
+  (Variables variables, ctx) async {
+    if (!AuthState.isAtLeast(.operator)) {
+      return Future.error(
+        'No tienes permiso para añadir ${params.unauthPluralName}',
+      );
+    }
 
-  return useMutation(
-    (Variables variables) async {
-      if (!AuthState.isAtLeast(.operator)) {
-        return Future.error(
-          'No tienes permiso para añadir ${params.unauthPluralName}',
-        );
-      }
-
-      /* return await Future.delayed(const Duration(seconds: 2), () {
+    /* return await Future.delayed(const Duration(seconds: 2), () {
       return Future.error('error');
       return 11;
     }); */
 
-      final newObj = await params.cb(variables);
-      return (newObj as dynamic).id;
-    },
+    final newObj = await params.cb(variables);
+    return (newObj as dynamic).id;
+  },
 
-    onMutate: (variables) {
-      try {
-        final state = params.getStateManager()!;
-
-        final newObj = createNewObj(variables);
-
-        final newRow = createRow(state.refRows.length, newObj);
-
-        state.insertRows(state.refRows.length, [newRow]);
-
-        final record = (row: newRow, newObj: newObj);
-
-        params.onMutate?.call(variables, record);
-
-        return record;
-      } catch (e) {
-        print(e);
-        rethrow;
-      }
-    },
-
-    onSuccess: (addedId, variables, returned) {
-      toast(
-        context: params.context,
-        message:
-            '${params.successName.toUpperCase()} añadid${params.successMsgVocal}',
-      );
-
-      returned!.row.$id = addedId;
-
-      cache.setQueryData<List, Exception>(params.queryKey, (list) {
-        list!.add(
-          Function.apply((returned.newObj as dynamic).copyWith, null, {
-            #id: addedId,
-          }),
-        );
-        return list;
-      });
-
-      params.onSuccess?.call(variables, returned);
-    },
-
-    onError: (error, variables, returned) {
-      toast(context: params.context, message: error.toString());
-
+  onMutate: (variables, ctx) {
+    try {
       final state = params.getStateManager()!;
 
-      state.refRows.remove(returned!.row);
+      final newObj = createNewObj(variables);
 
-      params.onError?.call(variables, returned);
+      final newRow = createRow(state.refRows.length, newObj);
 
-      state.notifyListeners();
-    },
-  );
-}
+      state.insertRows(state.refRows.length, [newRow]);
+
+      final record = (row: newRow, newObj: newObj);
+
+      params.onMutate?.call(variables, record);
+
+      return record;
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  },
+
+  onSuccess: (addedId, variables, returned, ctx) {
+    toast(
+      context: params.context,
+      message:
+          '${params.successName.toUpperCase()} añadid${params.successMsgVocal}',
+    );
+
+    returned!.row.$id = addedId;
+
+    ctx.client.setQueryData<List, Exception>(params.queryKey, (list) {
+      list!.add(
+        Function.apply((returned.newObj as dynamic).copyWith, null, {
+          #id: addedId,
+        }),
+      );
+      return list;
+    });
+
+    params.onSuccess?.call(variables, returned);
+  },
+
+  onError: (error, variables, returned, ctx) {
+    toast(context: params.context, message: error.toString());
+
+    final state = params.getStateManager()!;
+
+    state.refRows.remove(returned!.row);
+
+    params.onError?.call(variables, returned);
+
+    state.notifyListeners();
+  },
+);

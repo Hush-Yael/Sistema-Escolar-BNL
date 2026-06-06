@@ -2,9 +2,9 @@ import 'package:trina_grid/trina_grid.dart';
 
 extension TrinaRowExt on TrinaRow {
   /// returns the id (if provided) of the object associated with the row
-  int? get $id => data?['id'];
+  int get $id => metadata!['id'];
 
-  set $id(int? id) => data?['id'] = id;
+  set $id(int id) => metadata!['id'] = id;
 
   T cellValue<T extends dynamic>(String field) => cells[field]?.originalValue;
 }
