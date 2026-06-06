@@ -1,17 +1,31 @@
 import 'package:disco/disco.dart';
 import 'package:drift/drift.dart';
-import 'package:drift_flutter/drift_flutter.dart';
+import 'package:path/path.dart' as p;
 import 'package:flutter/foundation.dart';
+import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sistema_escolar_bnl/constants/auth_constants.dart';
 import 'package:sistema_escolar_bnl/core/db/seed.dart';
 import 'package:sistema_escolar_bnl/models/auth_models.dart';
-import 'package:path/path.dart' as p;
+import 'package:sistema_escolar_bnl/models/models_mixins.dart';
+import 'package:sistema_escolar_bnl/models/school_models.dart';
+import 'package:sistema_escolar_bnl/models/representative_models.dart';
+import 'package:sistema_escolar_bnl/models/student_models.dart';
 import 'dart:io';
 
 part 'db.g.dart';
 
-@DriftDatabase(tables: [Users])
+@DriftDatabase(
+  tables: [
+    Users,
+    Grades,
+    Sections,
+    Students,
+    Enrollments,
+    Representatives,
+    RepresentativesStudents,
+  ],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 

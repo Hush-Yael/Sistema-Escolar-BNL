@@ -43,5 +43,26 @@ Future<void> seed(AppDatabase db) async {
         ),
       ),
     );
+
+    final grades = [
+      GradesCompanion.insert(number: 1, name: 'Primero', shortName: '1ero'),
+      GradesCompanion.insert(number: 2, name: 'Segundo', shortName: '2do'),
+      GradesCompanion.insert(number: 3, name: 'Tercero', shortName: '3ro'),
+      GradesCompanion.insert(number: 4, name: 'Cuarto', shortName: '4to'),
+      GradesCompanion.insert(number: 5, name: 'Quinto', shortName: '5to'),
+      GradesCompanion.insert(number: 6, name: 'Sexto', shortName: '6to'),
+    ];
+
+    batch.insertAll(db.grades, grades);
+
+    for (final letter in ['A', 'B']) {
+      batch.insertAll(
+        db.sections,
+        List.generate(
+          grades.length,
+          (i) => SectionsCompanion.insert(letter: letter, gradeId: i + 1),
+        ),
+      );
+    }
   });
 }
