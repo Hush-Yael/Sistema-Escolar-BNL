@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sistema_escolar_bnl/screens/sections_screen.dart';
 import 'package:sistema_escolar_bnl/screens/users_screen.dart';
 
 enum AppRoutes<View extends StatelessWidget Function()> {
@@ -11,9 +12,7 @@ enum AppRoutes<View extends StatelessWidget Function()> {
 
   students('/students', label: 'Estudiantes'),
 
-  grados('/grados', label: 'Grados'),
-
-  sections('/sections', label: 'Secciones'),
+  sections('/sections', label: 'Secciones', view: SectionsScreen.new),
 
   account('/account', label: 'Cuenta', shownInSidebar: false);
 
