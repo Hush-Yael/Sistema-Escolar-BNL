@@ -31,7 +31,7 @@ class _Table extends HookWidget {
     final selfId = AuthState.instance.user?.id;
 
     final deleteMutation = vm.createDeleteMutation(context);
-    final changeRoleMutation = vm.createChangeRoleMutation(context);
+    final updateMutation = vm.createUpdateMutation(context);
 
     return QueryTable(
       queryKey: kUsersQueryKey,
@@ -50,11 +50,7 @@ class _Table extends HookWidget {
       deleteMutation: deleteMutation,
       onLoaded: (e) => e.stateManager.setShowColumnFilter(true),
       onBeforeActiveCellChange: (e) => e.newCell.row.$id != selfId,
-      onChanged: (event) {
-        final field = UsersTableColumns.values.byName(event.column.field);
-
-        if (field == UsersTableColumns.role) changeRoleMutation.mutate(event);
-      },
+      onChanged: updateMutation.mutate,
       actionsRenderer: (ctx) {
         final userId = ctx.row.$id;
 

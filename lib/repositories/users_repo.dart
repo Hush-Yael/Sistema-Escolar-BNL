@@ -16,9 +16,9 @@ class UsersRepository extends Repository {
   final companion = UsersCompanion.new;
 
   Future<int> deleteUser(int id) async =>
-      await delete(id, companion, 'No se pudo eliminar el usuario');
+      await deleteSingle(id, companion, 'No se pudo eliminar el usuario');
 
-  Future<int> changeRole(UserRole role, int id) async => await update(
+  Future<int> changeRole(int id, UserRole role) async => await updateSingle(
     id,
     companion,
     UsersCompanion(role: Value(role)),

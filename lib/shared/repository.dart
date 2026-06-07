@@ -49,7 +49,7 @@ class Repository<DC extends DataClass> {
     }
   }
 
-  Future<int> update(
+  Future<int> updateSingle(
     int id,
     CompanionWithId constructorWithId,
     Insertable<DC> companion, {
@@ -69,7 +69,7 @@ class Repository<DC extends DataClass> {
     );
   }
 
-  Future<int> delete<T extends CompanionWithId>(
+  Future<int> deleteSingle<T extends CompanionWithId>(
     int id,
     T modelCompanion,
     String failedMsg,

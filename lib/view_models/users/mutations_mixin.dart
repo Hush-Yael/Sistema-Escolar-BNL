@@ -7,27 +7,26 @@ import 'package:sistema_escolar_bnl/shared/mutations/single_update.dart';
 import 'package:sistema_escolar_bnl/view_models/users/users_vm.dart';
 
 mixin MutationsMixin on UsersBaseVm {
-  MutationCommonParams<C, S> _params<C extends Function, S extends Function>(
-    BuildContext context,
-    C cb,
-  ) => MutationCommonParams<C, S>(
-    context,
-    cb: cb,
-    timestamped: true,
-    queryKey: kUsersQueryKey,
-    getStateManager: getStateManager,
-    successName: 'usuario',
-    unauthPluralName: 'usuarios',
-    successMsgVocal: 'o',
-  );
+  MutationCommonParams<S> _params<S extends Function>(BuildContext context) =>
+      MutationCommonParams<S>(
+        context,
+        timestamped: true,
+        queryKey: kUsersQueryKey,
+        getStateManager: getStateManager,
+        successName: 'usuario',
+        unauthPluralName: 'usuarios',
+        successMsgVocal: 'o',
+      );
 
   SingleDeleteMutation createDeleteMutation(BuildContext context) =>
-      createSingleDeleteMutation(_params(context, repository.deleteUser));
+      createSingleDeleteMutation(
+        .fromCommonParams(_params(context), repository.deleteUser),
+      );
 
-  SingleUpdateMutation createChangeRoleMutation(BuildContext context) =>
-      createSingleUpdateMutation<UserRole>(
-        _params(context, (id, role) => repository.changeRole(role, id)),
-        propName: UsersTableColumns.role.name,
+  SingleUpdateMutation createUpdateMutation(BuildContext context) =>
+      createSingleUpdateMutation(
+        _params(context),
+        cb: (column, id, value) => repository.changeRole(id, value),
         getValue: (event, ctx) =>
             UserRole.values.firstWhere((role) => role.label == event.value),
       );

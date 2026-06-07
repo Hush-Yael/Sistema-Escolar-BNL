@@ -9,10 +9,11 @@ import 'package:trina_grid/trina_grid.dart';
 typedef SingleUpdateMutation =
     MutationResult<int, dynamic, TrinaGridOnChangedEvent, DateTime?>;
 
-typedef SingleUpdateMutationCb<T> = Future<int> Function(int id, T newValue);
+typedef SingleUpdateMutationCb<T> =
+    Future<int> Function(String column, int id, T newValue);
 
 typedef SingleUpdateMutationSideEffect =
-    void Function(TrinaGridOnChangedEvent event)?;
+    void Function(TrinaGridOnChangedEvent event, MutationFunctionContext ctx)?;
 
 /// Handles an update mutation for a single model object.
 /// It checks update permission before updating.
@@ -22,12 +23,8 @@ typedef SingleUpdateMutationSideEffect =
 /// [propName] is the name of the property to update.
 SingleUpdateMutation createSingleUpdateMutation<T>(
   /// [getValue] is a function that returns the new value to update. If not provided, it will use the event value.
-  MutationCommonParams<
-    SingleUpdateMutationCb<T>,
-    SingleUpdateMutationSideEffect
-  >
-  params, {
-  required String propName,
+  MutationCommonParams<SingleUpdateMutationSideEffect> params, {
+  required SingleUpdateMutationCb<T> cb,
   T Function(TrinaGridOnChangedEvent event, MutationFunctionContext ctx)?
   getValue,
 }) => useMutation(
@@ -42,14 +39,14 @@ SingleUpdateMutation createSingleUpdateMutation<T>(
     final newValue = getValue?.call(event, ctx) ?? event.value;
 
     // return await Future.error('error');
-    return await params.cb(id, newValue);
+    return await cb(event.column.field, id, newValue);
   },
 
   onMutate: (event, ctx) {
     // important! prevents crashing
     params.getStateManager()?.setEditing(false);
 
-    params.onMutate?.call(event);
+    params.onMutate?.call(event, ctx);
     return null;
   },
 
@@ -63,7 +60,7 @@ SingleUpdateMutation createSingleUpdateMutation<T>(
     try {
       event.cell.value = event.oldValue;
 
-      params.onError?.call(event);
+      params.onError?.call(event, ctx);
     } catch (e) {
       print(e);
     }
@@ -86,7 +83,8 @@ SingleUpdateMutation createSingleUpdateMutation<T>(
 
           if (obj.id == id) {
             objList[i] = Function.apply(obj.copyWith, null, {
-              Symbol(propName): getValue?.call(event, ctx) ?? event.value,
+              Symbol(event.column.field):
+                  getValue?.call(event, ctx) ?? event.value,
             });
 
             return objList;
@@ -97,6 +95,6 @@ SingleUpdateMutation createSingleUpdateMutation<T>(
       });
     }
 
-    params.onSuccess?.call(event);
+    params.onSuccess?.call(event, ctx);
   },
 );

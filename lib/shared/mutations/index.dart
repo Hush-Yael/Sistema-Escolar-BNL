@@ -3,10 +3,7 @@ import 'package:sistema_escolar_bnl/types/shared_types.dart';
 import 'package:trina_grid/trina_grid.dart';
 export 'single_add.dart';
 
-class MutationCommonParams<
-  Callback extends Function,
-  SideEffect extends Function?
-> {
+class MutationCommonParams<SideEffect extends Function?> {
   final BuildContext context;
   final QueryKey queryKey;
   final TrinaGridStateManager? Function() getStateManager;
@@ -23,9 +20,6 @@ class MutationCommonParams<
   /// Whether the mutation should update the 'updatedAt' field
   final bool timestamped;
 
-  /// The async function that performs the mutation on the db
-  final Callback cb;
-
   /// Do something before the mutation resolves
   final SideEffect? onMutate;
 
@@ -39,7 +33,6 @@ class MutationCommonParams<
     this.context, {
     required this.queryKey,
     required this.timestamped,
-    required this.cb,
     required this.getStateManager,
     required this.successName,
     required this.unauthPluralName,
@@ -48,4 +41,44 @@ class MutationCommonParams<
     this.onError,
     this.onSuccess,
   });
+}
+
+class SingleCbMutationParams<
+  Callback extends Function,
+  SideEffect extends Function?
+>
+    extends MutationCommonParams<SideEffect> {
+  /// The async function that performs the mutation on the db
+  final Callback cb;
+
+  SingleCbMutationParams(
+    super.context, {
+    required super.queryKey,
+    required super.timestamped,
+    required super.getStateManager,
+    required super.successName,
+    required super.unauthPluralName,
+    super.successMsgVocal,
+    super.onMutate,
+    super.onError,
+    super.onSuccess,
+    required this.cb,
+  });
+
+  factory SingleCbMutationParams.fromCommonParams(
+    MutationCommonParams<SideEffect> commonParams,
+    Callback cb,
+  ) => SingleCbMutationParams<Callback, SideEffect>(
+    commonParams.context,
+    queryKey: commonParams.queryKey,
+    timestamped: commonParams.timestamped,
+    getStateManager: commonParams.getStateManager,
+    successName: commonParams.successName,
+    unauthPluralName: commonParams.unauthPluralName,
+    successMsgVocal: commonParams.successMsgVocal,
+    onMutate: commonParams.onMutate,
+    onError: commonParams.onError,
+    onSuccess: commonParams.onSuccess,
+    cb: cb,
+  );
 }

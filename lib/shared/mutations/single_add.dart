@@ -7,7 +7,7 @@ import 'package:sistema_escolar_bnl/shared/mutations/index.dart';
 import 'package:trina_grid/trina_grid.dart';
 
 typedef SingleAddMutation<Variables, NewObj extends Object> =
-    MutationResult<int, Exception, Variables, ({TrinaRow row, NewObj newObj})>;
+    MutationResult<int, dynamic, Variables, ({TrinaRow row, NewObj newObj})>;
 
 typedef SingleAddMutationCb<Variables, AddedObj extends dynamic> =
     Future<AddedObj> Function(Variables variables);
@@ -22,7 +22,7 @@ typedef SingleAddMutationSideEffect<Variables, NewObj extends Object> =
 /// On success, the new object is added to the query list.
 SingleAddMutation<Variables, NewObj>
 createSingleAddMutation<Variables, NewObj extends Object>(
-  MutationCommonParams<
+  SingleCbMutationParams<
     SingleAddMutationCb<Variables, NewObj>,
     SingleAddMutationSideEffect
   >
@@ -76,7 +76,7 @@ createSingleAddMutation<Variables, NewObj extends Object>(
 
     returned!.row.$id = addedId;
 
-    ctx.client.setQueryData<List, Exception>(params.queryKey, (list) {
+    ctx.client.setQueryData<List, dynamic>(params.queryKey, (list) {
       list!.add(
         Function.apply((returned.newObj as dynamic).copyWith, null, {
           #id: addedId,

@@ -7,7 +7,7 @@ import 'package:trina_grid/trina_grid.dart';
 import 'package:intl/intl.dart';
 
 typedef SingleDeleteMutation =
-    MutationResult<dynamic, Exception, TrinaColumnRendererContext, int>;
+    MutationResult<dynamic, dynamic, TrinaColumnRendererContext, int>;
 
 typedef SingleDeleteMutationSideEffect =
     void Function(TrinaColumnRendererContext columnCtx)?;
@@ -20,7 +20,7 @@ typedef SingleDeleteMutationCb = Future<int> Function(int id);
 /// On error, it readds the deleted object to the rows list.
 /// On success, it deletes the object from the query list.
 SingleDeleteMutation createSingleDeleteMutation<TListData extends List>(
-  MutationCommonParams<SingleDeleteMutationCb, SingleDeleteMutationSideEffect>
+  SingleCbMutationParams<SingleDeleteMutationCb, SingleDeleteMutationSideEffect>
   params,
 ) => useMutation(
   (ctx, _) async {
@@ -80,7 +80,7 @@ SingleDeleteMutation createSingleDeleteMutation<TListData extends List>(
           '${toBeginningOfSentenceCase(params.successName)} eliminad${params.successMsgVocal}',
     );
 
-    ctx.client.setQueryData<TListData, Exception>(params.queryKey, (objList) {
+    ctx.client.setQueryData<TListData, dynamic>(params.queryKey, (objList) {
       final id = columnCtx.row.$id;
 
       objList!.removeWhere((obj) => obj.id == id);
