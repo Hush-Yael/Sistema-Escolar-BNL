@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sistema_escolar_bnl/constants/shared_constants.dart';
 import 'package:sistema_escolar_bnl/shared/table/constants.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/no_filter_field.dart';
 import 'package:trina_grid/trina_grid.dart';
@@ -27,7 +28,7 @@ TrinaColumn indexColumn(int listLength) {
       return Text(
         (rendererContext.rowIdx + 1).toString(),
         textAlign: .right,
-        style: const TextStyle(fontFeatures: [.tabularFigures()]),
+        style: tabularNums,
       );
     },
   );
