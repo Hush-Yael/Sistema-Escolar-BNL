@@ -181,6 +181,8 @@ class QueryTable<Item extends dynamic, TError extends Exception>
 
   TrinaGridConfiguration getBaseConfig(BuildContext context) =>
       TrinaGridConfiguration(
+        selectingMode: .none,
+
         localeText: TrinaGridLocaleText.spanish(
           unfreezeColumn: 'Desfijar columna',
           freezeColumnToEnd: 'Fijar columna al final',

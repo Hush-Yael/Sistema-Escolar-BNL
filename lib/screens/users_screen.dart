@@ -48,7 +48,6 @@ class _Table extends HookWidget {
       },
       setStateManager: vm.setStateManager,
       deleteMutation: deleteMutation,
-      createConfig: (baseConfig) => baseConfig.copyWith(selectingMode: .none),
       onLoaded: (e) => e.stateManager.setShowColumnFilter(true),
       onBeforeActiveCellChange: (e) => e.newCell.row.$id != selfId,
       onChanged: (event) {
