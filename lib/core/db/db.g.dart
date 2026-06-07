@@ -898,6 +898,10 @@ class $SectionsTable extends Sections with TableInfo<$SectionsTable, Section> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {letter, gradeId},
+  ];
+  @override
   Section map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Section(
