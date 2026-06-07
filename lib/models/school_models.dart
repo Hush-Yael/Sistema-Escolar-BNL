@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:sistema_escolar_bnl/core/db/db.dart';
 
 class Grades extends Table {
   late final id = integer().autoIncrement()();
@@ -23,4 +24,18 @@ class Sections extends Table {
   List<Set<Column>> get uniqueKeys => [
     {letter, gradeId},
   ];
+}
+
+class SectionWithDetails extends Section {
+  final String gradeName;
+  final int studentCount;
+
+  const SectionWithDetails({
+    required super.id,
+    required super.letter,
+    required super.capacity,
+    required super.gradeId,
+    required this.gradeName,
+    required this.studentCount,
+  });
 }
