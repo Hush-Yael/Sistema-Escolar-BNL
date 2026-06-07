@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class TableFetchError extends StatelessWidget {
-  final Exception? error;
+  final Error? error;
   final String title;
   const TableFetchError(this.error, this.title, {super.key});
 
