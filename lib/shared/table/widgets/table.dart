@@ -25,6 +25,7 @@ class QueryTable<Item extends dynamic, TError extends Exception>
   final void Function(TrinaGridStateManager stateManager) setStateManager;
   final SingleDeleteMutation? deleteMutation;
   final Widget Function(TrinaColumnRendererContext)? actionsRenderer;
+  final double actionsWidth;
   final bool showIndexColumn;
 
   final TrinaGridConfiguration Function(TrinaGridConfiguration baseConfig)?
@@ -74,6 +75,7 @@ class QueryTable<Item extends dynamic, TError extends Exception>
     this.onColumnsMoved,
     this.onBeforeActiveCellChange,
     this.actionsRenderer,
+    this.actionsWidth = 90,
     this.showIndexColumn = true,
   }) : assert(
          getCells != null || getRow != null,
@@ -98,7 +100,9 @@ class QueryTable<Item extends dynamic, TError extends Exception>
 
     if (actionsRenderer != null && AuthState.isAdmin()) {
       // Add actions column to the end of the columns list
-      columns.add(actionsColumn(renderer: actionsRenderer));
+      columns.add(
+        actionsColumn(width: actionsWidth, renderer: actionsRenderer),
+      );
     }
 
     useEffect(() {
