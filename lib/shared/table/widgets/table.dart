@@ -241,7 +241,8 @@ class QueryTable<Item extends dynamic, TError extends Exception>
 
             #cellCheckedColor: context.theme.colorScheme.primary,
 
-            #activatedColor: context.theme.colorScheme.muted,
+            // whole row color when a cell has selection
+            #activatedColor: Colors.transparent,
 
             #activatedBorderColor: context.theme.colorScheme.primary,
           },
