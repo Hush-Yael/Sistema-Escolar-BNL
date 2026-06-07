@@ -9,7 +9,7 @@ import 'package:sistema_escolar_bnl/core/utils/fn.dart';
 
 class FormWithAsyncValidation<
   MutInput,
-  Mutation extends MutationResult<dynamic, Exception, MutInput, dynamic>
+  Mutation extends MutationResult<dynamic, dynamic, MutInput, dynamic>
 > {
   final bool isModal;
   Mutation? mutation;
