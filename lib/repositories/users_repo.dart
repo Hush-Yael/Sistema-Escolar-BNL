@@ -3,7 +3,6 @@ import 'package:sistema_escolar_bnl/core/db/db.dart';
 import 'package:sistema_escolar_bnl/constants/auth_constants.dart';
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
 import 'package:sistema_escolar_bnl/shared/repository.dart';
-import 'package:sistema_escolar_bnl/types/users_types.dart';
 
 class UsersRepository extends Repository {
   const UsersRepository(super.db);
@@ -11,7 +10,7 @@ class UsersRepository extends Repository {
   @override
   get table => db.users;
 
-  Future<UsersList> fetchUsers() async =>
+  Future<List<User>> getUsers() async =>
       await delay((db.select(db.users)).get());
 
   final companion = UsersCompanion.new;

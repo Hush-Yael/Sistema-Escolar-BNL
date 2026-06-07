@@ -10,6 +10,7 @@ import 'package:sistema_escolar_bnl/core/utils/table_utils.dart';
 import 'package:sistema_escolar_bnl/shared/table/constants.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/table.dart';
 import 'package:sistema_escolar_bnl/view_models/users/users_vm.dart';
+import 'package:trina_grid/trina_grid.dart';
 
 class UsersScreen extends StatelessWidget {
   const UsersScreen({super.key});
@@ -34,9 +35,17 @@ class _Table extends HookWidget {
 
     return QueryTable(
       queryKey: kUsersQueryKey,
-      queryFn: vm.getUsers,
+      queryFn: vm.repository.getUsers,
       errorTitle: 'Error al cargar usuarios',
-      getRows: vm.getRows,
+      getCells: (user) => {
+        UsersTableColumns.name.name: TrinaCell(value: user.name),
+
+        UsersTableColumns.username.name: TrinaCell(value: user.username),
+
+        UsersTableColumns.role.name: TrinaCell(value: user.role.label),
+
+        UsersTableColumns.lastLogin.name: TrinaCell(value: user.lastLogin),
+      },
       setStateManager: vm.setStateManager,
       deleteMutation: deleteMutation,
       createConfig: (baseConfig) => baseConfig.copyWith(selectingMode: .none),

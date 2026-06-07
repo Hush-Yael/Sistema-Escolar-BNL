@@ -5,21 +5,23 @@ import 'package:flutter_query/flutter_query.dart';
 import 'package:sistema_escolar_bnl/core/auth_state.dart';
 import 'package:sistema_escolar_bnl/core/theme/theme.dart';
 import 'package:sistema_escolar_bnl/shared/mutations/single_delete.dart';
+import 'package:sistema_escolar_bnl/shared/table/constants.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/actions_column.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/index_column.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/table_fetch_error.dart';
 import 'package:sistema_escolar_bnl/types/shared_types.dart';
 import 'package:trina_grid/trina_grid.dart';
 
-class QueryTable<TData extends List<dynamic>, TError extends Exception>
+class QueryTable<Item extends dynamic, TError extends Exception>
     extends HookWidget {
   final QueryKey queryKey;
-  final Future<TData> Function() queryFn;
+  final Future<List<Item>> Function() queryFn;
 
   final String errorTitle;
 
   final List<TrinaColumn> Function(BuildContext context) getColumns;
-  final List<TrinaRow> Function(TData list) getRows;
+  final TrinaRow Function(Item item)? getRow;
+  final Map<String, TrinaCell> Function(Item item)? getCells;
   final void Function(TrinaGridStateManager stateManager) setStateManager;
   final SingleDeleteMutation? deleteMutation;
   final Widget Function(TrinaColumnRendererContext)? actionsRenderer;
@@ -51,8 +53,9 @@ class QueryTable<TData extends List<dynamic>, TError extends Exception>
     required this.queryFn,
     required this.errorTitle,
     required this.getColumns,
-    required this.getRows,
     required this.setStateManager,
+    this.getCells,
+    this.getRow,
     this.deleteMutation,
     this.createConfig,
     this.createHeader,
@@ -72,7 +75,10 @@ class QueryTable<TData extends List<dynamic>, TError extends Exception>
     this.onBeforeActiveCellChange,
     this.actionsRenderer,
     this.showIndexColumn = true,
-  });
+  }) : assert(
+         getCells != null || getRow != null,
+         'Either getCells or getRow must be provided',
+       );
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +110,23 @@ class QueryTable<TData extends List<dynamic>, TError extends Exception>
 
         TrinaGridStateManager.initializeRowsAsync(
           columns,
-          getRows(query.data!),
+
+          query.data!.map((item) {
+            if (getRow != null) return getRow!(item);
+
+            final cells = showIndexColumn || actionsRenderer != null
+                ? {
+                    if (showIndexColumn) kIndexColumnField: TrinaCell(),
+
+                    if (actionsRenderer != null)
+                      kActionsColumnName: TrinaCell(),
+
+                    ...getCells!(item),
+                  }
+                : getCells!(item);
+
+            return TrinaRow(metadata: {'id': item.id}, cells: cells);
+          }).toList(),
         ).then((newRows) {
           state.value!.refRows.clearFromOriginal();
           state.value!.refRows.addAll(newRows);
