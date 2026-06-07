@@ -35,8 +35,6 @@ class UsersBaseVm with VmTrinaGridMixin {
             UsersTableColumns.role.name: TrinaCell(value: user.role.label),
 
             UsersTableColumns.lastLogin.name: TrinaCell(value: user.lastLogin),
-
-            if (AuthState.isAdmin()) kActionsColumnName: TrinaCell(),
           },
         );
       }).toList();

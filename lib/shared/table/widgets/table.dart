@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_query/flutter_query.dart';
+import 'package:sistema_escolar_bnl/core/auth_state.dart';
 import 'package:sistema_escolar_bnl/core/theme/theme.dart';
 import 'package:sistema_escolar_bnl/shared/mutations/single_delete.dart';
+import 'package:sistema_escolar_bnl/shared/table/widgets/actions_column.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/table_fetch_error.dart';
 import 'package:sistema_escolar_bnl/types/shared_types.dart';
 import 'package:trina_grid/trina_grid.dart';
@@ -15,15 +17,12 @@ class QueryTable<TData extends List<dynamic>, TError extends Exception>
 
   final String errorTitle;
 
-  final List<TrinaColumn> Function(
-    BuildContext context,
-    int listLength,
-    SingleDeleteMutation? deleteMutation,
-  )
+  final List<TrinaColumn> Function(BuildContext context, int listLength)
   getColumns;
   final List<TrinaRow> Function(TData list) getRows;
   final void Function(TrinaGridStateManager stateManager) setStateManager;
   final SingleDeleteMutation? deleteMutation;
+  final Widget Function(TrinaColumnRendererContext)? actionsRenderer;
 
   final TrinaGridConfiguration Function(TrinaGridConfiguration baseConfig)?
   createConfig;
@@ -70,6 +69,7 @@ class QueryTable<TData extends List<dynamic>, TError extends Exception>
     this.onActiveCellChanged,
     this.onColumnsMoved,
     this.onBeforeActiveCellChange,
+    this.actionsRenderer,
   });
 
   @override
@@ -82,11 +82,12 @@ class QueryTable<TData extends List<dynamic>, TError extends Exception>
         ? createConfig!(baseConfig)
         : baseConfig;
 
-    final columns = getColumns(
-      context,
-      query.data?.length ?? 0,
-      deleteMutation,
-    );
+    final columns = getColumns(context, query.data?.length ?? 0);
+
+    if (actionsRenderer != null && AuthState.isAdmin()) {
+      // Add actions column to the end of the columns list
+      columns.add(actionsColumn(renderer: actionsRenderer));
+    }
 
     useEffect(() {
       if (!query.isFetching && query.isSuccess && state.value != null) {
