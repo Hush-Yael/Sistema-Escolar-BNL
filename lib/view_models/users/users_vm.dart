@@ -47,7 +47,7 @@ class UsersVm extends UsersBaseVm with MutationsMixin {
 
   static final instance = Provider((ctx) {
     final AppDatabase db = AppDatabase.instance.of(ctx);
-    final usersRepository = UsersRepository(db, table: db.users);
+    final usersRepository = UsersRepository(db);
 
     return UsersVm(repository: usersRepository);
   });

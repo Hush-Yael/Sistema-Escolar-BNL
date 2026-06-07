@@ -6,7 +6,10 @@ import 'package:sistema_escolar_bnl/shared/repository.dart';
 import 'package:sistema_escolar_bnl/types/users_types.dart';
 
 class UsersRepository extends Repository {
-  const UsersRepository(super.db, {required super.table});
+  const UsersRepository(super.db);
+
+  @override
+  get table => db.users;
 
   Future<UsersList> fetchUsers() async =>
       await delay((db.select(db.users)).get());

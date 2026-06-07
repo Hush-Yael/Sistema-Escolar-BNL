@@ -5,11 +5,13 @@ import 'package:sistema_escolar_bnl/core/db/db.dart';
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
 
 /// All the services used in the app must have a db dependency
-class Repository {
+class Repository<DC extends DataClass> {
   final AppDatabase db;
-  final TableInfo<Table, dynamic> table;
 
-  const Repository(this.db, {required this.table});
+  TableInfo<Table, DC> get table =>
+      throw UnimplementedError('Se debe indicar la tabla a usar');
+
+  const Repository(this.db);
 
   static const int uniqueConflict = 2067;
   static const int foreignConstraint = 1811;
@@ -47,16 +49,16 @@ class Repository {
     }
   }
 
-  Future<int> update<T extends UpdateCompanion>(
+  Future<int> update(
     int id,
     CompanionWithId constructorWithId,
-    T companion, {
+    Insertable<DC> companion, {
     required String defaultFailMsg,
     String? uniqueFailMsg,
   }) async {
-    final op = (db.update(
-      table,
-    )..whereSamePrimaryKey(constructorWithId(id: Value(id)))).write(companion);
+    final op =
+        (table.update()..whereSamePrimaryKey(constructorWithId(id: Value(id))))
+            .write(companion);
 
     return await expectDBError(
       ensureMutated(op, defaultFailMsg),

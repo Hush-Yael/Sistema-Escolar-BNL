@@ -33,9 +33,6 @@ class AuthVm extends AuthBaseVm with FormMixin {
   static final instance = Provider((ctx) {
     final db = AppDatabase.instance.of(ctx);
 
-    return AuthVm(
-      service: AuthRepository(db, table: db.users),
-      context: ctx,
-    );
+    return AuthVm(service: AuthRepository(db), context: ctx);
   });
 }
