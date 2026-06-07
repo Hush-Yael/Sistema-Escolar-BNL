@@ -6,6 +6,7 @@ import 'package:sistema_escolar_bnl/core/auth_state.dart';
 import 'package:sistema_escolar_bnl/core/theme/theme.dart';
 import 'package:sistema_escolar_bnl/shared/mutations/single_delete.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/actions_column.dart';
+import 'package:sistema_escolar_bnl/shared/table/widgets/index_column.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/table_fetch_error.dart';
 import 'package:sistema_escolar_bnl/types/shared_types.dart';
 import 'package:trina_grid/trina_grid.dart';
@@ -17,12 +18,12 @@ class QueryTable<TData extends List<dynamic>, TError extends Exception>
 
   final String errorTitle;
 
-  final List<TrinaColumn> Function(BuildContext context, int listLength)
-  getColumns;
+  final List<TrinaColumn> Function(BuildContext context) getColumns;
   final List<TrinaRow> Function(TData list) getRows;
   final void Function(TrinaGridStateManager stateManager) setStateManager;
   final SingleDeleteMutation? deleteMutation;
   final Widget Function(TrinaColumnRendererContext)? actionsRenderer;
+  final bool showIndexColumn;
 
   final TrinaGridConfiguration Function(TrinaGridConfiguration baseConfig)?
   createConfig;
@@ -70,6 +71,7 @@ class QueryTable<TData extends List<dynamic>, TError extends Exception>
     this.onColumnsMoved,
     this.onBeforeActiveCellChange,
     this.actionsRenderer,
+    this.showIndexColumn = true,
   });
 
   @override
@@ -82,7 +84,11 @@ class QueryTable<TData extends List<dynamic>, TError extends Exception>
         ? createConfig!(baseConfig)
         : baseConfig;
 
-    final columns = getColumns(context, query.data?.length ?? 0);
+    final columns = getColumns(context);
+
+    if (showIndexColumn) {
+      columns.insert(0, indexColumn((query.data?.length ?? 0)));
+    }
 
     if (actionsRenderer != null && AuthState.isAdmin()) {
       // Add actions column to the end of the columns list

@@ -4,7 +4,6 @@ import 'package:sistema_escolar_bnl/constants/users_constants.dart';
 import 'package:sistema_escolar_bnl/core/auth_state.dart';
 import 'package:sistema_escolar_bnl/core/db/db.dart';
 import 'package:sistema_escolar_bnl/repositories/users_repo.dart';
-import 'package:sistema_escolar_bnl/shared/table/constants.dart';
 import 'package:sistema_escolar_bnl/shared/table/mixin.dart';
 import 'package:sistema_escolar_bnl/types/users_types.dart';
 import 'package:sistema_escolar_bnl/view_models/users/mutations_mixin.dart';
@@ -26,8 +25,6 @@ class UsersBaseVm with VmTrinaGridMixin {
         return TrinaRow(
           metadata: {'id': user.id},
           cells: {
-            kIndexColumnField: TrinaCell(value: rowIndex + 1),
-
             UsersTableColumns.name.name: TrinaCell(value: user.name),
 
             UsersTableColumns.username.name: TrinaCell(value: user.username),

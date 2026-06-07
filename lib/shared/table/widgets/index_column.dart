@@ -16,7 +16,6 @@ TrinaColumn indexColumn(int listLength) {
     type: .number(),
     titleTextAlign: .right,
     suppressedAutoSize: true,
-    textAlign: .right,
     width: painter.width + 30,
     enableEditingMode: false,
     enableFilterMenuItem: false,
@@ -24,5 +23,12 @@ TrinaColumn indexColumn(int listLength) {
     enableContextMenu: false,
     enableDropToResize: false,
     filterWidgetDelegate: noFilterField(),
+    renderer: (rendererContext) {
+      return Text(
+        (rendererContext.rowIdx + 1).toString(),
+        textAlign: .right,
+        style: const TextStyle(fontFeatures: [.tabularFigures()]),
+      );
+    },
   );
 }

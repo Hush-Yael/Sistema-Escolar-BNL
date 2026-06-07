@@ -8,7 +8,6 @@ import 'package:sistema_escolar_bnl/core/auth_state.dart';
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
 import 'package:sistema_escolar_bnl/core/utils/table_utils.dart';
 import 'package:sistema_escolar_bnl/shared/table/constants.dart';
-import 'package:sistema_escolar_bnl/shared/table/widgets/index_column.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/table.dart';
 import 'package:sistema_escolar_bnl/view_models/users/users_vm.dart';
 
@@ -75,9 +74,7 @@ class _Table extends HookWidget {
                 ),
         );
       },
-      getColumns: (context, listLength) => [
-        indexColumn(listLength),
-
+      getColumns: (context) => [
         .new(
           field: UsersTableColumns.name.name,
           type: .text(),
