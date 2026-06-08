@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:drift/drift.dart';
 import 'package:sistema_escolar_bnl/constants/auth_constants.dart';
 import 'package:sistema_escolar_bnl/core/db/db.dart';
+import 'package:sistema_escolar_bnl/models/models_mixins.dart';
 import 'package:sistema_escolar_bnl/shared/password_manager.dart';
 import 'package:faker/faker.dart';
 
@@ -22,7 +23,11 @@ class Seeder {
     final seeder = Seeder.instance ?? Seeder(db: db);
     Seeder.instance ??= seeder;
 
-    await Future.wait([seeder._setupUsers(), seeder._setupGrades()]);
+    await Future.wait([
+      seeder._setupUsers(),
+      seeder._setupGrades(),
+      seeder._setupRepresentatives(),
+    ]);
   }
 
   R _setupUsers() async {
@@ -89,6 +94,29 @@ class Seeder {
           ),
         );
       }
+    });
+  }
+
+  R _setupRepresentatives() async {
+    final phonePrefixes = ['12', '16', '14', '24', '26'];
+
+    await db.batch((batch) async {
+      final people = List.generate(
+        50,
+        (i) => RepresentativesCompanion.insert(
+          cedula: f.randomGenerator.integer(30_000_000, min: 1_000_000),
+          names: f.person.name(),
+          lastNames: f.person.lastName(),
+          sex: f.randomGenerator.element(Sex.values),
+          phone: Value(
+            '04${f.randomGenerator.element(phonePrefixes)}-${f.randomGenerator.numberOfLength(7)}',
+          ),
+          address: Value(f.address.streetAddress()),
+          createdAt: newDate(),
+        ),
+      );
+
+      batch.insertAll(db.representatives, people);
     });
   }
 }
