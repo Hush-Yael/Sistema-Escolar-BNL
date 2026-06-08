@@ -12,6 +12,7 @@ import 'package:sistema_escolar_bnl/shared/widgets/form/field_with_custom_valida
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
 
 class AuthVm extends FormWithAsyncValidation {
+  @override
   final AuthRepository repository;
   final BuildContext context;
   final authState = AuthState.instance;

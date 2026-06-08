@@ -6,13 +6,19 @@ import 'package:sistema_escolar_bnl/shared/mutations/index.dart';
 import 'package:flutter_solidart/flutter_solidart.dart';
 import 'package:meta/meta.dart';
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
+import 'package:sistema_escolar_bnl/shared/repository.dart';
 
 class FormWithAsyncValidation<
   MutInput,
-  Mutation extends MutationResult<dynamic, dynamic, MutInput, dynamic>
+  Mutation extends MutationResult<dynamic, dynamic, MutInput, dynamic>,
+  Repo extends Repository
 > {
   final bool isModal;
   Mutation? mutation;
+
+  @mustBeOverridden
+  Repo get repository =>
+      throw UnimplementedError('repository must be implemented');
 
   FormWithAsyncValidation({this.isModal = false});
 
@@ -75,9 +81,11 @@ class FormWithAsyncValidation<
 
 class ModalFormWithAsyncValidation<
   Input,
-  NewObj extends Object>
+  NewObj extends Object,
+  Repo extends Repository
+>
     extends
-        FormWithAsyncValidation<Input, SingleAddMutation<Input, NewObj>> {
+        FormWithAsyncValidation<Input, SingleAddMutation<Input, NewObj>, Repo> {
   ModalFormWithAsyncValidation({super.isModal = true});
 
   /// Used signals must be disposed manually to prevent crashing when using them when modal is opened again
