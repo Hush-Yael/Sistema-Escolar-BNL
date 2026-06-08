@@ -2,8 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 class Validators {
+  const Validators._();
+
   static final FormFieldValidator<String> required =
       FormBuilderValidators.required(errorText: 'Este campo es requerido');
+
+  static FormFieldValidator<String> notRequired(
+    FormFieldValidator<String> other,
+  ) => FormBuilderValidators.skipWhen((v) => v == null || v.isEmpty, other);
 
   static FormFieldValidator<String> minLength(int length) =>
       FormBuilderValidators.minLength(
