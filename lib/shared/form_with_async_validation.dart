@@ -4,7 +4,7 @@ import 'package:flutter_query/flutter_query.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/shared/mutations/index.dart';
 import 'package:flutter_solidart/flutter_solidart.dart';
-import 'package:sistema_escolar_bnl/core/db/db.dart';
+import 'package:meta/meta.dart';
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
 
 class FormWithAsyncValidation<
@@ -23,6 +23,7 @@ class FormWithAsyncValidation<
   bool get enabled => !isSubmitting.value;
   bool get invalid => formKey.currentState!.saveAndValidate() != true;
 
+  @mustBeOverridden
   Future<bool> checkAsyncErrorsBeforeSubmit() {
     throw UnimplementedError('Debe implementarse en la clase que lo use');
   }
@@ -58,6 +59,7 @@ class FormWithAsyncValidation<
     }
   }
 
+  @mustBeOverridden
   MutInput getFormData() {
     throw UnimplementedError(
       'getFormData must be implemented to perform mutation',
@@ -65,11 +67,12 @@ class FormWithAsyncValidation<
   }
 }
 
-class ModalFormWithAsyncValidation<Input, NewObj extends Object>
-    extends FormWithAsyncValidation<Input, SingleAddMutation<Input, NewObj>> {
-  ModalFormWithAsyncValidation(this.db, {super.isModal = true});
-
-  final AppDatabase db;
+class ModalFormWithAsyncValidation<
+  Input,
+  NewObj extends Object>
+    extends
+        FormWithAsyncValidation<Input, SingleAddMutation<Input, NewObj>> {
+  ModalFormWithAsyncValidation({super.isModal = true});
 
   /// Used signals must be disposed manually to prevent crashing when using them when modal is opened again
   void disposeSignals() {
@@ -92,4 +95,20 @@ class ModalFormWithAsyncValidation<Input, NewObj extends Object>
 
     return result;
   }
+
+  @override
+  @mustBeOverridden
+  Future<bool> checkAsyncErrorsBeforeSubmit() {
+    throw UnimplementedError();
+  }
+
+  @override
+  @mustBeOverridden
+  Input getFormData() {
+    throw UnimplementedError();
+  }
+
+  @override
+  @mustBeOverridden
+  Repo get repository => throw UnimplementedError();
 }

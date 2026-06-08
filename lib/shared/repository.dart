@@ -3,12 +3,14 @@ import 'package:drift/isolate.dart';
 import 'package:drift/native.dart';
 import 'package:sistema_escolar_bnl/core/db/db.dart';
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
+import 'package:meta/meta.dart';
 
 /// All the services used in the app must have a db dependency
-class Repository<DC extends DataClass> {
+class Repository<TT extends Table, DC extends DataClass> {
   final AppDatabase db;
 
-  TableInfo<Table, DC> get table =>
+  @mustBeOverridden
+  TableInfo<TT, DC> get table =>
       throw UnimplementedError('Se debe indicar la tabla a usar');
 
   const Repository(this.db);
