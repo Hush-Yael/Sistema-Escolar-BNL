@@ -36,7 +36,8 @@ class ListGrades extends HookWidget {
       queryKey: kSectionsKey,
       queryFn: vm.repository.getSections,
       setStateManager: vm.setStateManager,
-      errorTitle: 'Error al cargar las secciones',
+      pluralModelArticle: 'las',
+      pluralModelName: 'secciones',
       onChanged: updateMutation.mutate,
       getCells: (section) {
         // final studentCount = r.nextInt(section.capacity);

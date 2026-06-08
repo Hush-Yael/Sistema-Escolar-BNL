@@ -36,7 +36,8 @@ class _Table extends HookWidget {
     return QueryTable(
       queryKey: kUsersQueryKey,
       queryFn: vm.repository.getUsers,
-      errorTitle: 'Error al cargar usuarios',
+      pluralModelArticle: 'los',
+      pluralModelName: 'usuarios',
       getCells: (user) => {
         UsersTableColumns.name.name: TrinaCell(value: user.name),
 

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_query/flutter_query.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/core/auth_state.dart';
 import 'package:sistema_escolar_bnl/core/theme/theme.dart';
+import 'package:sistema_escolar_bnl/core/utils/fn.dart';
 import 'package:sistema_escolar_bnl/shared/mutations/single_delete.dart';
 import 'package:sistema_escolar_bnl/shared/table/constants.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/actions_column.dart';
@@ -17,7 +18,9 @@ class QueryTable<Item extends dynamic, TError extends Exception>
   final QueryKey queryKey;
   final Future<List<Item>> Function() queryFn;
 
-  final String errorTitle;
+  final String pluralModelName;
+  final String pluralModelArticle;
+  final void Function()? onAdd;
 
   final List<TrinaColumn> Function(BuildContext context) getColumns;
   final TrinaRow Function(Item item)? getRow;
@@ -52,9 +55,11 @@ class QueryTable<Item extends dynamic, TError extends Exception>
     super.key,
     required this.queryKey,
     required this.queryFn,
-    required this.errorTitle,
+    required this.pluralModelName,
+    required this.pluralModelArticle,
     required this.getColumns,
     required this.setStateManager,
+    this.onAdd,
     this.getCells,
     this.getRow,
     this.deleteMutation,
@@ -85,6 +90,7 @@ class QueryTable<Item extends dynamic, TError extends Exception>
   @override
   Widget build(BuildContext context) {
     final state = useState<TrinaGridStateManager?>(null);
+    final isEmpty = useState<bool>(false);
     final query = useQuery(queryKey, (ctx) => delay(queryFn()));
 
     final baseConfig = getBaseConfig(context);
@@ -107,7 +113,8 @@ class QueryTable<Item extends dynamic, TError extends Exception>
 
     useEffect(() {
       if (!query.isFetching && query.isSuccess && state.value != null) {
-        if (query.data == null) {
+        if (query.data == null || query.data!.isEmpty) {
+          isEmpty.value = true;
           state.value!.setShowLoading(false);
           return;
         }
@@ -142,7 +149,59 @@ class QueryTable<Item extends dynamic, TError extends Exception>
       return null;
     }, [query, state]);
 
-    if (query.isError) return TableFetchError(query.error, errorTitle);
+    if (query.isError) {
+      return TableFetchError(
+        query.error,
+        'Error al cargar $pluralModelArticle $pluralModelName',
+      );
+    }
+
+    if (isEmpty.value) {
+      return DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border.all(color: ShadTheme.of(context).colorScheme.border),
+          borderRadius: const .all(.circular(8)),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: .center,
+            crossAxisAlignment: .center,
+            children: [
+              const Icon(LucideIcons.sheet, size: 40),
+
+              const SizedBox(height: 10),
+
+              const Text(
+                'No hay nada para mostrar',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              ),
+
+              const SizedBox(height: 4),
+
+              Text(
+                'Parece que no se han añadido $pluralModelName',
+                style: TextStyle(
+                  color: ShadTheme.of(context).colorScheme.mutedForeground,
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              if (onAdd != null)
+                ShadButton(
+                  width: 300,
+                  onPressed: onAdd,
+                  enabled: AuthState.isAtLeast(.operator),
+                  trailing: const Icon(LucideIcons.arrowRight, size: 20),
+                  child: Text(
+                    'Agregar un${pluralModelArticle.endsWith('os') ? 'o' : 'a'}',
+                  ),
+                ),
+            ],
+          ),
+        ),
+      );
+    }
 
     return TrinaGrid(
       rows: [],
