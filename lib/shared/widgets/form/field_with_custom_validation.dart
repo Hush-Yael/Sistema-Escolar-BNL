@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/shared/debouncer.dart';
-
-typedef FieldState =
-    ShadFormBuilderFieldState<ShadFormBuilderField<dynamic>, dynamic>?;
+import 'package:sistema_escolar_bnl/shared/form_with_async_validation.dart';
 
 typedef AsyncValidator<T> = AsyncValidatorResult Function(T value);
 typedef AsyncValidatorResult = Future<String?>;

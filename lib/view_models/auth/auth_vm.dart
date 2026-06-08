@@ -7,13 +7,9 @@ import 'package:flutter_solidart/flutter_solidart.dart';
 import 'package:sistema_escolar_bnl/core/db/db.dart';
 import 'package:sistema_escolar_bnl/shared/form_with_async_validation.dart';
 import 'package:sistema_escolar_bnl/shared/password_manager.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/constants/auth_constants.dart';
 import 'package:sistema_escolar_bnl/shared/widgets/form/field_with_custom_validation.dart';
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
-
-typedef Field =
-    ShadFormBuilderFieldState<ShadFormBuilderField<dynamic>, dynamic>?;
 
 class AuthVm extends FormWithAsyncValidation {
   final AuthRepository repository;
@@ -29,11 +25,9 @@ class AuthVm extends FormWithAsyncValidation {
     return AuthVm(context: ctx, repository: repository);
   });
 
-  Field get username =>
-      formKey.currentState!.fields[AuthFormFields.username.name];
-  Field get name => formKey.currentState!.fields[AuthFormFields.name.name];
-  Field get password =>
-      formKey.currentState!.fields[AuthFormFields.password.name];
+  FieldState get username => getFieldState(AuthFormFields.username);
+  FieldState get name => getFieldState(AuthFormFields.name);
+  FieldState get password => getFieldState(AuthFormFields.password);
 
   final usernameTakenMsg = 'El usuario ya existe';
   final userNotFoundMsg = 'El usuario no existe';
@@ -133,4 +127,12 @@ class AuthVm extends FormWithAsyncValidation {
 
     return null;
   }
+
+  // not needed
+  @override
+  Future<bool> checkAsyncErrorsBeforeSubmit() => throw UnimplementedError();
+
+  // not needed
+  @override
+  Object? getFormData() => throw UnimplementedError();
 }

@@ -36,6 +36,12 @@ class FormWithAsyncValidation<
     return val;
   }
 
+  FieldState getFieldState<T extends Enum>(T key) {
+    final state = formKey.currentState!.fields[key.name];
+    if (state == null) throw Exception('Field ${key.name} not found');
+    return state;
+  }
+
   Future<dynamic> submit(BuildContext context) async {
     if (isSubmitting.value || invalid) return;
 
@@ -112,3 +118,6 @@ class ModalFormWithAsyncValidation<
   @mustBeOverridden
   Repo get repository => throw UnimplementedError();
 }
+
+typedef FieldState =
+    ShadFormBuilderFieldState<ShadFormBuilderField<dynamic>, dynamic>?;
