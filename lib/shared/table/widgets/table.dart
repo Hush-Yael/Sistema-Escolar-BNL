@@ -3,10 +3,10 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_query/flutter_query.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/core/auth_state.dart';
-import 'package:sistema_escolar_bnl/core/theme/theme.dart';
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
 import 'package:sistema_escolar_bnl/shared/mutations/single_delete.dart';
 import 'package:sistema_escolar_bnl/shared/table/constants.dart';
+import 'package:sistema_escolar_bnl/shared/table/table_config.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/actions_column.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/index_column.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/table_fetch_error.dart';
@@ -14,7 +14,8 @@ import 'package:sistema_escolar_bnl/types/shared_types.dart';
 import 'package:trina_grid/trina_grid.dart';
 
 class QueryTable<Item extends dynamic, TError extends Exception>
-    extends HookWidget {
+    extends HookWidget
+    with TableConfig {
   final QueryKey queryKey;
   final Future<List<Item>> Function() queryFn;
 
@@ -241,74 +242,4 @@ class QueryTable<Item extends dynamic, TError extends Exception>
       onColumnsMoved: onColumnsMoved,
     );
   }
-
-  TrinaGridConfiguration getBaseConfig(BuildContext context) =>
-      TrinaGridConfiguration(
-        selectingMode: .none,
-
-        localeText: TrinaGridLocaleText.spanish(
-          unfreezeColumn: 'Desfijar columna',
-          freezeColumnToEnd: 'Fijar columna al final',
-          freezeColumnToStart: 'Fijar columna al inicio',
-          autoFitColumn: 'Ajustar columna al contenido',
-          hideColumn: 'Esconder columna',
-          setColumns: 'Establecer columnas',
-          setColumnsTitle: 'Todas',
-          setFilter: 'Filtrar',
-          resetFilter: 'Limpiar filtro',
-
-          filterType: 'Filtro',
-
-          filterContains: 'Contiene',
-          filterEquals: 'Es igual a',
-          filterGreaterThan: 'Mayor que',
-          filterGreaterThanOrEqualTo: 'Mayor o igual que',
-          filterLessThan: 'Menor que',
-          filterLessThanOrEqualTo: 'Menor o igual que',
-        ),
-
-        scrollbar: .new(columnShowScrollWidth: false),
-
-        columnSize: .new(autoSizeMode: .equal),
-
-        columnFilter: .new(debounceMilliseconds: 500),
-
-        style: Function.apply(
-          context.theme.brightness == Brightness.dark
-              ? TrinaGridStyleConfig.dark
-              : TrinaGridStyleConfig.new,
-          null,
-          {
-            #gridBackgroundColor: context.theme.colorScheme.card,
-
-            #borderColor: context.theme.colorScheme.border,
-
-            #gridBorderColor: context.theme.colorScheme.border,
-
-            #gridBorderRadius: BorderRadius.all(.circular(4)),
-
-            #columnTextStyle: TextStyle(
-              color: context.theme.colorScheme.cardForeground,
-              fontWeight: .bold,
-            ),
-
-            #filterIcon: null,
-
-            #menuBackgroundColor: context.theme.colorScheme.popover,
-
-            #rowColor: context.theme.colorScheme.card,
-
-            #rowCheckedColor: context.theme.colorScheme.card,
-
-            #cellColorInEditState: context.theme.colorScheme.muted,
-
-            #cellCheckedColor: context.theme.colorScheme.primary,
-
-            // whole row color when a cell has selection
-            #activatedColor: Colors.transparent,
-
-            #activatedBorderColor: context.theme.colorScheme.primary,
-          },
-        ),
-      );
 }
