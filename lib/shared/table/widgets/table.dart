@@ -183,15 +183,7 @@ class QueryTable<Item extends dynamic, TError extends Exception>
       },
       createHeader: createHeader,
       createFooter: createFooter,
-      onBeforeActiveCellChange: (e) {
-        final cellIsEditable = e.newCell.column.enableEditingMode == true;
-
-        if (onBeforeActiveCellChange != null) {
-          return cellIsEditable && onBeforeActiveCellChange!(e);
-        }
-
-        return cellIsEditable;
-      },
+      onBeforeActiveCellChange: _onBeforeActiveCellChange,
       onChanged: onChanged,
       onSelected: onSelected,
       onSorted: onSorted,
@@ -204,5 +196,15 @@ class QueryTable<Item extends dynamic, TError extends Exception>
       onActiveCellChanged: onActiveCellChanged,
       onColumnsMoved: onColumnsMoved,
     );
+  }
+
+  bool _onBeforeActiveCellChange(TrinaGridOnBeforeActiveCellChangeEvent e) {
+    final cellIsEditable = e.newCell.column.enableEditingMode == true;
+
+    if (onBeforeActiveCellChange != null) {
+      return cellIsEditable && onBeforeActiveCellChange!(e);
+    }
+
+    return cellIsEditable;
   }
 }
