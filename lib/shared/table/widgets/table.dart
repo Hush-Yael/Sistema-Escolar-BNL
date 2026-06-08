@@ -4,85 +4,48 @@ import 'package:flutter_query/flutter_query.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/core/auth_state.dart';
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
-import 'package:sistema_escolar_bnl/shared/mutations/single_delete.dart';
 import 'package:sistema_escolar_bnl/shared/table/constants.dart';
 import 'package:sistema_escolar_bnl/shared/table/table_config.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/actions_column.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/index_column.dart';
+import 'package:sistema_escolar_bnl/shared/table/widgets/table.d.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/table_fetch_error.dart';
-import 'package:sistema_escolar_bnl/types/shared_types.dart';
 import 'package:trina_grid/trina_grid.dart';
 
 class QueryTable<Item extends dynamic, TError extends Exception>
-    extends HookWidget
+    extends IQueryTable
     with TableConfig {
-  final QueryKey queryKey;
-  final Future<List<Item>> Function() queryFn;
-
-  final String pluralModelName;
-  final String pluralModelArticle;
-  final void Function()? onGoToAdd;
-
-  final List<TrinaColumn> Function(BuildContext context) getColumns;
-  final TrinaRow Function(Item item)? getRow;
-  final Map<String, TrinaCell> Function(Item item)? getCells;
-  final void Function(TrinaGridStateManager stateManager) setStateManager;
-  final SingleDeleteMutation? deleteMutation;
-  final Widget Function(TrinaColumnRendererContext)? actionsRenderer;
-  final double actionsWidth;
-  final bool showIndexColumn;
-
-  final TrinaGridConfiguration Function(TrinaGridConfiguration baseConfig)?
-  createConfig;
-  final Widget Function(TrinaGridStateManager)? createHeader;
-  final Widget Function(TrinaGridStateManager)? createFooter;
-
-  final void Function(TrinaGridOnLoadedEvent)? onLoaded;
-  final void Function(TrinaGridOnChangedEvent)? onChanged;
-  final void Function(TrinaGridOnSelectedEvent)? onSelected;
-  final void Function(TrinaGridOnSortedEvent)? onSorted;
-  final void Function(TrinaGridOnRowCheckedEvent)? onRowChecked;
-  final void Function(TrinaGridOnRowDoubleTapEvent)? onRowDoubleTap;
-  final void Function(TrinaGridOnRowSecondaryTapEvent)? onRowSecondaryTap;
-  final void Function(TrinaGridOnRowEnterEvent)? onRowEnter;
-  final void Function(TrinaGridOnRowExitEvent)? onRowExit;
-  final void Function(TrinaGridOnRowsMovedEvent)? onRowsMoved;
-  final void Function(TrinaGridOnActiveCellChangedEvent)? onActiveCellChanged;
-  final void Function(TrinaGridOnColumnsMovedEvent)? onColumnsMoved;
-  final bool Function(TrinaGridOnBeforeActiveCellChangeEvent event)?
-  onBeforeActiveCellChange;
-
   const QueryTable({
     super.key,
-    required this.queryKey,
-    required this.queryFn,
-    required this.pluralModelName,
-    required this.pluralModelArticle,
-    required this.getColumns,
-    required this.setStateManager,
-    this.onGoToAdd,
-    this.getCells,
-    this.getRow,
-    this.deleteMutation,
-    this.createConfig,
-    this.createHeader,
-    this.createFooter,
-    this.onLoaded,
-    this.onChanged,
-    this.onSelected,
-    this.onSorted,
-    this.onRowChecked,
-    this.onRowDoubleTap,
-    this.onRowSecondaryTap,
-    this.onRowEnter,
-    this.onRowExit,
-    this.onRowsMoved,
-    this.onActiveCellChanged,
-    this.onColumnsMoved,
-    this.onBeforeActiveCellChange,
-    this.actionsRenderer,
-    this.actionsWidth = 90,
-    this.showIndexColumn = true,
+    required super.queryKey,
+    required super.queryFn,
+    required super.pluralModelName,
+    required super.pluralModelArticle,
+    required super.getColumns,
+    required super.setStateManager,
+    super.onGoToAdd,
+    super.getCells,
+    super.getRow,
+    super.deleteMutation,
+    super.createConfig,
+    super.createHeader,
+    super.createFooter,
+    super.onLoaded,
+    super.onChanged,
+    super.onSelected,
+    super.onSorted,
+    super.onRowChecked,
+    super.onRowDoubleTap,
+    super.onRowSecondaryTap,
+    super.onRowEnter,
+    super.onRowExit,
+    super.onRowsMoved,
+    super.onActiveCellChanged,
+    super.onColumnsMoved,
+    super.onBeforeActiveCellChange,
+    super.actionsRenderer,
+    super.actionsWidth = 90,
+    super.showIndexColumn = true,
   }) : assert(
          getCells != null || getRow != null,
          'Either getCells or getRow must be provided',
