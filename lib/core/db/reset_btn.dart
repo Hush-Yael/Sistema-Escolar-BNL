@@ -49,7 +49,7 @@ class WithResetBtn extends StatelessWidget {
               print('Database was reset successfully. Seeding...');
 
               await db.customStatement('PRAGMA foreign_keys = ON');
-              await seed(db);
+              await Seeder.seed(db);
 
               print('Database seeded successfully.');
             },

@@ -42,7 +42,7 @@ class AppDatabase extends _$AppDatabase {
         // Enable foreign keys immediately upon opening the database
         await customStatement('PRAGMA foreign_keys = ON');
 
-        if (details.wasCreated && kDebugMode) await seed(this);
+        if (details.wasCreated && kDebugMode) await Seeder.seed(this);
       },
     );
   }
