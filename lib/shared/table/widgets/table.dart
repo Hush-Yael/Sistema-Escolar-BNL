@@ -20,7 +20,7 @@ class QueryTable<Item extends dynamic, TError extends Exception>
 
   final String pluralModelName;
   final String pluralModelArticle;
-  final void Function()? onAdd;
+  final void Function()? onGoToAdd;
 
   final List<TrinaColumn> Function(BuildContext context) getColumns;
   final TrinaRow Function(Item item)? getRow;
@@ -59,7 +59,7 @@ class QueryTable<Item extends dynamic, TError extends Exception>
     required this.pluralModelArticle,
     required this.getColumns,
     required this.setStateManager,
-    this.onAdd,
+    this.onGoToAdd,
     this.getCells,
     this.getRow,
     this.deleteMutation,
@@ -187,10 +187,10 @@ class QueryTable<Item extends dynamic, TError extends Exception>
 
               const SizedBox(height: 20),
 
-              if (onAdd != null)
+              if (onGoToAdd != null)
                 ShadButton(
                   width: 300,
-                  onPressed: onAdd,
+                  onPressed: onGoToAdd,
                   enabled: AuthState.isAtLeast(.operator),
                   trailing: const Icon(LucideIcons.arrowRight, size: 20),
                   child: Text(
