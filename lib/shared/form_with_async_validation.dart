@@ -7,6 +7,7 @@ import 'package:flutter_solidart/flutter_solidart.dart';
 import 'package:meta/meta.dart';
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
 import 'package:sistema_escolar_bnl/shared/repository.dart';
+import 'package:sistema_escolar_bnl/shared/widgets/form/field_with_custom_validation.dart';
 
 class FormWithAsyncValidation<
   MutInput,
@@ -76,6 +77,15 @@ class FormWithAsyncValidation<
     throw UnimplementedError(
       'getFormData must be implemented to perform mutation',
     );
+  }
+
+  AsyncValidatorResult checkFieldAsync<T>({
+    required T value,
+    required Future<bool> Function(T) repoCheckerFn,
+    required String errorMsg,
+  }) async {
+    final found = await repoCheckerFn(value);
+    return found ? errorMsg : null;
   }
 }
 

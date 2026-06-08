@@ -84,6 +84,18 @@ class Repository<TT extends Table, DC extends DataClass> {
 
     return await ensureMutated(op, failedMsg);
   }
+
+  Future<bool> checkFieldValueAvailable(
+    Expression<bool> Function(TT) filter,
+  ) async {
+    final product =
+        await (table.select()
+              ..limit(1)
+              ..where(filter))
+            .getSingleOrNull();
+
+    return product != null;
+  }
 }
 
 typedef CompanionWithId = Function({required Value<int> id});
