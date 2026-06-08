@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_solidart/flutter_solidart.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/core/theme/theme.dart';
-import 'package:sistema_escolar_bnl/shared/widgets/form/submit_btn_ring.dart';
+import 'package:sistema_escolar_bnl/shared/widgets/form/submit_btn.dart';
 import 'package:sistema_escolar_bnl/view_models/auth/auth_vm.dart';
 import 'package:sistema_escolar_bnl/screens/auth/widgets/form_fields.dart';
 import 'package:sistema_escolar_bnl/screens/auth/widgets/theme_selector.dart';
@@ -79,13 +79,9 @@ class _Form extends StatelessWidget {
                       crossAxisAlignment: .stretch,
                       spacing: 4,
                       children: [
-                        ShadButton(
-                          onPressed: () => vm.submit(context),
-                          enabled: !vm.isSubmitting.value,
-                          leading: vm.isSubmitting.value
-                              ? const SubmitBtnRing()
-                              : null,
-                          child: Text(isSignIn.value ? 'Ingresar' : 'Crear'),
+                        SubmitBtn(
+                          form: vm,
+                          text: isSignIn.value ? 'Ingresar' : 'Crear',
                         ),
 
                         ShadButton.link(
