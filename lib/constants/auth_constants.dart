@@ -16,16 +16,6 @@ enum UserRole {
 enum AuthFormFields { name, username, password }
 
 class AuthValidators {
-  static final name = FormBuilderValidators.compose([
-    Validators.required,
-    FormBuilderValidators.match(
-      RegExp(r'^[a-zA-Z\u00C0-\u017F\s]+$'),
-      errorText: 'El nombre solo puede contener letras y espacios',
-    ),
-    Validators.minLength(kNameMinLength),
-    Validators.maxLength(kNameMaxLength),
-  ]);
-
   static final username = FormBuilderValidators.compose([
     Validators.required,
     Validators.minLength(kUsernameMinLength),
@@ -47,9 +37,6 @@ class AuthValidators {
     ),
   ]);
 }
-
-const kNameMinLength = 3;
-const kNameMaxLength = 64;
 
 const kUsernameMinLength = 3;
 const kUsernameMaxLength = 64;

@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_solidart/flutter_solidart.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/constants/auth_constants.dart';
+import 'package:sistema_escolar_bnl/constants/shared_constants.dart';
 import 'package:sistema_escolar_bnl/core/theme/theme.dart';
 import 'package:sistema_escolar_bnl/shared/widgets/form/field_with_custom_validation.dart';
 import 'package:sistema_escolar_bnl/shared/widgets/form/password_field.dart';
@@ -35,7 +36,7 @@ class FormFields extends HookWidget {
                   onSubmitted: submit,
                   autovalidateMode: .onUnfocus,
                   enabled: vm.enabled,
-                  validator: AuthValidators.name,
+                  validator: nameValidator,
                 ),
               ],
             );

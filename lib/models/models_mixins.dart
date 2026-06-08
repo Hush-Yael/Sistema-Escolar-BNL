@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:sistema_escolar_bnl/constants/shared_constants.dart';
 
 mixin Timestamps on Table {
   late final createdAt = dateTime().withDefault(currentDateAndTime)();
@@ -15,20 +16,17 @@ enum Sex {
   final String label;
 }
 
-const kNamesMinLength = 3;
-const kNamesMaxLength = 64;
-
 mixin Person on Table {
   late final cedula = integer().unique()();
 
   late final names = text().withLength(
-    min: kNamesMinLength,
-    max: kNamesMaxLength,
+    min: kNameMinLength,
+    max: kNameMaxLength,
   )();
 
   late final lastNames = text().withLength(
-    min: kNamesMinLength,
-    max: kNamesMaxLength,
+    min: kNameMinLength,
+    max: kNameMaxLength,
   )();
 
   late final sex = textEnum<Sex>()();

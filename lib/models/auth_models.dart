@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:sistema_escolar_bnl/constants/auth_constants.dart';
+import 'package:sistema_escolar_bnl/constants/shared_constants.dart';
 
 class Users extends Table {
   late final id = integer().autoIncrement()();
