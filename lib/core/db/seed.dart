@@ -14,6 +14,8 @@ class Seeder {
 
   Seeder({required this.db});
 
+  int currentYear = DateTime.now().year;
+
   static Seeder? instance;
 
   static R seed(AppDatabase db) async {
@@ -37,6 +39,7 @@ class Seeder {
           username: 'admin',
           password: base64Encode(await pass.extractBytes()),
           salt: base64Encode(salt),
+          createdAt: newDate(min: currentYear),
           lastLogin: Value(DateTime.now()),
         ),
       );
@@ -54,12 +57,15 @@ class Seeder {
             password: 'wrong',
             salt: 'wrong',
             lastLogin: Value(f.date.dateTime()),
-            createdAt: Value(f.date.dateTime()),
+            createdAt: newDate(),
           ),
         ),
       );
     });
   }
+
+  Value<DateTime> newDate({int? min, int? max}) =>
+      Value(f.date.dateTime(minYear: min ?? 2020, maxYear: max ?? currentYear));
 
   R _setupGrades() async {
     await db.batch((batch) async {
