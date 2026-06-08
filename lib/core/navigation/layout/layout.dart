@@ -20,41 +20,35 @@ class Layout extends StatelessWidget {
     final theme = ShadTheme.of(context);
     final isLight = theme.brightness == Brightness.light;
 
-    final Color bg = Color.alphaBlend(
-      isLight
-          ? Colors.black.withValues(alpha: 0.03)
-          : Colors.black.withValues(alpha: 0.2),
-      theme.colorScheme.background,
-    );
-
     return Scaffold(
-      backgroundColor: bg,
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Sidebar(currentIndex: currentIndex, background: bg),
+          Sidebar(currentIndex: currentIndex),
 
           Expanded(
             child: Column(
               mainAxisAlignment: .start,
               children: [
-                Header(currentIndex: currentIndex, background: bg),
+                Header(currentIndex: currentIndex),
 
                 // main content
                 Expanded(
                   child: DecoratedBox(
                     decoration: BoxDecoration(
-                      color: ShadTheme.of(context).colorScheme.background,
-                      borderRadius: .only(topLeft: .circular(8)),
-                      border: !isLight
-                          ? Border.all(
-                              color: Colors.white.withValues(alpha: 0.05),
-                            )
-                          : null,
+                      color: .alphaBlend(
+                        isLight
+                            ? Colors.black.withValues(alpha: 0.03)
+                            : Colors.black.withValues(alpha: 0.3),
+                        theme.colorScheme.background,
+                      ),
+                      border: Border(
+                        top: .new(color: theme.colorScheme.border),
+                      ),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Scaffold(body: currentScreen),
+                      padding: const .symmetric(vertical: 15, horizontal: 20),
+                      child: currentScreen,
                     ),
                   ),
                 ),

@@ -7,23 +7,16 @@ import 'package:sistema_escolar_bnl/core/navigation/layout/theme_selector.dart';
 import 'package:sistema_escolar_bnl/core/navigation/routes.dart';
 
 class Header extends StatelessWidget {
-  final Color background;
-
-  const Header({
-    super.key,
-    required this.currentIndex,
-    required this.background,
-  });
+  const Header({super.key, required this.currentIndex});
 
   final int currentIndex;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(color: background),
-      constraints: const BoxConstraints(maxHeight: 100),
+    return ConstrainedBox(
+      constraints: const .new(maxHeight: 100),
       child: Padding(
-        padding: const .all(8),
+        padding: const .symmetric(vertical: 8, horizontal: 20),
         child: Row(
           spacing: 26,
           children: [

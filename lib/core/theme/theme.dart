@@ -6,7 +6,19 @@ class AppTheme {
 
   // Base theme configuration (used by both light and dark themes)
   static ShadThemeData _extendBaseTheme(ShadThemeData t) {
-    return t.copyWith();
+    return t.copyWith(
+      inputTheme: t.inputTheme.copyWith(
+        decoration: t.inputTheme.decoration?.copyWith(
+          color: t.cardTheme.backgroundColor,
+        ),
+      ),
+
+      selectTheme: t.selectTheme.copyWith(
+        decoration: t.selectTheme.decoration?.copyWith(
+          color: t.cardTheme.backgroundColor,
+        ),
+      ),
+    );
   }
 
   static final ShadThemeData lightTheme = _extendBaseTheme(

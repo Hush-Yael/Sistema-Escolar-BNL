@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/core/navigation/routes.dart';
 import 'package:sistema_escolar_bnl/core/navigation/layout/sidebar_link.dart';
 
 class Sidebar extends StatelessWidget {
   final int currentIndex;
-  final Color background;
-
-  const Sidebar({
-    super.key,
-    required this.currentIndex,
-    required this.background,
-  });
+  const Sidebar({super.key, required this.currentIndex});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 250,
+      decoration: BoxDecoration(
+        border: Border(
+          right: .new(color: ShadTheme.of(context).colorScheme.border),
+        ),
+      ),
       padding: const .all(12),
-      decoration: BoxDecoration(color: background),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
