@@ -6,12 +6,12 @@ import 'package:sistema_escolar_bnl/models/student_models.dart';
 class Representatives extends Table with Person, Timestamps {
   late final id = integer().autoIncrement()();
 
-  late final phone = text().withLength(
+  late final phone = text().nullable().withLength(
     min: kPhoneMinLength,
     max: kPhoneMaxLength,
   )();
 
-  late final address = text().withLength(
+  late final address = text().nullable().withLength(
     min: kAddressMinLength,
     max: kAddressMaxLength,
   )();

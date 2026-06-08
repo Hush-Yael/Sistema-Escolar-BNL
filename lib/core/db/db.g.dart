@@ -2332,10 +2332,10 @@ class $RepresentativesTable extends Representatives
   late final GeneratedColumn<String> phone = GeneratedColumn<String>(
     'phone',
     aliasedName,
-    false,
+    true,
     additionalChecks: GeneratedColumn.checkTextLength(),
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _addressMeta = const VerificationMeta(
     'address',
@@ -2344,10 +2344,10 @@ class $RepresentativesTable extends Representatives
   late final GeneratedColumn<String> address = GeneratedColumn<String>(
     'address',
     aliasedName,
-    false,
+    true,
     additionalChecks: GeneratedColumn.checkTextLength(),
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   @override
   List<GeneratedColumn> get $columns => [
@@ -2417,16 +2417,12 @@ class $RepresentativesTable extends Representatives
         _phoneMeta,
         phone.isAcceptableOrUnknown(data['phone']!, _phoneMeta),
       );
-    } else if (isInserting) {
-      context.missing(_phoneMeta);
     }
     if (data.containsKey('address')) {
       context.handle(
         _addressMeta,
         address.isAcceptableOrUnknown(data['address']!, _addressMeta),
       );
-    } else if (isInserting) {
-      context.missing(_addressMeta);
     }
     return context;
   }
@@ -2470,11 +2466,11 @@ class $RepresentativesTable extends Representatives
       phone: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}phone'],
-      )!,
+      ),
       address: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}address'],
-      )!,
+      ),
     );
   }
 
@@ -2495,8 +2491,8 @@ class Representative extends DataClass implements Insertable<Representative> {
   final DateTime createdAt;
   final DateTime updatedAt;
   final int id;
-  final String phone;
-  final String address;
+  final String? phone;
+  final String? address;
   const Representative({
     required this.cedula,
     required this.names,
@@ -2505,8 +2501,8 @@ class Representative extends DataClass implements Insertable<Representative> {
     required this.createdAt,
     required this.updatedAt,
     required this.id,
-    required this.phone,
-    required this.address,
+    this.phone,
+    this.address,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -2522,8 +2518,12 @@ class Representative extends DataClass implements Insertable<Representative> {
     map['created_at'] = Variable<DateTime>(createdAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     map['id'] = Variable<int>(id);
-    map['phone'] = Variable<String>(phone);
-    map['address'] = Variable<String>(address);
+    if (!nullToAbsent || phone != null) {
+      map['phone'] = Variable<String>(phone);
+    }
+    if (!nullToAbsent || address != null) {
+      map['address'] = Variable<String>(address);
+    }
     return map;
   }
 
@@ -2536,8 +2536,12 @@ class Representative extends DataClass implements Insertable<Representative> {
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
       id: Value(id),
-      phone: Value(phone),
-      address: Value(address),
+      phone: phone == null && nullToAbsent
+          ? const Value.absent()
+          : Value(phone),
+      address: address == null && nullToAbsent
+          ? const Value.absent()
+          : Value(address),
     );
   }
 
@@ -2556,8 +2560,8 @@ class Representative extends DataClass implements Insertable<Representative> {
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
       id: serializer.fromJson<int>(json['id']),
-      phone: serializer.fromJson<String>(json['phone']),
-      address: serializer.fromJson<String>(json['address']),
+      phone: serializer.fromJson<String?>(json['phone']),
+      address: serializer.fromJson<String?>(json['address']),
     );
   }
   @override
@@ -2573,8 +2577,8 @@ class Representative extends DataClass implements Insertable<Representative> {
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
       'id': serializer.toJson<int>(id),
-      'phone': serializer.toJson<String>(phone),
-      'address': serializer.toJson<String>(address),
+      'phone': serializer.toJson<String?>(phone),
+      'address': serializer.toJson<String?>(address),
     };
   }
 
@@ -2586,8 +2590,8 @@ class Representative extends DataClass implements Insertable<Representative> {
     DateTime? createdAt,
     DateTime? updatedAt,
     int? id,
-    String? phone,
-    String? address,
+    Value<String?> phone = const Value.absent(),
+    Value<String?> address = const Value.absent(),
   }) => Representative(
     cedula: cedula ?? this.cedula,
     names: names ?? this.names,
@@ -2596,8 +2600,8 @@ class Representative extends DataClass implements Insertable<Representative> {
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
     id: id ?? this.id,
-    phone: phone ?? this.phone,
-    address: address ?? this.address,
+    phone: phone.present ? phone.value : this.phone,
+    address: address.present ? address.value : this.address,
   );
   Representative copyWithCompanion(RepresentativesCompanion data) {
     return Representative(
@@ -2664,8 +2668,8 @@ class RepresentativesCompanion extends UpdateCompanion<Representative> {
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   final Value<int> id;
-  final Value<String> phone;
-  final Value<String> address;
+  final Value<String?> phone;
+  final Value<String?> address;
   const RepresentativesCompanion({
     this.cedula = const Value.absent(),
     this.names = const Value.absent(),
@@ -2685,14 +2689,12 @@ class RepresentativesCompanion extends UpdateCompanion<Representative> {
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.id = const Value.absent(),
-    required String phone,
-    required String address,
+    this.phone = const Value.absent(),
+    this.address = const Value.absent(),
   }) : cedula = Value(cedula),
        names = Value(names),
        lastNames = Value(lastNames),
-       sex = Value(sex),
-       phone = Value(phone),
-       address = Value(address);
+       sex = Value(sex);
   static Insertable<Representative> custom({
     Expression<int>? cedula,
     Expression<String>? names,
@@ -2725,8 +2727,8 @@ class RepresentativesCompanion extends UpdateCompanion<Representative> {
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
     Value<int>? id,
-    Value<String>? phone,
-    Value<String>? address,
+    Value<String?>? phone,
+    Value<String?>? address,
   }) {
     return RepresentativesCompanion(
       cedula: cedula ?? this.cedula,
@@ -5010,8 +5012,8 @@ typedef $$RepresentativesTableCreateCompanionBuilder =
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
       Value<int> id,
-      required String phone,
-      required String address,
+      Value<String?> phone,
+      Value<String?> address,
     });
 typedef $$RepresentativesTableUpdateCompanionBuilder =
     RepresentativesCompanion Function({
@@ -5022,8 +5024,8 @@ typedef $$RepresentativesTableUpdateCompanionBuilder =
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
       Value<int> id,
-      Value<String> phone,
-      Value<String> address,
+      Value<String?> phone,
+      Value<String?> address,
     });
 
 final class $$RepresentativesTableReferences
@@ -5302,8 +5304,8 @@ class $$RepresentativesTableTableManager
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int> id = const Value.absent(),
-                Value<String> phone = const Value.absent(),
-                Value<String> address = const Value.absent(),
+                Value<String?> phone = const Value.absent(),
+                Value<String?> address = const Value.absent(),
               }) => RepresentativesCompanion(
                 cedula: cedula,
                 names: names,
@@ -5324,8 +5326,8 @@ class $$RepresentativesTableTableManager
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int> id = const Value.absent(),
-                required String phone,
-                required String address,
+                Value<String?> phone = const Value.absent(),
+                Value<String?> address = const Value.absent(),
               }) => RepresentativesCompanion.insert(
                 cedula: cedula,
                 names: names,
