@@ -3,7 +3,7 @@ import 'package:sistema_escolar_bnl/constants/auth_constants.dart';
 import 'package:sistema_escolar_bnl/core/db/db.dart';
 import 'package:sistema_escolar_bnl/shared/repository.dart';
 
-class AuthRepository extends Repository<User> {
+class AuthRepository extends Repository {
   const AuthRepository(super.db);
 
   @override

@@ -9,11 +9,11 @@ import 'package:sistema_escolar_bnl/shared/form_with_async_validation.dart';
 import 'package:sistema_escolar_bnl/shared/password_manager.dart';
 
 class AuthBaseVm extends FormWithAsyncValidation {
-  final AuthRepository service;
+  final AuthRepository repository;
   final BuildContext context;
   final authState = AuthState.instance;
 
-  AuthBaseVm({required this.service, required this.context});
+  AuthBaseVm({required this.context, required this.repository});
 
   final passwordManager = PasswordManager();
 
@@ -28,11 +28,12 @@ class AuthBaseVm extends FormWithAsyncValidation {
 }
 
 class AuthVm extends AuthBaseVm with FormMixin {
-  AuthVm({required super.service, required super.context});
+  AuthVm({required super.context, required super.repository});
 
   static final instance = Provider((ctx) {
     final db = AppDatabase.instance.of(ctx);
+    final repository = AuthRepository(db);
 
-    return AuthVm(service: AuthRepository(db), context: ctx);
+    return AuthVm(context: ctx, repository: repository);
   });
 }
