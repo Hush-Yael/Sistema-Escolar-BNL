@@ -85,7 +85,7 @@ class QueryTable<Item extends dynamic, TError extends Exception>
   @override
   Widget build(BuildContext context) {
     final state = useState<TrinaGridStateManager?>(null);
-    final query = useQuery(queryKey, (ctx) => queryFn());
+    final query = useQuery(queryKey, (ctx) => delay(queryFn()));
 
     final baseConfig = getBaseConfig(context);
     final config = createConfig != null

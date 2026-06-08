@@ -10,8 +10,7 @@ class UsersRepository extends Repository {
   @override
   get table => db.users;
 
-  Future<List<User>> getUsers() async =>
-      await delay((db.select(db.users)).get());
+  Future<List<User>> getUsers() async => await (db.select(db.users)).get();
 
   final companion = UsersCompanion.new;
 
