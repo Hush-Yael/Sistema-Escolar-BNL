@@ -42,7 +42,7 @@ class FormFields extends HookWidget {
           },
         ),
 
-        FiledWithCustomValidation<String>(
+        FieldWithCustomValidation<String>(
           getFieldState: () => vm.username,
           validate: AuthValidators.username,
           validateAsync: vm.checkUsername,
@@ -58,7 +58,7 @@ class FormFields extends HookWidget {
           },
         ),
 
-        FiledWithCustomValidation<String>(
+        FieldWithCustomValidation<String>(
           getFieldState: () => vm.password,
           validate: AuthValidators.password,
           builder: (onChanged, validator) {

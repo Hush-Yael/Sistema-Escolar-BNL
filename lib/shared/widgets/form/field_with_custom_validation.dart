@@ -13,14 +13,14 @@ typedef ValidatorFn<T> = String? Function(T? value);
 ///
 /// This widget handles both synchronous and asynchronous validation,
 /// debouncing validation calls to improve performance.
-class FiledWithCustomValidation<T> extends StatelessWidget {
+class FieldWithCustomValidation<T> extends StatelessWidget {
   final Widget Function(void Function(T?) onChanged, ValidatorFn<T> validator)
   builder;
   final FieldState Function() getFieldState;
   final ValidatorFn<T> validate;
   final AsyncValidator<T>? validateAsync;
 
-  const FiledWithCustomValidation({
+  const FieldWithCustomValidation({
     super.key,
     required this.builder,
     required this.getFieldState,
