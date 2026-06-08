@@ -44,6 +44,7 @@ class AuthVm extends FormWithAsyncValidation {
     formKey.currentState?.reset();
   }
 
+  @override
   Future submit(BuildContext context) async {
     if (isSubmitting.value || invalid) return;
 
