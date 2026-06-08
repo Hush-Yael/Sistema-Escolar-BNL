@@ -4,8 +4,8 @@ import 'package:flutter_solidart/flutter_solidart.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/constants/auth_constants.dart';
 import 'package:sistema_escolar_bnl/constants/shared_constants.dart';
-import 'package:sistema_escolar_bnl/core/theme/theme.dart';
 import 'package:sistema_escolar_bnl/shared/widgets/form/field_with_custom_validation.dart';
+import 'package:sistema_escolar_bnl/shared/widgets/form/label.dart';
 import 'package:sistema_escolar_bnl/shared/widgets/form/password_field.dart';
 import 'package:sistema_escolar_bnl/view_models/auth/auth_vm.dart';
 
@@ -17,7 +17,6 @@ class FormFields extends HookWidget {
     final AuthVm vm = AuthVm.instance.of(context);
 
     void submit([_]) => vm.submit(context);
-    final labelStyles = AppTheme.labelStyles(context);
 
     return Column(
       crossAxisAlignment: .stretch,
@@ -32,7 +31,7 @@ class FormFields extends HookWidget {
 
                 ShadInputFormField(
                   id: AuthFormFields.name.name,
-                  label: Text('Nombre personal', style: labelStyles),
+                  label: const Label('Nombre personal'),
                   onSubmitted: submit,
                   autovalidateMode: .onUnfocus,
                   enabled: vm.enabled,
@@ -50,7 +49,7 @@ class FormFields extends HookWidget {
           builder: (onChanged, validator) {
             return ShadInputFormField(
               id: AuthFormFields.username.name,
-              label: Text('Nombre de usuario', style: labelStyles),
+              label: const Label('Nombre de usuario'),
               enabled: vm.enabled,
               onSubmitted: submit,
               validator: validator,

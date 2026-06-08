@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_solidart/flutter_solidart.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
-import 'package:sistema_escolar_bnl/core/theme/theme.dart';
+import 'package:sistema_escolar_bnl/shared/widgets/form/label.dart';
 
 class PasswordField extends StatelessWidget {
   final String? id;
@@ -36,9 +36,7 @@ class PasswordField extends StatelessWidget {
     return SignalBuilder(
       builder: (context, child) => ShadInputFormField(
         id: id,
-        label: label != null
-            ? Text(label!, style: AppTheme.labelStyles(context))
-            : null,
+        label: label != null ? Label(label!) : null,
         placeholder: placeholder != null ? Text(placeholder!) : null,
         obscureText: obscure.value,
         controller: controller,
