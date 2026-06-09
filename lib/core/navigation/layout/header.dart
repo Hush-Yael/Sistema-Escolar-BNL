@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/core/auth_state.dart';
 import 'package:sistema_escolar_bnl/core/navigation/layout/account.dart';
+import 'package:sistema_escolar_bnl/core/navigation/layout/layout.dart';
 import 'package:sistema_escolar_bnl/core/navigation/layout/theme_selector.dart';
 import 'package:sistema_escolar_bnl/core/navigation/routes.dart';
 
@@ -13,10 +14,10 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: const .new(maxHeight: 100),
+    return SizedBox(
+      height: Layout.headerHeight,
       child: Padding(
-        padding: const .symmetric(vertical: 8, horizontal: 20),
+        padding: const .symmetric(vertical: Layout.headerPy, horizontal: 20),
         child: Row(
           spacing: 26,
           children: [

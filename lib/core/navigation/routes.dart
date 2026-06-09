@@ -4,22 +4,32 @@ import 'package:sistema_escolar_bnl/screens/sections_screen.dart';
 import 'package:sistema_escolar_bnl/screens/users_screen.dart';
 
 enum AppRoutes<View extends StatelessWidget Function()> {
-  home('/home', label: 'Inicio'),
+  home('/home', label: 'Inicio', icon: Icons.home),
 
-  users('/users', label: 'Usuarios', view: UsersScreen.new),
+  users('/users', label: 'Usuarios', view: UsersScreen.new, icon: Icons.groups),
 
-  representantes('/representantes', label: 'Representantes'),
+  representatives(
+    '/representatives',
+    label: 'Representantes',
+    icon: Icons.supervised_user_circle,
+  ),
 
-  students('/students', label: 'Estudiantes'),
+  students('/students', label: 'Estudiantes', icon: Icons.school),
 
-  sections('/sections', label: 'Secciones', view: SectionsScreen.new),
+  sections(
+    '/sections',
+    label: 'Secciones',
+    view: SectionsScreen.new,
+    icon: Icons.view_column,
+  ),
 
   account('/account', label: 'Cuenta', shownInSidebar: false);
 
   const AppRoutes(
     this.path, {
-    this.view,
     required this.label,
+    this.icon,
+    this.view,
     this.shownInSidebar = true,
   });
 
@@ -27,6 +37,7 @@ enum AppRoutes<View extends StatelessWidget Function()> {
   final View? view;
   final String label;
   final bool shownInSidebar;
+  final IconData? icon;
 
   GoRoute get route => .new(
     path: path,

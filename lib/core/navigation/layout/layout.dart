@@ -11,6 +11,9 @@ class Layout extends StatelessWidget {
 
   const Layout({super.key, required this.state, required this.currentScreen});
 
+  static const double headerHeight = 60;
+  static const double headerPy = 8;
+
   @override
   Widget build(BuildContext context) {
     final currentIndex = AppRoutes.values

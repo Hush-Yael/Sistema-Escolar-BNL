@@ -26,4 +26,12 @@ class SharedPrefsService {
   Future<bool> saveThemeMode(ThemeMode newMode) async {
     return await service!.setString(themeModeKey, newMode.name);
   }
+
+  bool getSidebarExpanded() {
+    return service!.getBool('sidebar_expanded') ?? true;
+  }
+
+  Future<bool> saveSidebarExpanded(bool expanded) async {
+    return await service!.setBool('sidebar_expanded', expanded);
+  }
 }
