@@ -13,7 +13,7 @@ import 'package:sistema_escolar_bnl/shared/table/widgets/table_fetch_error.dart'
 import 'package:trina_grid/trina_grid.dart';
 
 class QueryTable<Item extends dynamic, TError extends Exception>
-    extends IQueryTable
+    extends IQueryTable<Item, TError>
     with TableConfig {
   const QueryTable({
     super.key,
