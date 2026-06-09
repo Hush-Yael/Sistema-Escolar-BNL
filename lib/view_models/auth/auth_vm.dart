@@ -45,8 +45,8 @@ class AuthVm extends FormWithAsyncValidation {
   }
 
   @override
-  Future submit(BuildContext context) async {
-    if (isSubmitting.value || invalid) return;
+  Future<bool> submit(BuildContext context) async {
+    if (isSubmitting.value || invalid) return false;
 
     isSubmitting.value = true;
 
@@ -67,6 +67,8 @@ class AuthVm extends FormWithAsyncValidation {
         message: isSignIn.value ? 'Bienvenido' : 'Cuenta creada',
       );
     }
+
+    return fine;
   }
 
   Future<bool> signIn(User? existingUser) async {

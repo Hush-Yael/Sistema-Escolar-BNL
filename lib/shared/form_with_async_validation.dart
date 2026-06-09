@@ -49,8 +49,8 @@ class FormWithAsyncValidation<
     return state;
   }
 
-  Future<dynamic> submit(BuildContext context) async {
-    if (isSubmitting.value || invalid) return;
+  Future<bool> submit(BuildContext context) async {
+    if (isSubmitting.value || invalid) return false;
 
     isSubmitting.value = true;
 
@@ -64,9 +64,11 @@ class FormWithAsyncValidation<
     final input = getFormData();
 
     try {
-      return await mutation!.mutateAsync(input);
+      await mutation!.mutateAsync(input);
+      return true;
     } catch (e) {
       if (context.mounted) toast(context: context, message: e.toString());
+      return false;
     } finally {
       isSubmitting.value = false;
     }
@@ -112,12 +114,12 @@ class ModalFormWithAsyncValidation<
 
   @override
   // ignore: avoid_renaming_method_parameters
-  Future<dynamic> submit(BuildContext modalContext) async {
-    final result = await super.submit(modalContext);
+  Future<bool> submit(BuildContext modalContext) async {
+    final fine = await super.submit(modalContext);
 
-    if (modalContext.mounted) Navigator.of(modalContext).pop();
+    if (fine && modalContext.mounted) Navigator.of(modalContext).pop();
 
-    return result;
+    return fine;
   }
 
   @override
