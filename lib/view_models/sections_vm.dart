@@ -6,9 +6,10 @@ import 'package:sistema_escolar_bnl/core/db/db.dart';
 import 'package:sistema_escolar_bnl/shared/mutations/index.dart';
 import 'package:sistema_escolar_bnl/shared/mutations/single_delete.dart';
 import 'package:sistema_escolar_bnl/shared/mutations/single_update.dart';
-import 'package:sistema_escolar_bnl/shared/table/mixin.dart';
+import 'package:sistema_escolar_bnl/shared/table/table_vm.dart';
 
-class SectionsVm with VmTrinaGridMixin {
+class SectionsVm extends TableVm {
+  @override
   final SectionsRepo repository;
 
   SectionsVm({required this.repository});
