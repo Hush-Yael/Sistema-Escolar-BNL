@@ -57,7 +57,17 @@ class FormWithAsyncValidation<
       const .new(milliseconds: 250),
     );
 
-    if (error) return isSubmitting.value = false;
+    if (error) {
+      if (context.mounted) {
+        toast(
+          context: context,
+          destructive: true,
+          message: 'Corrige los errores del formulario',
+        );
+      }
+
+      return isSubmitting.value = false;
+    }
 
     final input = getFormData();
 
