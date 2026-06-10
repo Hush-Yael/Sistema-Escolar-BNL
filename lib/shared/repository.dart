@@ -7,8 +7,10 @@ import 'package:meta/meta.dart';
 
 /// All the services used in the app must have a db dependency
 class Repository<TT extends Table, DC extends DataClass> {
+  @protected
   final AppDatabase db;
 
+  @protected
   @mustBeOverridden
   TableInfo<TT, DC> get table =>
       throw UnimplementedError('Se debe indicar la tabla a usar');
@@ -18,6 +20,7 @@ class Repository<TT extends Table, DC extends DataClass> {
   static const int uniqueConflict = 2067;
   static const int foreignConstraint = 1811;
 
+  @protected
   /// Update and delete operations must return at least 1 row to be considered successful
   Future<int> ensureMutated(Future<int> operation, String failedMsg) async {
     final int count = await operation;
@@ -29,6 +32,7 @@ class Repository<TT extends Table, DC extends DataClass> {
     }
   }
 
+  @protected
   /// expect that, if db operation fails, an error that explains what went wrong should be thrown
   Future<T> expectDBError<T>(
     Future<T> operation,
@@ -51,6 +55,7 @@ class Repository<TT extends Table, DC extends DataClass> {
     }
   }
 
+  @protected
   Future<int> updateSingle(
     int id,
     CompanionWithId constructorWithId,
@@ -71,6 +76,7 @@ class Repository<TT extends Table, DC extends DataClass> {
     );
   }
 
+  @protected
   Future<int> deleteSingle<T extends CompanionWithId>(
     int id,
     T modelCompanion,
@@ -85,6 +91,7 @@ class Repository<TT extends Table, DC extends DataClass> {
     return await ensureMutated(op, failedMsg);
   }
 
+  @protected
   Future<bool> checkFieldValueAvailable(
     Expression<bool> Function(TT) filter,
   ) async {
