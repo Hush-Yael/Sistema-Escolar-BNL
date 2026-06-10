@@ -121,49 +121,9 @@ class QueryTable<Item extends dynamic, TError extends Exception>
     }
 
     if (isEmpty.value) {
-      return DecoratedBox(
-        decoration: BoxDecoration(
-          border: Border.all(color: ShadTheme.of(context).colorScheme.border),
-          borderRadius: const .all(.circular(8)),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: .center,
-            crossAxisAlignment: .center,
-            children: [
-              const Icon(LucideIcons.sheet, size: 40),
-
-              const SizedBox(height: 10),
-
-              const Text(
-                'No hay nada para mostrar',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              ),
-
-              const SizedBox(height: 4),
-
-              Text(
-                'Parece que no se han añadido $pluralModelName',
-                style: TextStyle(
-                  color: ShadTheme.of(context).colorScheme.mutedForeground,
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              if (onGoToAdd != null)
-                ShadButton(
-                  width: 300,
-                  onPressed: onGoToAdd,
-                  enabled: AuthState.isAtLeast(.operator),
-                  trailing: const Icon(LucideIcons.arrowRight, size: 20),
-                  child: Text(
-                    'Agregar un${pluralModelArticle.endsWith('os') ? 'o' : 'a'}',
-                  ),
-                ),
-            ],
-          ),
-        ),
+      return TableEmptyState(
+        pluralModelName: pluralModelName,
+        onGoToAdd: onGoToAdd,
       );
     }
 
