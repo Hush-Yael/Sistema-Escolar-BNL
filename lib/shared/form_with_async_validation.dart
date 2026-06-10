@@ -36,7 +36,7 @@ class FormWithAsyncValidation<
   T getValue<T>(String key) {
     final val = formKey.currentState!.fields[key]?.value;
 
-    if (val.runtimeType == String) return val.trim();
+    if (val is String) return val.trim() as T;
 
     return val;
   }
