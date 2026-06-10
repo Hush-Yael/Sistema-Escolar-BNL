@@ -67,7 +67,7 @@ class _Sidebar extends StatelessWidget {
           const ShadSeparator.horizontal(margin: .all(0)),
 
           Padding(
-            padding: const .symmetric(vertical: 12, horizontal: 6),
+            padding: const .symmetric(vertical: 12, horizontal: 8),
             child: Column(
               crossAxisAlignment: .center,
               mainAxisSize: .min,
@@ -104,7 +104,7 @@ class _Header extends StatelessWidget {
               ? .directional(
                   top: Layout.headerPy,
                   bottom: Layout.headerPy,
-                  start: 16,
+                  start: 18,
                   end: 4,
                 )
               : .all(4),
