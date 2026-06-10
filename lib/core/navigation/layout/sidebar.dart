@@ -123,10 +123,10 @@ class _Header extends StatelessWidget {
       ),
       child: ShadIconButton.ghost(
         iconSize: 18,
-        icon: Icon(
-          expanded.value
-              ? LucideIcons.panelLeftClose
-              : LucideIcons.panelLeftOpen,
+        icon: Show(
+          when: () => expanded.value,
+          builder: (_) => const Icon(LucideIcons.panelLeftClose),
+          fallback: (_) => const Icon(LucideIcons.panelLeftOpen),
         ),
         onPressed: () {
           controller.isCompleted ? controller.reverse() : controller.forward();
