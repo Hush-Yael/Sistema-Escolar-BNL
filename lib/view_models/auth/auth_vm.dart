@@ -11,19 +11,16 @@ import 'package:sistema_escolar_bnl/constants/auth_constants.dart';
 import 'package:sistema_escolar_bnl/shared/widgets/form/field_with_custom_validation.dart';
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
 
-class AuthVm extends FormWithAsyncValidation {
-  @override
-  final AuthRepository repository;
-  final BuildContext context;
+class AuthVm extends FormWithAsyncValidation<AuthRepository, User> {
   final authState = AuthState.instance;
 
-  AuthVm({required this.context, required this.repository});
+  AuthVm(super.repository);
 
   static final instance = Provider((ctx) {
     final db = AppDatabase.instance.of(ctx);
     final repository = AuthRepository(db);
 
-    return AuthVm(context: ctx, repository: repository);
+    return AuthVm(repository);
   });
 
   FieldState get username => getFieldState(AuthFormFields.username);

@@ -17,11 +17,9 @@ class FormWithAsyncValidation<
   final bool isModal;
   Mutation? mutation;
 
-  @mustBeOverridden
-  Repo get repository =>
-      throw UnimplementedError('repository must be implemented');
+  final Repo repository;
 
-  FormWithAsyncValidation({this.isModal = false});
+  FormWithAsyncValidation(this.repository, {this.isModal = false});
 
   final formKey = GlobalKey<ShadFormState>();
 
@@ -98,7 +96,7 @@ class ModalFormWithAsyncValidation<
 >
     extends
         FormWithAsyncValidation<Input, SingleAddMutation<Input, NewObj>, Repo> {
-  ModalFormWithAsyncValidation({super.isModal = true});
+  ModalFormWithAsyncValidation(super.repository, {super.isModal = true});
 
   /// Used signals must be disposed manually to prevent crashing when using them when modal is opened again
   void disposeSignals() {
@@ -133,10 +131,6 @@ class ModalFormWithAsyncValidation<
   Input getFormData() {
     throw UnimplementedError();
   }
-
-  @override
-  @mustBeOverridden
-  Repo get repository => throw UnimplementedError();
 }
 
 typedef FieldState =
