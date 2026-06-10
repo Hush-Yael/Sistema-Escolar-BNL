@@ -103,6 +103,28 @@ class Repository<TT extends Table, DC extends DataClass> {
 
     return product != null;
   }
+
+  @protected
+  Future addSingle<T extends Insertable<DC>>(
+    T companion, {
+    required String objectName,
+    String? Function(SqliteException error)? onSqliteException,
+    String? uniqueErrorMsg,
+  }) async {
+    final op = db.into(table).insert(companion);
+
+    return await expectDBError(
+      op,
+      'No se pudo añadir $objectName',
+      onSqliteException:
+          onSqliteException ??
+          (error) {
+            return error.extendedResultCode == uniqueConflict
+                ? uniqueErrorMsg
+                : null;
+          },
+    );
+  }
 }
 
 typedef CompanionWithId = Function({required Value<int> id});
