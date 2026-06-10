@@ -22,72 +22,79 @@ typedef SingleDeleteMutationCb = Future<int> Function(int id);
 SingleDeleteMutation createSingleDeleteMutation<TListData extends List>(
   SingleCbMutationParams<SingleDeleteMutationCb, SingleDeleteMutationSideEffect>
   params,
-) => useMutation(
-  (ctx, _) async {
-    if (!AuthState.isAdmin()) {
-      return Future.error(
-        'No tienes permiso para eliminar $params.unauthPluralName',
-      );
-    }
+) {
+  assert(params.getStateManager != null);
 
-    final id = ctx.row.$id;
+  return useMutation(
+    (ctx, _) async {
+      if (!AuthState.isAdmin()) {
+        return Future.error(
+          'No tienes permiso para eliminar $params.unauthPluralName',
+        );
+      }
 
-    /*  return await Future.delayed(const Duration(seconds: 1), () {
+      final id = ctx.row.$id;
+
+      /*  return await Future.delayed(const Duration(seconds: 1), () {
         return Random().nextBool() ? Future.error('error') : id;
       }); */
 
-    return await params.cb(id);
-  },
+      return await params.cb(id);
+    },
 
-  onMutate: (colCtx, _) {
-    final rows = params.getStateManager()!.refRows;
-    final id = colCtx.row.$id;
+    onMutate: (colCtx, _) {
+      final rows = params.getStateManager!()!.refRows;
+      final id = colCtx.row.$id;
 
-    params.onMutate?.call(colCtx);
+      params.onMutate?.call(colCtx);
 
-    for (var i = 0; i < rows.length; i++) {
-      final row = rows[i];
+      for (var i = 0; i < rows.length; i++) {
+        final row = rows[i];
 
-      if (row.$id == id) {
-        rows.removeAt(i);
-        return i - 1;
+        if (row.$id == id) {
+          rows.removeAt(i);
+          return i - 1;
+        }
       }
-    }
 
-    return rows.length - 2;
-  },
+      return rows.length - 2;
+    },
 
-  onError: (error, columnCtx, beforeIndex, _) {
-    toast(
-      context: params.context,
-      message: error.toString(),
-      destructive: true,
-    );
+    onError: (error, columnCtx, beforeIndex, _) {
+      toast(
+        context: params.context,
+        message: error.toString(),
+        destructive: true,
+      );
 
-    try {
-      params.getStateManager()!.refRows.insert(beforeIndex! + 1, columnCtx.row);
-      params.onError?.call(columnCtx);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  },
+      try {
+        params.getStateManager!()!.refRows.insert(
+          beforeIndex! + 1,
+          columnCtx.row,
+        );
+        params.onError?.call(columnCtx);
+      } catch (e) {
+        print(e);
+        rethrow;
+      }
+    },
 
-  onSuccess: (_, columnCtx, _, ctx) {
-    toast(
-      context: params.context,
-      message:
-          '${toBeginningOfSentenceCase(params.successName)} eliminad${params.successMsgVocal}',
-    );
+    onSuccess: (_, columnCtx, _, ctx) {
+      toast(
+        context: params.context,
+        message:
+            '${toBeginningOfSentenceCase(params.successName)} eliminad${params.successMsgVocal}',
+      );
 
-    ctx.client.setQueryData<TListData, dynamic>(params.queryKey, (objList) {
-      final id = columnCtx.row.$id;
+      ctx.client.setQueryData<TListData, dynamic>(params.queryKey, (objList) {
+        final id = columnCtx.row.$id;
 
-      objList!.removeWhere((obj) => obj.id == id);
+        objList!.removeWhere((obj) => obj.id == id);
 
-      return objList;
-    });
+        return objList;
+      });
 
-    params.onSuccess?.call(columnCtx);
-  },
-);
+      params.onSuccess?.call(columnCtx);
+    },
+  );
+}

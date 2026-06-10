@@ -6,7 +6,7 @@ export 'single_add.dart';
 class MutationCommonParams<SideEffect extends Function?> {
   final BuildContext context;
   final QueryKey queryKey;
-  final TrinaGridStateManager? Function() getStateManager;
+  final TrinaGridStateManager? Function()? getStateManager;
 
   /// Name to be shown in the success message
   final String successName;
@@ -33,9 +33,9 @@ class MutationCommonParams<SideEffect extends Function?> {
     this.context, {
     required this.queryKey,
     required this.timestamped,
-    required this.getStateManager,
     required this.successName,
     required this.unauthPluralName,
+    this.getStateManager,
     this.successMsgVocal = 'o',
     this.onMutate,
     this.onError,
@@ -55,9 +55,9 @@ class SingleCbMutationParams<
     super.context, {
     required super.queryKey,
     required super.timestamped,
-    required super.getStateManager,
     required super.successName,
     required super.unauthPluralName,
+    super.getStateManager,
     super.successMsgVocal,
     super.onMutate,
     super.onError,

@@ -27,74 +27,78 @@ SingleUpdateMutation createSingleUpdateMutation<T>(
   required SingleUpdateMutationCb<T> cb,
   T Function(TrinaGridOnChangedEvent event, MutationFunctionContext ctx)?
   getValue,
-}) => useMutation(
-  (event, ctx) async {
-    if (!AuthState.isAtLeast(.operator)) {
-      return Future.error(
-        'No tienes permiso para editar ${params.unauthPluralName}',
+}) {
+  assert(params.getStateManager != null);
+
+  return useMutation(
+    (event, ctx) async {
+      if (!AuthState.isAtLeast(.operator)) {
+        return Future.error(
+          'No tienes permiso para editar ${params.unauthPluralName}',
+        );
+      }
+
+      final int id = event.row.$id;
+      final newValue = getValue?.call(event, ctx) ?? event.value;
+
+      // return await Future.error('error');
+      return await cb(event.column.field, id, newValue);
+    },
+
+    onMutate: (event, ctx) {
+      // important! prevents crashing
+      params.getStateManager!()?.setEditing(false);
+
+      params.onMutate?.call(event, ctx);
+      return null;
+    },
+
+    onError: (error, event, previousUpdatedAt, ctx) {
+      toast(
+        context: params.context,
+        message: error.toString(),
+        destructive: true,
       );
-    }
 
-    final int id = event.row.$id;
-    final newValue = getValue?.call(event, ctx) ?? event.value;
+      try {
+        event.cell.value = event.oldValue;
 
-    // return await Future.error('error');
-    return await cb(event.column.field, id, newValue);
-  },
+        params.onError?.call(event, ctx);
+      } catch (e) {
+        print(e);
+      }
+    },
 
-  onMutate: (event, ctx) {
-    // important! prevents crashing
-    params.getStateManager()?.setEditing(false);
+    onSuccess: (_, event, _, ctx) {
+      toast(
+        context: params.context,
+        message:
+            '${toBeginningOfSentenceCase(params.successName)} actualizad${params.successMsgVocal}',
+        destructive: false,
+      );
 
-    params.onMutate?.call(event, ctx);
-    return null;
-  },
+      if (params.timestamped) {
+        ctx.client.setQueryData<List, dynamic>(params.queryKey, (objList) {
+          final int id = event.row.$id;
 
-  onError: (error, event, previousUpdatedAt, ctx) {
-    toast(
-      context: params.context,
-      message: error.toString(),
-      destructive: true,
-    );
+          for (var i = 0; i < objList!.length; i++) {
+            final obj = objList[i];
 
-    try {
-      event.cell.value = event.oldValue;
+            if (obj.id == id) {
+              objList[i] = Function.apply(obj.copyWith, null, {
+                Symbol(event.column.field):
+                    getValue?.call(event, ctx) ?? event.value,
+              });
 
-      params.onError?.call(event, ctx);
-    } catch (e) {
-      print(e);
-    }
-  },
-
-  onSuccess: (_, event, _, ctx) {
-    toast(
-      context: params.context,
-      message:
-          '${toBeginningOfSentenceCase(params.successName)} actualizad${params.successMsgVocal}',
-      destructive: false,
-    );
-
-    if (params.timestamped) {
-      ctx.client.setQueryData<List, dynamic>(params.queryKey, (objList) {
-        final int id = event.row.$id;
-
-        for (var i = 0; i < objList!.length; i++) {
-          final obj = objList[i];
-
-          if (obj.id == id) {
-            objList[i] = Function.apply(obj.copyWith, null, {
-              Symbol(event.column.field):
-                  getValue?.call(event, ctx) ?? event.value,
-            });
-
-            return objList;
+              return objList;
+            }
           }
-        }
 
-        return objList;
-      });
-    }
+          return objList;
+        });
+      }
 
-    params.onSuccess?.call(event, ctx);
-  },
-);
+      params.onSuccess?.call(event, ctx);
+    },
+  );
+}
