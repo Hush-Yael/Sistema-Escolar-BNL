@@ -69,7 +69,7 @@ class FormWithAsyncValidation<
       return isSubmitting.value = false;
     }
 
-    final input = getFormData();
+    final input = createNewObj();
 
     try {
       await delay(mutation!.mutateAsync(input), const .new(milliseconds: 250));
@@ -83,7 +83,7 @@ class FormWithAsyncValidation<
   }
 
   @mustBeOverridden
-  MutInput getFormData() {
+  MutInput createNewObj() {
     throw UnimplementedError(
       'getFormData must be implemented to perform mutation',
     );
@@ -138,7 +138,7 @@ class ModalFormWithAsyncValidation<
 
   @override
   @mustBeOverridden
-  Input getFormData() {
+  Input createNewObj() {
     throw UnimplementedError();
   }
 }
