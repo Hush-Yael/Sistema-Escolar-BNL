@@ -14,13 +14,13 @@ class Sidebar extends HookWidget {
 
   static final provider = Provider.withArgument((
     context,
-    (bool isExpanded, int currentIndex, AnimationController controller) p,
+    (bool isExpanded, AnimationController controller) arg,
   ) {
-    final (isExpanded, currentIndex, controller) = p;
+    final (isExpanded, controller) = arg;
 
     final expanded = Signal(isExpanded);
 
-    return (expanded, currentIndex, controller);
+    return (expanded, controller);
   });
 
   @override
@@ -37,23 +37,23 @@ class Sidebar extends HookWidget {
     final animation = Tween<double>(begin: 64, end: 250).animate(controller);
 
     return ProviderScope(
-      providers: [provider((isExpanded, currentIndex, controller))],
+      providers: [provider((isExpanded, controller))],
       child: AnimatedBuilder(
         animation: animation,
         builder: (context, child) =>
             SizedBox(width: animation.value, child: child),
-        child: const _Sidebar(),
+        child: _Sidebar(currentIndex: currentIndex),
       ),
     );
   }
 }
 
 class _Sidebar extends StatelessWidget {
-  const _Sidebar();
+  final int currentIndex;
+  const _Sidebar({required this.currentIndex});
 
   @override
   Widget build(BuildContext context) {
-    final (expanded, currentIndex, controller) = Sidebar.provider.of(context);
     final theme = ShadTheme.of(context);
 
     return DecoratedBox(
@@ -94,7 +94,7 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = ShadTheme.of(context);
     final prefs = SharedPrefsService.instance.of(context);
-    final (expanded, _, controller) = Sidebar.provider.of(context);
+    final (expanded, controller) = Sidebar.provider.of(context);
 
     return SignalBuilder(
       builder: (context, btn) => SizedBox(

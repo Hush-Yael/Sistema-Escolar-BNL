@@ -27,7 +27,7 @@ class _SidebarLinkState extends State<SidebarLink> {
 
   @override
   Widget build(BuildContext context) {
-    final (expanded, _, _) = Sidebar.provider.of(context);
+    final (expanded, _) = Sidebar.provider.of(context);
     final colors = ShadTheme.of(context).colorScheme;
 
     return MouseRegion(
