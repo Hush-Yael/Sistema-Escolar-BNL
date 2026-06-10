@@ -72,7 +72,7 @@ class FormWithAsyncValidation<
     final input = getFormData();
 
     try {
-      await mutation!.mutateAsync(input);
+      await delay(mutation!.mutateAsync(input), const .new(milliseconds: 250));
       return true;
     } catch (e) {
       if (context.mounted) toast(context: context, message: e.toString());
