@@ -2,102 +2,60 @@ import 'package:flutter_query/flutter_query.dart';
 import 'package:intl/intl.dart';
 import 'package:sistema_escolar_bnl/core/auth_state.dart';
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
-import 'package:sistema_escolar_bnl/core/utils/table_utils.dart';
 import 'package:sistema_escolar_bnl/shared/mutations/index.dart';
-import 'package:trina_grid/trina_grid.dart';
 
-typedef SingleAddMutation<Variables, NewObj extends Object> =
-    MutationResult<int, dynamic, Variables, ({TrinaRow row, NewObj newObj})>;
+typedef SingleAddMutation<Input> = MutationResult<void, dynamic, Input, void>;
 
-typedef SingleAddMutationCb<Variables, AddedObj extends dynamic> =
-    Future<AddedObj> Function(Variables variables);
+typedef SingleAddMutationCb<Input> = Future<void> Function(Input input);
 
-typedef SingleAddMutationSideEffect<Variables, NewObj extends Object> =
-    void Function(Variables variables, ({TrinaRow row, NewObj newObj}) record);
+typedef SingleAddMutationSideEffect<Input> =
+    void Function(Input input, MutationFunctionContext ctx);
 
 /// Handles the addition of a single model object.
 /// It checks add permission before adding.
-/// On mutation it create a new row using a new object and adds it to the rows list.
-/// On error, the new row is removed from the rows list.
-/// On success, the new object is added to the query list.
-SingleAddMutation<Variables, NewObj>
-createSingleAddMutation<Variables, NewObj extends Object>(
+/// On success, the object list is refetch.
+SingleAddMutation<Input> createSingleAddMutation<Input>(
   SingleCbMutationParams<
-    SingleAddMutationCb<Variables, NewObj>,
+    SingleAddMutationCb<Input>,
     SingleAddMutationSideEffect
   >
-  params, {
-  required NewObj Function(Variables variables, MutationFunctionContext ctx)
-  createNewObj,
-  required TrinaRow Function(int rowsLength, NewObj newObj) createRow,
-}) => useMutation(
-  (Variables variables, ctx) async {
+  params,
+) => useMutation(
+  (Input input, ctx) async {
     if (!AuthState.isAtLeast(.operator)) {
       return Future.error(
         'No tienes permiso para añadir ${params.unauthPluralName}',
       );
     }
 
-    /* return await Future.delayed(const Duration(seconds: 2), () {
-      return Future.error('error');
-      return 11;
-    }); */
+    // return await Future.delayed(const Duration(microseconds: 500), () {
+    // return Future.error('error');
+    // });
 
-    final newObj = await params.cb(variables);
-    return (newObj as dynamic).id;
+    await params.cb(input);
   },
 
-  onMutate: (variables, ctx) {
-    try {
-      final state = params.getStateManager()!;
+  onMutate: params.onMutate,
 
-      final newObj = createNewObj(variables, ctx);
-
-      final newRow = createRow(state.refRows.length, newObj);
-
-      state.insertRows(state.refRows.length, [newRow]);
-
-      final record = (row: newRow, newObj: newObj);
-
-      params.onMutate?.call(variables, record);
-
-      return record;
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  },
-
-  onSuccess: (addedId, variables, returned, ctx) {
+  onSuccess: (_, input, _, ctx) {
     toast(
       context: params.context,
       message:
           '${toBeginningOfSentenceCase(params.successName)} añadid${params.successMsgVocal}',
     );
 
-    returned!.row.$id = addedId;
+    ctx.client.invalidateQueries(queryKey: params.queryKey);
 
-    ctx.client.setQueryData<List, dynamic>(params.queryKey, (list) {
-      list!.add(
-        Function.apply((returned.newObj as dynamic).copyWith, null, {
-          #id: addedId,
-        }),
-      );
-      return list;
-    });
-
-    params.onSuccess?.call(variables, returned);
+    params.onSuccess?.call(input, ctx);
   },
 
-  onError: (error, variables, returned, ctx) {
-    toast(context: params.context, message: error.toString());
+  onError: (error, input, _, ctx) {
+    toast(
+      context: params.context,
+      message: error.toString(),
+      destructive: true,
+    );
 
-    final state = params.getStateManager()!;
-
-    state.refRows.remove(returned!.row);
-
-    params.onError?.call(variables, returned);
-
-    state.notifyListeners();
+    params.onError?.call(input, ctx);
   },
 );
