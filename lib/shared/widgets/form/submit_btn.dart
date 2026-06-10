@@ -12,7 +12,7 @@ class SubmitBtn extends StatelessWidget {
   const SubmitBtn({
     super.key,
     this.width,
-    this.loaderSize = 16,
+    this.loaderSize = 14,
     required this.text,
     required this.form,
   });
@@ -34,7 +34,7 @@ class SubmitBtn extends StatelessWidget {
     return SizedBox.square(
       dimension: loaderSize,
       child: CircularProgressIndicator(
-        strokeWidth: 2,
+        strokeWidth: 2.5,
         color: ShadTheme.of(context).colorScheme.primaryForeground,
       ),
     );
