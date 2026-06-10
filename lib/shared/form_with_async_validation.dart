@@ -1,6 +1,6 @@
+import 'package:drift/drift.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_query/flutter_query.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/shared/mutations/index.dart';
 import 'package:flutter_solidart/flutter_solidart.dart';
@@ -10,12 +10,15 @@ import 'package:sistema_escolar_bnl/shared/repository.dart';
 import 'package:sistema_escolar_bnl/shared/widgets/form/field_with_custom_validation.dart';
 
 class FormWithAsyncValidation<
-  MutInput,
-  Mutation extends MutationResult<dynamic, dynamic, MutInput, dynamic>,
-  Repo extends Repository
+  Repo extends Repository,
+  MutInput extends Insertable
 > {
   final bool isModal;
-  Mutation? mutation;
+
+  SingleAddMutation<MutInput>? mutation;
+
+  void ensureMutationIsSet(BuildContext context) =>
+      mutation ??= createMutation(context);
 
   final Repo repository;
 
@@ -89,6 +92,10 @@ class FormWithAsyncValidation<
     );
   }
 
+  @mustBeOverridden
+  SingleAddMutation<MutInput> createMutation(BuildContext context) =>
+      throw UnimplementedError('createMutation must be overridden');
+
   AsyncValidatorResult checkFieldAsync<T>({
     required T value,
     required Future<bool> Function(T) repoCheckerFn,
@@ -100,12 +107,10 @@ class FormWithAsyncValidation<
 }
 
 class ModalFormWithAsyncValidation<
-  Input,
-  NewObj extends Object,
-  Repo extends Repository
+  Repo extends Repository,
+  Input extends Insertable
 >
-    extends
-        FormWithAsyncValidation<Input, SingleAddMutation<Input, NewObj>, Repo> {
+    extends FormWithAsyncValidation<Repo, Input> {
   ModalFormWithAsyncValidation(super.repository, {super.isModal = true});
 
   /// Used signals must be disposed manually to prevent crashing when using them when modal is opened again
@@ -141,6 +146,10 @@ class ModalFormWithAsyncValidation<
   Input createNewObj() {
     throw UnimplementedError();
   }
+
+  @override
+  SingleAddMutation<Input> createMutation(BuildContext context) =>
+      throw UnimplementedError('createMutation must be overridden');
 }
 
 typedef FieldState =

@@ -136,4 +136,7 @@ class AuthVm extends FormWithAsyncValidation<AuthRepository, User> {
   // not needed
   @override
   createNewObj() => throw UnimplementedError();
+
+  @override
+  createMutation(BuildContext context) => throw UnimplementedError();
 }
