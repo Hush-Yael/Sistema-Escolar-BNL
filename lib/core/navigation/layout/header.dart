@@ -48,7 +48,7 @@ class Header extends StatelessWidget {
                   width: 30,
                   height: 30,
                   iconSize: 16,
-                  icon: const Icon(LucideIcons.settings),
+                  icon: const Icon(LucideIcons.userCog),
                   onPressed: () {
                     GoRouter.of(context).goNamed(AppRoutes.account.name);
                   },
