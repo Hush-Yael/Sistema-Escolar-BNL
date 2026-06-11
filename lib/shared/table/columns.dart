@@ -67,7 +67,7 @@ class TableColumn extends TrinaColumn {
     Renderer renderer,
     TitleRenderer titleRenderer,
     double width = TrinaGridSettings.columnWidth,
-    bool? editable,
+    bool editable = true,
     bool autoSize = true,
     TrinaColumnTextAlign textAlign = TrinaColumnTextAlign.start,
   }) : this(
@@ -86,7 +86,7 @@ class TableColumn extends TrinaColumn {
     Renderer renderer,
     TitleRenderer titleRenderer,
     double width = TrinaGridSettings.columnWidth,
-    bool? editable,
+    bool editable = true,
     bool autoSize = true,
     TrinaColumnTextAlign textAlign = TrinaColumnTextAlign.start,
   }) : this(
