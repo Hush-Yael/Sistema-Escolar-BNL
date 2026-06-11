@@ -64,31 +64,11 @@ class SectionsVm extends TableVm {
       ),
       cb: (column, id, newValue) {
         if (column == SectionsTableColumns.letter.name) {
-          final String letter = (newValue as String).trim();
-
-          if (letter.isEmpty) {
-            throw ErrorDescription('La letra no puede estar vacía');
-          }
-
-          if (letter.length > 1) {
-            throw ErrorDescription('Solo se acepta un carácter');
-          }
-
-          if (!RegExp(r'^[A-Za-zñÑ]$').hasMatch(newValue)) {
-            throw ErrorDescription('Solo se aceptan letras');
-          }
-
           return repository.updateLetter(id, newValue);
         }
 
         if (column == SectionsTableColumns.capacity.name) {
-          final int capacity = (newValue as int);
-
-          if (capacity <= 0) {
-            throw ErrorDescription('La capacidad debe ser mayor a 0');
-          }
-
-          return repository.updateCapacity(id, capacity);
+          return repository.updateCapacity(id, newValue);
         }
 
         throw ErrorDescription('La columna $column no es editable');

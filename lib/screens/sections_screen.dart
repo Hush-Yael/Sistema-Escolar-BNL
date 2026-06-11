@@ -80,9 +80,14 @@ class ListGrades extends HookWidget {
           enableContextMenu: false,
           enableColumnDrag: false,
           enableDropToResize: false,
+          validator: (value, ctx) => SectionValidators.letter(value),
         ),
 
-        TableColumn.number(SectionsTableColumns.capacity, textAlign: .right),
+        TableColumn.number(
+          SectionsTableColumns.capacity,
+          textAlign: .right,
+          validator: (value, ctx) => SectionValidators.capacity(value),
+        ),
 
         TableColumn.number(
           SectionsTableColumns.studentsCount,

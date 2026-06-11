@@ -29,6 +29,7 @@ class TableColumn extends TrinaColumn {
     super.enableFilterMenuItem,
     super.enableAutoEditing,
     this.editable = true,
+    super.validator,
   }) : super(
          title: column.title,
          field: column.name,
@@ -47,6 +48,7 @@ class TableColumn extends TrinaColumn {
     TrinaColumnTextAlign titleTextAlign = TrinaColumnTextAlign.start,
     bool enableColumnDrag = true,
     bool enableDropToResize = true,
+    Validator validator,
   }) : this(
          column,
          type: .text(),
@@ -60,6 +62,7 @@ class TableColumn extends TrinaColumn {
          titleTextAlign: titleTextAlign,
          enableColumnDrag: enableColumnDrag,
          enableDropToResize: enableDropToResize,
+         validator: validator,
        );
 
   TableColumn.number(
@@ -70,6 +73,7 @@ class TableColumn extends TrinaColumn {
     bool editable = true,
     bool autoSize = true,
     TrinaColumnTextAlign textAlign = TrinaColumnTextAlign.start,
+    Validator? validator,
   }) : this(
          column,
          type: .number(),
@@ -79,6 +83,7 @@ class TableColumn extends TrinaColumn {
          textAlign: textAlign,
          width: width,
          suppressedAutoSize: !autoSize,
+         validator: validator,
        );
 
   TableColumn.date(
@@ -89,6 +94,7 @@ class TableColumn extends TrinaColumn {
     bool editable = true,
     bool autoSize = true,
     TrinaColumnTextAlign textAlign = TrinaColumnTextAlign.start,
+    Validator? validator,
   }) : this(
          column,
          type: formattedDateColumnType,
@@ -98,8 +104,10 @@ class TableColumn extends TrinaColumn {
          textAlign: textAlign,
          width: width,
          suppressedAutoSize: !autoSize,
+         validator: validator,
        );
 }
 
 typedef Renderer = Widget Function(TrinaColumnRendererContext)?;
 typedef TitleRenderer = Widget Function(TrinaColumnTitleRendererContext)?;
+typedef Validator = String? Function(dynamic, TrinaValidationContext)?;
