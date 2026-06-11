@@ -5,6 +5,7 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/constants/sections_constants.dart';
 import 'package:sistema_escolar_bnl/constants/shared_constants.dart';
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
+import 'package:sistema_escolar_bnl/shared/table/columns.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/table.dart';
 import 'package:sistema_escolar_bnl/view_models/sections_vm.dart';
 import 'package:trina_grid/trina_grid.dart';
@@ -62,51 +63,37 @@ class ListGrades extends HookWidget {
         };
       },
       getColumns: (context) => [
-        .new(
-          title: 'Grado',
-          field: SectionsTableColumns.grade.name,
-          type: .text(),
+        TableColumn.text(
+          SectionsTableColumns.grade,
           width: 150,
-          suppressedAutoSize: true,
+          autoSize: false,
           enableContextMenu: false,
-          enableEditingMode: false,
+          editable: false,
         ),
 
-        .new(
-          title: 'Letra',
-          field: SectionsTableColumns.letter.name,
-          type: .text(),
+        TableColumn.text(
+          SectionsTableColumns.letter,
           titleTextAlign: .center,
           textAlign: .center,
           width: 80,
-          suppressedAutoSize: true,
+          autoSize: false,
           enableContextMenu: false,
           enableColumnDrag: false,
           enableDropToResize: false,
         ),
 
-        .new(
-          title: 'Capacidad',
-          field: SectionsTableColumns.capacity.name,
-          type: .number(),
+        TableColumn.number(SectionsTableColumns.capacity, textAlign: .right),
+
+        TableColumn.number(
+          SectionsTableColumns.studentsCount,
           textAlign: .right,
+          editable: false,
         ),
 
-        .new(
-          title: 'Estudiantes',
-          field: SectionsTableColumns.studentsCount.name,
-          type: .number(),
-          textAlign: .right,
-          enableAutoEditing: false,
-          enableEditingMode: false,
-        ),
-
-        .new(
-          title: 'Matrícula',
-          field: SectionsTableColumns.enrollment.name,
+        TableColumn(
+          SectionsTableColumns.enrollment,
           type: .custom(),
-          enableEditingMode: false,
-          enableAutoEditing: false,
+          editable: false,
           enableSorting: false,
           enableFilterMenuItem: false,
           renderer: (ctx) {

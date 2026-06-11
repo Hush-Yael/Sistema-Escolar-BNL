@@ -7,7 +7,7 @@ import 'package:sistema_escolar_bnl/constants/users_constants.dart';
 import 'package:sistema_escolar_bnl/core/auth_state.dart';
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
 import 'package:sistema_escolar_bnl/core/utils/table_utils.dart';
-import 'package:sistema_escolar_bnl/shared/table/constants.dart';
+import 'package:sistema_escolar_bnl/shared/table/columns.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/table.dart';
 import 'package:sistema_escolar_bnl/view_models/users/users_vm.dart';
 import 'package:trina_grid/trina_grid.dart';
@@ -80,32 +80,16 @@ class _Table extends HookWidget {
         );
       },
       getColumns: (context) => [
-        .new(
-          field: UsersTableColumns.name.name,
-          type: .text(),
-          title: 'Nombre',
-          enableEditingMode: false,
-        ),
+        TableColumn.text(UsersTableColumns.name, editable: false),
 
-        .new(
-          field: UsersTableColumns.username.name,
-          type: .text(),
-          title: 'Nombre de usuario',
-          enableEditingMode: false,
-        ),
+        TableColumn.text(UsersTableColumns.username, editable: false),
 
-        .new(
-          field: UsersTableColumns.role.name,
+        TableColumn(
+          UsersTableColumns.role,
           type: .select(UserRole.values.map((role) => role.label).toList()),
-          title: 'Rol',
         ),
 
-        .new(
-          field: UsersTableColumns.lastLogin.name,
-          type: formattedDateColumnType,
-          title: 'Último ingreso',
-          enableEditingMode: false,
-        ),
+        TableColumn.date(UsersTableColumns.lastLogin, editable: false),
       ],
     );
   }
