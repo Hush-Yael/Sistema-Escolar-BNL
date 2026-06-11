@@ -16,6 +16,7 @@ class TableColumn extends TrinaColumn {
     this.column, {
     required super.type,
     super.renderer,
+    super.titleRenderer,
     super.width,
     super.suppressedAutoSize,
     super.enableContextMenu,
@@ -36,7 +37,8 @@ class TableColumn extends TrinaColumn {
 
   TableColumn.text(
     ColumnsEnum column, {
-    Widget Function(TrinaColumnRendererContext)? renderer,
+    Renderer renderer,
+    TitleRenderer titleRenderer,
     double width = TrinaGridSettings.columnWidth,
     bool autoSize = true,
     bool enableContextMenu = true,
@@ -49,6 +51,7 @@ class TableColumn extends TrinaColumn {
          column,
          type: .text(),
          renderer: renderer,
+         titleRenderer: titleRenderer,
          width: width,
          suppressedAutoSize: !autoSize,
          editable: editable,
@@ -61,7 +64,8 @@ class TableColumn extends TrinaColumn {
 
   TableColumn.number(
     ColumnsEnum column, {
-    Widget Function(TrinaColumnRendererContext)? renderer,
+    Renderer renderer,
+    TitleRenderer titleRenderer,
     double width = TrinaGridSettings.columnWidth,
     bool? editable,
     bool autoSize = true,
@@ -70,6 +74,7 @@ class TableColumn extends TrinaColumn {
          column,
          type: .number(),
          renderer: renderer,
+         titleRenderer: titleRenderer,
          editable: editable,
          textAlign: textAlign,
          width: width,
@@ -78,7 +83,8 @@ class TableColumn extends TrinaColumn {
 
   TableColumn.date(
     ColumnsEnum column, {
-    Widget Function(TrinaColumnRendererContext)? renderer,
+    Renderer renderer,
+    TitleRenderer titleRenderer,
     double width = TrinaGridSettings.columnWidth,
     bool? editable,
     bool autoSize = true,
@@ -87,9 +93,13 @@ class TableColumn extends TrinaColumn {
          column,
          type: formattedDateColumnType,
          renderer: renderer,
+         titleRenderer: titleRenderer,
          editable: editable,
          textAlign: textAlign,
          width: width,
          suppressedAutoSize: !autoSize,
        );
 }
+
+typedef Renderer = Widget Function(TrinaColumnRendererContext)?;
+typedef TitleRenderer = Widget Function(TrinaColumnTitleRendererContext)?;
