@@ -4,8 +4,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/constants/sections_constants.dart';
 import 'package:sistema_escolar_bnl/constants/shared_constants.dart';
-import 'package:sistema_escolar_bnl/core/utils/fn.dart';
 import 'package:sistema_escolar_bnl/shared/table/columns.dart';
+import 'package:sistema_escolar_bnl/shared/table/widgets/buttons.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/table.dart';
 import 'package:sistema_escolar_bnl/view_models/sections_vm.dart';
 import 'package:trina_grid/trina_grid.dart';
@@ -138,33 +138,12 @@ class ListGrades extends HookWidget {
           },
         ),
       ],
-      actionsWidth: 220,
       actionsRenderer: (ctx) {
         return Center(
-          child: Row(
-            spacing: 10,
-            mainAxisAlignment: .center,
-            children: [
-              ShadButton.secondary(
-                height: 30,
-                child: const Text('Ver matrícula'),
-              ),
-
-              ShadIconButton.destructive(
-                height: 30,
-                width: 30,
-                iconSize: 20,
-                onPressed: () {
-                  confirmDeletion(
-                    context,
-                    title: '¿Realmente quieres eliminar esta sección?',
-                    msg: 'Esta acción no se puede deshacer.',
-                    onConfirmed: () => deleteMutation.mutate(ctx),
-                  );
-                },
-                icon: const Icon(Icons.delete_outline_outlined),
-              ),
-            ],
+          child: DeleteBtn(
+            ctx: ctx,
+            deleteMutation: deleteMutation,
+            title: '¿Realmente quieres eliminar esta sección?',
           ),
         );
       },

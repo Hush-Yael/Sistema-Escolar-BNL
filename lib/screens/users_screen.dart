@@ -5,9 +5,9 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/constants/auth_constants.dart';
 import 'package:sistema_escolar_bnl/constants/users_constants.dart';
 import 'package:sistema_escolar_bnl/core/auth_state.dart';
-import 'package:sistema_escolar_bnl/core/utils/fn.dart';
 import 'package:sistema_escolar_bnl/core/utils/table_utils.dart';
 import 'package:sistema_escolar_bnl/shared/table/columns.dart';
+import 'package:sistema_escolar_bnl/shared/table/widgets/buttons.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/table.dart';
 import 'package:sistema_escolar_bnl/view_models/users/users_vm.dart';
 import 'package:trina_grid/trina_grid.dart';
@@ -63,19 +63,10 @@ class _Table extends HookWidget {
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                 )
-              : ShadIconButton.destructive(
-                  height: 30,
-                  width: 30,
-                  iconSize: 20,
-                  onPressed: () {
-                    confirmDeletion(
-                      context,
-                      title: '¿Realmente quieres eliminar este usuario?',
-                      msg: 'Esta acción no se puede deshacer.',
-                      onConfirmed: () => deleteMutation.mutate(ctx),
-                    );
-                  },
-                  icon: const Icon(Icons.delete_outline_outlined),
+              : DeleteBtn(
+                  ctx: ctx,
+                  deleteMutation: deleteMutation,
+                  title: '¿Realmente quieres eliminar este usuario?',
                 ),
         );
       },
