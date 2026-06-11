@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_query/flutter_query.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/core/auth_state.dart';
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
 import 'package:sistema_escolar_bnl/shared/table/constants.dart';
@@ -9,6 +8,7 @@ import 'package:sistema_escolar_bnl/shared/table/table_config.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/actions_column.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/index_column.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/table.d.dart';
+import 'package:sistema_escolar_bnl/shared/table/widgets/table_empty_state.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/table_fetch_error.dart';
 import 'package:trina_grid/trina_grid.dart';
 
@@ -23,12 +23,11 @@ class QueryTable<Item extends dynamic, TError extends Exception>
     required super.pluralModelArticle,
     required super.getColumns,
     required super.setStateManager,
-    super.onGoToAdd,
+    super.renderAddBtn,
     super.getCells,
     super.getRow,
     super.deleteMutation,
     super.createConfig,
-    super.createHeader,
     super.createFooter,
     super.onLoaded,
     super.onChanged,
@@ -103,11 +102,15 @@ class QueryTable<Item extends dynamic, TError extends Exception>
             return TrinaRow(metadata: {'id': item.id}, cells: cells);
           }).toList(),
         ).then((newRows) {
-          state.value!.refRows.clearFromOriginal();
+          state.value!.refRows.clear();
           state.value!.refRows.addAll(newRows);
 
           state.value!.setShowLoading(false);
         });
+      }
+
+      if (query.isRefetching && query.isFetched && state.value != null) {
+        state.value!.setShowLoading(true, level: .rows);
       }
 
       return null;
@@ -123,7 +126,7 @@ class QueryTable<Item extends dynamic, TError extends Exception>
     if (isEmpty.value) {
       return TableEmptyState(
         pluralModelName: pluralModelName,
-        onGoToAdd: onGoToAdd,
+        renderAddBtn: renderAddBtn,
       );
     }
 
@@ -141,7 +144,17 @@ class QueryTable<Item extends dynamic, TError extends Exception>
 
         onLoaded?.call(e);
       },
-      createHeader: createHeader,
+      createHeader: renderAddBtn == null
+          ? null
+          : (stateManager) {
+              return SizedBox(
+                height: 60,
+                child: Padding(
+                  padding: const .all(8.0),
+                  child: Align(alignment: .centerEnd, child: renderAddBtn!()),
+                ),
+              );
+            },
       createFooter: createFooter,
       onBeforeActiveCellChange: _onBeforeActiveCellChange,
       onChanged: onChanged,

@@ -11,7 +11,7 @@ abstract class IQueryTable<Item extends dynamic, TError extends Exception>
 
   final String pluralModelName;
   final String pluralModelArticle;
-  final void Function()? onGoToAdd;
+  final Widget Function()? renderAddBtn;
 
   final List<TrinaColumn> Function(BuildContext context) getColumns;
   final TrinaRow Function(Item item)? getRow;
@@ -24,7 +24,6 @@ abstract class IQueryTable<Item extends dynamic, TError extends Exception>
 
   final TrinaGridConfiguration Function(TrinaGridConfiguration baseConfig)?
   createConfig;
-  final Widget Function(TrinaGridStateManager)? createHeader;
   final Widget Function(TrinaGridStateManager)? createFooter;
   final void Function(TrinaGridOnLoadedEvent)? onLoaded;
   final void Function(TrinaGridOnChangedEvent)? onChanged;
@@ -63,9 +62,8 @@ abstract class IQueryTable<Item extends dynamic, TError extends Exception>
     this.onColumnsMoved,
     this.onBeforeActiveCellChange,
     this.createConfig,
-    this.createHeader,
     this.createFooter,
-    this.onGoToAdd,
+    this.renderAddBtn,
     this.getRow,
     this.getCells,
     this.deleteMutation,

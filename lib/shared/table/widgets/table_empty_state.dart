@@ -5,11 +5,11 @@ class TableEmptyState extends StatelessWidget {
   const TableEmptyState({
     super.key,
     required this.pluralModelName,
-    required this.onGoToAdd,
+    required this.renderAddBtn,
   });
 
   final String pluralModelName;
-  final Widget Function()? onGoToAdd;
+  final Widget Function()? renderAddBtn;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class TableEmptyState extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            if (onGoToAdd != null) onGoToAdd!(),
+            if (renderAddBtn != null) renderAddBtn!(),
           ],
         ),
       ),
