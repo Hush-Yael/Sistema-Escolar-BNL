@@ -11,10 +11,7 @@ class SharedPrefsService {
 
   /// Ensures the service is initialized, must be called before using the instance
   static Future<void> setup() async {
-    if (service == null) {
-      final prefs = await SharedPreferences.getInstance();
-      service = prefs;
-    }
+    service ??= await SharedPreferences.getInstance();
   }
 
   static const themeModeKey = 'theme';
