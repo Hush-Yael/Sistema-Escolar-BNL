@@ -79,13 +79,13 @@ class ListGrades extends HookWidget {
           enableContextMenu: false,
           enableColumnDrag: false,
           enableDropToResize: false,
-          validator: (value, ctx) => SectionValidators.letter(value),
+          validate: SectionValidators.letter,
         ),
 
         .number(
           SectionsTableColumns.capacity,
           textAlign: .right,
-          validator: (value, ctx) => SectionValidators.capacity(value),
+          validate: SectionValidators.capacity,
         ),
 
         .number(

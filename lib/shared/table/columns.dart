@@ -11,6 +11,7 @@ abstract class ColumnsEnum implements Enum {
 class TableColumn extends TrinaColumn {
   final ColumnsEnum column;
   bool? editable;
+  Validator? validate;
 
   TableColumn(
     this.column, {
@@ -28,12 +29,15 @@ class TableColumn extends TrinaColumn {
     super.enableFilterMenuItem,
     super.enableAutoEditing,
     this.editable = true,
-    super.validator,
+    this.validate,
   }) : super(
          title: column.title,
          field: column.name,
          enableEditingMode: editable,
          enableSorting: false,
+         validator: validate != null
+             ? (value, context) => validate(value)
+             : null,
        );
 
   TableColumn.text(
@@ -48,7 +52,7 @@ class TableColumn extends TrinaColumn {
     TrinaColumnTextAlign titleTextAlign = TrinaColumnTextAlign.start,
     bool enableColumnDrag = true,
     bool enableDropToResize = true,
-    Validator validator,
+    Validator validate,
   }) : this(
          column,
          type: .text(),
@@ -62,7 +66,7 @@ class TableColumn extends TrinaColumn {
          titleTextAlign: titleTextAlign,
          enableColumnDrag: enableColumnDrag,
          enableDropToResize: enableDropToResize,
-         validator: validator,
+         validate: validate,
        );
 
   TableColumn.number(
@@ -73,7 +77,7 @@ class TableColumn extends TrinaColumn {
     bool editable = true,
     bool autoSize = true,
     TrinaColumnTextAlign textAlign = TrinaColumnTextAlign.start,
-    Validator? validator,
+    Validator? validate,
   }) : this(
          column,
          type: .number(),
@@ -83,7 +87,7 @@ class TableColumn extends TrinaColumn {
          textAlign: textAlign,
          width: width,
          suppressedAutoSize: !autoSize,
-         validator: validator,
+         validate: validate,
        );
 
   TableColumn.date(
@@ -94,7 +98,7 @@ class TableColumn extends TrinaColumn {
     bool editable = true,
     bool autoSize = true,
     TrinaColumnTextAlign textAlign = TrinaColumnTextAlign.start,
-    Validator? validator,
+    Validator? validate,
   }) : this(
          column,
          type: formattedDateColumnType,
@@ -104,10 +108,10 @@ class TableColumn extends TrinaColumn {
          textAlign: textAlign,
          width: width,
          suppressedAutoSize: !autoSize,
-         validator: validator,
+         validate: validate,
        );
 }
 
 typedef Renderer = Widget Function(TrinaColumnRendererContext)?;
 typedef TitleRenderer = Widget Function(TrinaColumnTitleRendererContext)?;
-typedef Validator = String? Function(dynamic, TrinaValidationContext)?;
+typedef Validator = String? Function(String?)?;
