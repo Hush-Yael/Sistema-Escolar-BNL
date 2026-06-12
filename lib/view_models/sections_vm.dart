@@ -27,7 +27,6 @@ class SectionsVm extends TableVm {
     S? onError,
   }) => MutationCommonParams<S>(
     context,
-    timestamped: false,
     queryKey: kSectionsKey,
     getStateManager: getStateManager,
     successName: 'sección',

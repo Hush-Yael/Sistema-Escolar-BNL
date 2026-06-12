@@ -28,7 +28,6 @@ class UsersVm extends TableVm {
   MutationCommonParams<S> _params<S extends Function>(BuildContext context) =>
       MutationCommonParams<S>(
         context,
-        timestamped: true,
         queryKey: kUsersQueryKey,
         getStateManager: getStateManager,
         successName: 'usuario',

@@ -17,9 +17,8 @@ typedef SingleUpdateMutationSideEffect =
 
 /// Handles an update mutation for a single model object.
 /// It checks update permission before updating.
-/// On mutation it updates the date fields if [params.timestamped] is true.
 /// On error, it reverts the changes.
-/// On success, it updates the query data changing the [params.propName] property with the new value and 'updatedAt' field if [params.timestamped] is true.
+/// On success, the object list is refetch.
 /// [propName] is the name of the property to update.
 SingleUpdateMutation createSingleUpdateMutation<T>(
   /// [getValue] is a function that returns the new value to update. If not provided, it will use the event value.
@@ -74,29 +73,9 @@ SingleUpdateMutation createSingleUpdateMutation<T>(
         context: params.context,
         message:
             '${toBeginningOfSentenceCase(params.successName)} actualizad${params.successMsgVocal}',
-        destructive: false,
       );
 
-      if (params.timestamped) {
-        ctx.client.setQueryData<List, dynamic>(params.queryKey, (objList) {
-          final int id = event.row.$id;
-
-          for (var i = 0; i < objList!.length; i++) {
-            final obj = objList[i];
-
-            if (obj.id == id) {
-              objList[i] = Function.apply(obj.copyWith, null, {
-                Symbol(event.column.field):
-                    getValue?.call(event, ctx) ?? event.value,
-              });
-
-              return objList;
-            }
-          }
-
-          return objList;
-        });
-      }
+      ctx.client.invalidateQueries(queryKey: params.queryKey);
 
       params.onSuccess?.call(event, ctx);
     },

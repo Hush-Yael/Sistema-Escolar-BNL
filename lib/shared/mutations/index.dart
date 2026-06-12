@@ -17,9 +17,6 @@ class MutationCommonParams<SideEffect extends Function?> {
   /// Suffix added to the performed action word next to the object name in the success message
   final String successMsgVocal;
 
-  /// Whether the mutation should update the 'updatedAt' field
-  final bool timestamped;
-
   /// Do something before the mutation resolves
   final SideEffect? onMutate;
 
@@ -32,7 +29,6 @@ class MutationCommonParams<SideEffect extends Function?> {
   const MutationCommonParams(
     this.context, {
     required this.queryKey,
-    required this.timestamped,
     required this.successName,
     required this.unauthPluralName,
     this.getStateManager,
@@ -54,7 +50,6 @@ class SingleCbMutationParams<
   SingleCbMutationParams(
     super.context, {
     required super.queryKey,
-    required super.timestamped,
     required super.successName,
     required super.unauthPluralName,
     super.getStateManager,
@@ -71,7 +66,6 @@ class SingleCbMutationParams<
   ) => SingleCbMutationParams<Callback, SideEffect>(
     commonParams.context,
     queryKey: commonParams.queryKey,
-    timestamped: commonParams.timestamped,
     getStateManager: commonParams.getStateManager,
     successName: commonParams.successName,
     unauthPluralName: commonParams.unauthPluralName,
