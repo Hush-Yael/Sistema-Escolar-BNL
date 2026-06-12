@@ -1,15 +1,20 @@
+import 'package:disco/disco.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_query/flutter_query.dart';
 import 'package:sistema_escolar_bnl/core/auth_state.dart';
+import 'package:sistema_escolar_bnl/core/shared_prefs_service.dart';
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
 import 'package:sistema_escolar_bnl/shared/table/constants.dart';
+import 'package:sistema_escolar_bnl/shared/table/menu_delegate.dart';
 import 'package:sistema_escolar_bnl/shared/table/table_config.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/actions_column.dart';
+import 'package:sistema_escolar_bnl/shared/table/widgets/columns_btn/columns_btn.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/index_column.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/table.d.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/table_empty_state.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/table_fetch_error.dart';
+import 'package:sistema_escolar_bnl/types/shared_types.dart';
 import 'package:trina_grid/trina_grid.dart';
 
 class QueryTable<Item extends dynamic, TError extends Exception>
@@ -50,18 +55,33 @@ class QueryTable<Item extends dynamic, TError extends Exception>
          'Either getCells or getRow must be provided',
        );
 
+  static final provider = Provider.withArgument(
+    (_, QueryKey queryKey) => queryKey,
+  );
+
   @override
   Widget build(BuildContext context) {
+    final prefs = SharedPrefsService.instance.of(context);
+    final columns = getColumns(context);
+
     final state = useState<TrinaGridStateManager?>(null);
     final isEmpty = useState<bool>(false);
-    final query = useQuery(queryKey, (ctx) => delay(queryFn()));
+
+    final query = useQuery(queryKey, (ctx) {
+      final OrderTerms sortTerms = columns
+          .map(
+            (col) => (field: col.field, mode: prefs.getColSortMode(col.field)),
+          )
+          .where((col) => col.mode != null)
+          .toList();
+
+      return delay(queryFn(sortTerms));
+    });
 
     final baseConfig = getBaseConfig(context);
     final config = createConfig != null
         ? createConfig!(baseConfig)
         : baseConfig;
-
-    final columns = getColumns(context);
 
     if (showIndexColumn) {
       columns.insert(0, indexColumn((query.data?.length ?? 0)));
@@ -135,6 +155,7 @@ class QueryTable<Item extends dynamic, TError extends Exception>
       rows: [],
       columns: columns,
       configuration: config,
+      columnMenuDelegate: MenuDelegate(context, queryKey),
       onLoaded: (e) {
         final stateManager = e.stateManager;
         state.value = stateManager;
@@ -145,17 +166,31 @@ class QueryTable<Item extends dynamic, TError extends Exception>
 
         onLoaded?.call(e);
       },
-      createHeader: renderAddBtn == null
-          ? null
-          : (stateManager) {
-              return SizedBox(
-                height: 60,
-                child: Padding(
-                  padding: const .all(8.0),
-                  child: Align(alignment: .centerEnd, child: renderAddBtn!()),
-                ),
-              );
-            },
+      createHeader: (stateManager) {
+        return ProviderScope(
+          providers: [provider(queryKey)],
+          child: SizedBox(
+            height: 60,
+            child: Padding(
+              padding: const .all(8.0),
+              child: Row(
+                children: [
+                  const Spacer(),
+
+                  Row(
+                    spacing: 10,
+                    children: [
+                      ColumnsBtn(state: stateManager, columns: columns),
+
+                      if (renderAddBtn != null) renderAddBtn!(),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
       createFooter: createFooter,
       onValidationFailed: (e) {
         toast(

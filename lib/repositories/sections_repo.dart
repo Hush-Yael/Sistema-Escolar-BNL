@@ -1,7 +1,9 @@
 import 'package:drift/drift.dart';
+import 'package:sistema_escolar_bnl/constants/sections_constants.dart';
 import 'package:sistema_escolar_bnl/core/db/db.dart';
 import 'package:sistema_escolar_bnl/models/school_models.dart';
 import 'package:sistema_escolar_bnl/shared/repository.dart';
+import 'package:sistema_escolar_bnl/types/shared_types.dart';
 
 class SectionsRepo extends Repository {
   const SectionsRepo(super.db);
@@ -11,37 +13,46 @@ class SectionsRepo extends Repository {
 
   final companion = SectionsCompanion.new;
 
-  Future<List<SectionWithDetails>> getSections() async {
-    final count = db.enrollments.id.count();
+  Future<List<SectionWithDetails>> getSections(OrderTerms terms) async {
+    final studentsCount = db.enrollments.id.count();
 
     final sections =
-        await (db.select(db.sections).join([
-                leftOuterJoin(
-                  db.grades,
-                  db.grades.id.equalsExp(db.sections.gradeId),
-                  useColumns: false,
-                ),
-                leftOuterJoin(
-                  db.enrollments,
-                  db.enrollments.sectionId.equalsExp(db.sections.id),
-                  useColumns: false,
-                ),
-              ])
-              ..addColumns([db.grades.name, count])
-              ..groupBy([db.sections.id]))
-            .asyncMap(
-              (section) => SectionWithDetails(
-                id: section.read<int>(db.sections.id)!,
-                letter: section.read<String>(db.sections.letter)!,
-                capacity: section.read<int>(db.sections.capacity)!,
-                gradeId: section.read<int>(db.sections.gradeId)!,
-                gradeName: section.read<String>(db.grades.name)!,
-                studentCount: section.read<int>(count)!,
-              ),
-            )
-            .get();
+        (db.select(db.sections).join([
+            leftOuterJoin(
+              db.grades,
+              db.grades.id.equalsExp(db.sections.gradeId),
+              useColumns: false,
+            ),
+            leftOuterJoin(
+              db.enrollments,
+              db.enrollments.sectionId.equalsExp(db.sections.id),
+              useColumns: false,
+            ),
+          ])
+          ..addColumns([db.grades.name, studentsCount])
+          ..orderBy(
+            buildOrderJoined(
+              terms,
+              otherColumns: {
+                SectionsTableColumns.grade.name: db.grades.number,
+                SectionsTableColumns.studentsCount.name: studentsCount,
+              },
+            ),
+          )
+          ..groupBy([db.sections.id]));
 
-    return sections;
+    return await sections
+        .asyncMap(
+          (section) => SectionWithDetails(
+            id: section.read<int>(db.sections.id)!,
+            letter: section.read<String>(db.sections.letter)!,
+            capacity: section.read<int>(db.sections.capacity)!,
+            gradeId: section.read<int>(db.sections.gradeId)!,
+            gradeName: section.read<String>(db.grades.name)!,
+            studentCount: section.read<int>(studentsCount)!,
+          ),
+        )
+        .get();
   }
 
   Future<int> deleteSection(int id) async =>

@@ -66,7 +66,6 @@ class ListGrades extends HookWidget {
           SectionsTableColumns.grade,
           width: 150,
           autoSize: false,
-          enableContextMenu: false,
           editable: false,
         ),
 
@@ -74,9 +73,8 @@ class ListGrades extends HookWidget {
           SectionsTableColumns.letter,
           titleTextAlign: .center,
           textAlign: .center,
-          width: 80,
+          width: 100,
           autoSize: false,
-          enableContextMenu: false,
           enableColumnDrag: false,
           enableDropToResize: false,
           validate: SectionValidators.letter,
@@ -98,7 +96,7 @@ class ListGrades extends HookWidget {
           SectionsTableColumns.enrollment,
           type: .custom(),
           editable: false,
-          enableSorting: false,
+          sortable: false,
           enableFilterMenuItem: false,
           renderer: (ctx) {
             final int left = ctx.cell.value;

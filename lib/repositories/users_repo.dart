@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:sistema_escolar_bnl/core/db/db.dart';
 import 'package:sistema_escolar_bnl/constants/auth_constants.dart';
 import 'package:sistema_escolar_bnl/shared/repository.dart';
+import 'package:sistema_escolar_bnl/types/shared_types.dart';
 
 class UsersRepository extends Repository {
   const UsersRepository(super.db);
@@ -9,7 +10,8 @@ class UsersRepository extends Repository {
   @override
   get table => db.users;
 
-  Future<List<User>> getUsers() async => await (db.select(db.users)).get();
+  Future<List<User>> getUsers(OrderTerms terms) async =>
+      await (db.select(db.users)..orderBy(buildOrder(terms))).get();
 
   final companion = UsersCompanion.new;
 

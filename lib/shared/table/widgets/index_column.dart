@@ -18,6 +18,7 @@ TableColumn indexColumn(int listLength) {
     suppressedAutoSize: true,
     width: painter.width + 30,
     editable: false,
+    sortable: false,
     enableFilterMenuItem: false,
     enableColumnDrag: false,
     enableContextMenu: false,

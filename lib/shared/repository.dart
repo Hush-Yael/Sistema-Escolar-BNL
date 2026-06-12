@@ -4,6 +4,7 @@ import 'package:drift/native.dart';
 import 'package:sistema_escolar_bnl/core/db/db.dart';
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
 import 'package:meta/meta.dart';
+import 'package:sistema_escolar_bnl/types/shared_types.dart';
 
 /// All the services used in the app must have a db dependency
 class Repository<TT extends Table, DC extends DataClass> {
@@ -124,6 +125,55 @@ class Repository<TT extends Table, DC extends DataClass> {
                 : null;
           },
     );
+  }
+
+  Iterable<(Expression<Object>, OrderingMode)?> _getOrderTerms(
+    OrderTerms terms, {
+    Map<String, Expression>? otherColumns,
+  }) {
+    final columns = table.columnsByName;
+
+    final matches = terms
+        .map((term) {
+          final (:field, :mode) = term;
+          final expression = columns[field] ?? otherColumns?[field];
+
+          return expression != null && mode != null ? (expression, mode) : null;
+        })
+        .where((match) => match != null);
+
+    if (matches.isEmpty) return [];
+
+    return matches;
+  }
+
+  @protected
+  List<OrderingTerm> buildOrderJoined(
+    OrderTerms terms, {
+    Map<String, Expression>? otherColumns,
+  }) {
+    final matches = _getOrderTerms(terms, otherColumns: otherColumns);
+
+    if (matches.isEmpty) return [];
+
+    return matches.map((term) {
+      final (expression, order) = term!;
+      return OrderingTerm(expression: expression, mode: order);
+    }).toList();
+  }
+
+  List<OrderClauseGenerator<TT>> buildOrder(
+    OrderTerms terms, {
+    Map<String, Expression>? otherColumns,
+  }) {
+    final matches = _getOrderTerms(terms, otherColumns: otherColumns);
+
+    if (matches.isEmpty) return [];
+
+    return matches.map((term) {
+      final (expression, order) = term!;
+      return (dynamic _) => OrderingTerm(expression: expression, mode: order);
+    }).toList();
   }
 }
 

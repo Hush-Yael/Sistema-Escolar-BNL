@@ -8,7 +8,7 @@ import 'package:trina_grid/trina_grid.dart';
 abstract class IQueryTable<Item extends dynamic, TError extends Exception>
     extends HookWidget {
   final QueryKey queryKey;
-  final Future<List<Item>> Function() queryFn;
+  final Future<List<Item>> Function(OrderTerms terms) queryFn;
 
   final String pluralModelName;
   final String pluralModelArticle;

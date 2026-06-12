@@ -16,6 +16,7 @@ TableColumn actionsColumn({
     minWidth: width,
     suppressedAutoSize: true,
     editable: false,
+    sortable: false,
     enableColumnDrag: false,
     enableContextMenu: false,
     enableDropToResize: false,
