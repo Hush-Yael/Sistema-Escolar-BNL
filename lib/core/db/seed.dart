@@ -61,7 +61,7 @@ class Seeder {
             username: 'Usuario ${i + 1}',
             password: 'wrong',
             salt: 'wrong',
-            lastLogin: Value(f.date.dateTime()),
+            lastLogin: newDate(min: currentYear),
             createdAt: newDate(),
           ),
         ),
