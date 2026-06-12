@@ -79,7 +79,7 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
   );
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-    'created_at',
+    'createdAt',
     aliasedName,
     false,
     type: DriftSqlType.dateTime,
@@ -91,7 +91,7 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
   );
   @override
   late final GeneratedColumn<DateTime> lastLogin = GeneratedColumn<DateTime>(
-    'last_login',
+    'lastLogin',
     aliasedName,
     true,
     type: DriftSqlType.dateTime,
@@ -112,7 +112,7 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'users';
+  static const String $name = 'Users';
   @override
   VerificationContext validateIntegrity(
     Insertable<User> instance, {
@@ -155,16 +155,16 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
     } else if (isInserting) {
       context.missing(_saltMeta);
     }
-    if (data.containsKey('created_at')) {
+    if (data.containsKey('createdAt')) {
       context.handle(
         _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+        createdAt.isAcceptableOrUnknown(data['createdAt']!, _createdAtMeta),
       );
     }
-    if (data.containsKey('last_login')) {
+    if (data.containsKey('lastLogin')) {
       context.handle(
         _lastLoginMeta,
-        lastLogin.isAcceptableOrUnknown(data['last_login']!, _lastLoginMeta),
+        lastLogin.isAcceptableOrUnknown(data['lastLogin']!, _lastLoginMeta),
       );
     }
     return context;
@@ -204,11 +204,11 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
       ),
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
-        data['${effectivePrefix}created_at'],
+        data['${effectivePrefix}createdAt'],
       )!,
       lastLogin: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
-        data['${effectivePrefix}last_login'],
+        data['${effectivePrefix}lastLogin'],
       ),
     );
   }
@@ -252,9 +252,9 @@ class User extends DataClass implements Insertable<User> {
     {
       map['role'] = Variable<int>($UsersTable.$converterrole.toSql(role));
     }
-    map['created_at'] = Variable<DateTime>(createdAt);
+    map['createdAt'] = Variable<DateTime>(createdAt);
     if (!nullToAbsent || lastLogin != null) {
-      map['last_login'] = Variable<DateTime>(lastLogin);
+      map['lastLogin'] = Variable<DateTime>(lastLogin);
     }
     return map;
   }
@@ -429,8 +429,8 @@ class UsersCompanion extends UpdateCompanion<User> {
       if (password != null) 'password': password,
       if (salt != null) 'salt': salt,
       if (role != null) 'role': role,
-      if (createdAt != null) 'created_at': createdAt,
-      if (lastLogin != null) 'last_login': lastLogin,
+      if (createdAt != null) 'createdAt': createdAt,
+      if (lastLogin != null) 'lastLogin': lastLogin,
     });
   }
 
@@ -478,10 +478,10 @@ class UsersCompanion extends UpdateCompanion<User> {
       map['role'] = Variable<int>($UsersTable.$converterrole.toSql(role.value));
     }
     if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
+      map['createdAt'] = Variable<DateTime>(createdAt.value);
     }
     if (lastLogin.present) {
-      map['last_login'] = Variable<DateTime>(lastLogin.value);
+      map['lastLogin'] = Variable<DateTime>(lastLogin.value);
     }
     return map;
   }
@@ -545,7 +545,7 @@ class $GradesTable extends Grades with TableInfo<$GradesTable, Grade> {
   );
   @override
   late final GeneratedColumn<String> shortName = GeneratedColumn<String>(
-    'short_name',
+    'shortName',
     aliasedName,
     false,
     type: DriftSqlType.string,
@@ -558,7 +558,7 @@ class $GradesTable extends Grades with TableInfo<$GradesTable, Grade> {
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'grades';
+  static const String $name = 'Grades';
   @override
   VerificationContext validateIntegrity(
     Insertable<Grade> instance, {
@@ -585,10 +585,10 @@ class $GradesTable extends Grades with TableInfo<$GradesTable, Grade> {
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
-    if (data.containsKey('short_name')) {
+    if (data.containsKey('shortName')) {
       context.handle(
         _shortNameMeta,
-        shortName.isAcceptableOrUnknown(data['short_name']!, _shortNameMeta),
+        shortName.isAcceptableOrUnknown(data['shortName']!, _shortNameMeta),
       );
     } else if (isInserting) {
       context.missing(_shortNameMeta);
@@ -616,7 +616,7 @@ class $GradesTable extends Grades with TableInfo<$GradesTable, Grade> {
       )!,
       shortName: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}short_name'],
+        data['${effectivePrefix}shortName'],
       )!,
     );
   }
@@ -644,7 +644,7 @@ class Grade extends DataClass implements Insertable<Grade> {
     map['id'] = Variable<int>(id);
     map['number'] = Variable<int>(number);
     map['name'] = Variable<String>(name);
-    map['short_name'] = Variable<String>(shortName);
+    map['shortName'] = Variable<String>(shortName);
     return map;
   }
 
@@ -748,7 +748,7 @@ class GradesCompanion extends UpdateCompanion<Grade> {
       if (id != null) 'id': id,
       if (number != null) 'number': number,
       if (name != null) 'name': name,
-      if (shortName != null) 'short_name': shortName,
+      if (shortName != null) 'shortName': shortName,
     });
   }
 
@@ -779,7 +779,7 @@ class GradesCompanion extends UpdateCompanion<Grade> {
       map['name'] = Variable<String>(name.value);
     }
     if (shortName.present) {
-      map['short_name'] = Variable<String>(shortName.value);
+      map['shortName'] = Variable<String>(shortName.value);
     }
     return map;
   }
@@ -844,13 +844,13 @@ class $SectionsTable extends Sections with TableInfo<$SectionsTable, Section> {
   );
   @override
   late final GeneratedColumn<int> gradeId = GeneratedColumn<int>(
-    'grade_id',
+    'gradeId',
     aliasedName,
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES grades (id) ON DELETE RESTRICT',
+      'REFERENCES Grades (id) ON DELETE RESTRICT',
     ),
   );
   @override
@@ -859,7 +859,7 @@ class $SectionsTable extends Sections with TableInfo<$SectionsTable, Section> {
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'sections';
+  static const String $name = 'Sections';
   @override
   VerificationContext validateIntegrity(
     Insertable<Section> instance, {
@@ -884,10 +884,10 @@ class $SectionsTable extends Sections with TableInfo<$SectionsTable, Section> {
         capacity.isAcceptableOrUnknown(data['capacity']!, _capacityMeta),
       );
     }
-    if (data.containsKey('grade_id')) {
+    if (data.containsKey('gradeId')) {
       context.handle(
         _gradeIdMeta,
-        gradeId.isAcceptableOrUnknown(data['grade_id']!, _gradeIdMeta),
+        gradeId.isAcceptableOrUnknown(data['gradeId']!, _gradeIdMeta),
       );
     } else if (isInserting) {
       context.missing(_gradeIdMeta);
@@ -919,7 +919,7 @@ class $SectionsTable extends Sections with TableInfo<$SectionsTable, Section> {
       )!,
       gradeId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}grade_id'],
+        data['${effectivePrefix}gradeId'],
       )!,
     );
   }
@@ -947,7 +947,7 @@ class Section extends DataClass implements Insertable<Section> {
     map['id'] = Variable<int>(id);
     map['letter'] = Variable<String>(letter);
     map['capacity'] = Variable<int>(capacity);
-    map['grade_id'] = Variable<int>(gradeId);
+    map['gradeId'] = Variable<int>(gradeId);
     return map;
   }
 
@@ -1050,7 +1050,7 @@ class SectionsCompanion extends UpdateCompanion<Section> {
       if (id != null) 'id': id,
       if (letter != null) 'letter': letter,
       if (capacity != null) 'capacity': capacity,
-      if (gradeId != null) 'grade_id': gradeId,
+      if (gradeId != null) 'gradeId': gradeId,
     });
   }
 
@@ -1081,7 +1081,7 @@ class SectionsCompanion extends UpdateCompanion<Section> {
       map['capacity'] = Variable<int>(capacity.value);
     }
     if (gradeId.present) {
-      map['grade_id'] = Variable<int>(gradeId.value);
+      map['gradeId'] = Variable<int>(gradeId.value);
     }
     return map;
   }
@@ -1128,7 +1128,7 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
   );
   @override
   late final GeneratedColumn<String> lastNames = GeneratedColumn<String>(
-    'last_names',
+    'lastNames',
     aliasedName,
     false,
     additionalChecks: GeneratedColumn.checkTextLength(),
@@ -1149,7 +1149,7 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
   );
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-    'created_at',
+    'createdAt',
     aliasedName,
     false,
     type: DriftSqlType.dateTime,
@@ -1161,7 +1161,7 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
   );
   @override
   late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-    'updated_at',
+    'updatedAt',
     aliasedName,
     false,
     type: DriftSqlType.dateTime,
@@ -1186,7 +1186,7 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
   );
   @override
   late final GeneratedColumn<DateTime> birthDate = GeneratedColumn<DateTime>(
-    'birth_date',
+    'birthDate',
     aliasedName,
     false,
     type: DriftSqlType.dateTime,
@@ -1197,7 +1197,7 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
   );
   @override
   late final GeneratedColumn<String> birthPlace = GeneratedColumn<String>(
-    'birth_place',
+    'birthPlace',
     aliasedName,
     false,
     type: DriftSqlType.string,
@@ -1219,7 +1219,7 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'students';
+  static const String $name = 'Students';
   @override
   VerificationContext validateIntegrity(
     Insertable<Student> instance, {
@@ -1243,41 +1243,41 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
     } else if (isInserting) {
       context.missing(_namesMeta);
     }
-    if (data.containsKey('last_names')) {
+    if (data.containsKey('lastNames')) {
       context.handle(
         _lastNamesMeta,
-        lastNames.isAcceptableOrUnknown(data['last_names']!, _lastNamesMeta),
+        lastNames.isAcceptableOrUnknown(data['lastNames']!, _lastNamesMeta),
       );
     } else if (isInserting) {
       context.missing(_lastNamesMeta);
     }
-    if (data.containsKey('created_at')) {
+    if (data.containsKey('createdAt')) {
       context.handle(
         _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+        createdAt.isAcceptableOrUnknown(data['createdAt']!, _createdAtMeta),
       );
     }
-    if (data.containsKey('updated_at')) {
+    if (data.containsKey('updatedAt')) {
       context.handle(
         _updatedAtMeta,
-        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+        updatedAt.isAcceptableOrUnknown(data['updatedAt']!, _updatedAtMeta),
       );
     }
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('birth_date')) {
+    if (data.containsKey('birthDate')) {
       context.handle(
         _birthDateMeta,
-        birthDate.isAcceptableOrUnknown(data['birth_date']!, _birthDateMeta),
+        birthDate.isAcceptableOrUnknown(data['birthDate']!, _birthDateMeta),
       );
     } else if (isInserting) {
       context.missing(_birthDateMeta);
     }
-    if (data.containsKey('birth_place')) {
+    if (data.containsKey('birthPlace')) {
       context.handle(
         _birthPlaceMeta,
-        birthPlace.isAcceptableOrUnknown(data['birth_place']!, _birthPlaceMeta),
+        birthPlace.isAcceptableOrUnknown(data['birthPlace']!, _birthPlaceMeta),
       );
     } else if (isInserting) {
       context.missing(_birthPlaceMeta);
@@ -1301,7 +1301,7 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
       )!,
       lastNames: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}last_names'],
+        data['${effectivePrefix}lastNames'],
       )!,
       sex: $StudentsTable.$convertersex.fromSql(
         attachedDatabase.typeMapping.read(
@@ -1311,11 +1311,11 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
       ),
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
-        data['${effectivePrefix}created_at'],
+        data['${effectivePrefix}createdAt'],
       )!,
       updatedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
-        data['${effectivePrefix}updated_at'],
+        data['${effectivePrefix}updatedAt'],
       )!,
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
@@ -1323,11 +1323,11 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
       )!,
       birthDate: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
-        data['${effectivePrefix}birth_date'],
+        data['${effectivePrefix}birthDate'],
       )!,
       birthPlace: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}birth_place'],
+        data['${effectivePrefix}birthPlace'],
       )!,
     );
   }
@@ -1367,15 +1367,15 @@ class Student extends DataClass implements Insertable<Student> {
     final map = <String, Expression>{};
     map['cedula'] = Variable<int>(cedula);
     map['names'] = Variable<String>(names);
-    map['last_names'] = Variable<String>(lastNames);
+    map['lastNames'] = Variable<String>(lastNames);
     {
       map['sex'] = Variable<String>($StudentsTable.$convertersex.toSql(sex));
     }
-    map['created_at'] = Variable<DateTime>(createdAt);
-    map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['createdAt'] = Variable<DateTime>(createdAt);
+    map['updatedAt'] = Variable<DateTime>(updatedAt);
     map['id'] = Variable<int>(id);
-    map['birth_date'] = Variable<DateTime>(birthDate);
-    map['birth_place'] = Variable<String>(birthPlace);
+    map['birthDate'] = Variable<DateTime>(birthDate);
+    map['birthPlace'] = Variable<String>(birthPlace);
     return map;
   }
 
@@ -1561,13 +1561,13 @@ class StudentsCompanion extends UpdateCompanion<Student> {
     return RawValuesInsertable({
       if (cedula != null) 'cedula': cedula,
       if (names != null) 'names': names,
-      if (lastNames != null) 'last_names': lastNames,
+      if (lastNames != null) 'lastNames': lastNames,
       if (sex != null) 'sex': sex,
-      if (createdAt != null) 'created_at': createdAt,
-      if (updatedAt != null) 'updated_at': updatedAt,
+      if (createdAt != null) 'createdAt': createdAt,
+      if (updatedAt != null) 'updatedAt': updatedAt,
       if (id != null) 'id': id,
-      if (birthDate != null) 'birth_date': birthDate,
-      if (birthPlace != null) 'birth_place': birthPlace,
+      if (birthDate != null) 'birthDate': birthDate,
+      if (birthPlace != null) 'birthPlace': birthPlace,
     });
   }
 
@@ -1605,7 +1605,7 @@ class StudentsCompanion extends UpdateCompanion<Student> {
       map['names'] = Variable<String>(names.value);
     }
     if (lastNames.present) {
-      map['last_names'] = Variable<String>(lastNames.value);
+      map['lastNames'] = Variable<String>(lastNames.value);
     }
     if (sex.present) {
       map['sex'] = Variable<String>(
@@ -1613,19 +1613,19 @@ class StudentsCompanion extends UpdateCompanion<Student> {
       );
     }
     if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
+      map['createdAt'] = Variable<DateTime>(createdAt.value);
     }
     if (updatedAt.present) {
-      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+      map['updatedAt'] = Variable<DateTime>(updatedAt.value);
     }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
     if (birthDate.present) {
-      map['birth_date'] = Variable<DateTime>(birthDate.value);
+      map['birthDate'] = Variable<DateTime>(birthDate.value);
     }
     if (birthPlace.present) {
-      map['birth_place'] = Variable<String>(birthPlace.value);
+      map['birthPlace'] = Variable<String>(birthPlace.value);
     }
     return map;
   }
@@ -1658,7 +1658,7 @@ class $EnrollmentsTable extends Enrollments
   );
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-    'created_at',
+    'createdAt',
     aliasedName,
     false,
     type: DriftSqlType.dateTime,
@@ -1670,7 +1670,7 @@ class $EnrollmentsTable extends Enrollments
   );
   @override
   late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-    'updated_at',
+    'updatedAt',
     aliasedName,
     false,
     type: DriftSqlType.dateTime,
@@ -1695,13 +1695,13 @@ class $EnrollmentsTable extends Enrollments
   );
   @override
   late final GeneratedColumn<int> studentId = GeneratedColumn<int>(
-    'student_id',
+    'studentId',
     aliasedName,
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES students (id) ON DELETE CASCADE',
+      'REFERENCES Students (id) ON DELETE CASCADE',
     ),
   );
   static const VerificationMeta _sectionIdMeta = const VerificationMeta(
@@ -1709,13 +1709,13 @@ class $EnrollmentsTable extends Enrollments
   );
   @override
   late final GeneratedColumn<int> sectionId = GeneratedColumn<int>(
-    'section_id',
+    'sectionId',
     aliasedName,
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES sections (id) ON DELETE RESTRICT',
+      'REFERENCES Sections (id) ON DELETE RESTRICT',
     ),
   );
   static const VerificationMeta _weightMeta = const VerificationMeta('weight');
@@ -1741,7 +1741,7 @@ class $EnrollmentsTable extends Enrollments
   );
   @override
   late final GeneratedColumn<int> shoeSize = GeneratedColumn<int>(
-    'shoe_size',
+    'shoeSize',
     aliasedName,
     false,
     type: DriftSqlType.int,
@@ -1752,7 +1752,7 @@ class $EnrollmentsTable extends Enrollments
   );
   @override
   late final GeneratedColumn<int> pantSize = GeneratedColumn<int>(
-    'pant_size',
+    'pantSize',
     aliasedName,
     false,
     type: DriftSqlType.int,
@@ -1763,7 +1763,7 @@ class $EnrollmentsTable extends Enrollments
   );
   @override
   late final GeneratedColumn<int> shirtSize = GeneratedColumn<int>(
-    'shirt_size',
+    'shirtSize',
     aliasedName,
     false,
     type: DriftSqlType.int,
@@ -1786,7 +1786,7 @@ class $EnrollmentsTable extends Enrollments
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'enrollments';
+  static const String $name = 'Enrollments';
   @override
   VerificationContext validateIntegrity(
     Insertable<Enrollment> instance, {
@@ -1794,33 +1794,33 @@ class $EnrollmentsTable extends Enrollments
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('created_at')) {
+    if (data.containsKey('createdAt')) {
       context.handle(
         _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+        createdAt.isAcceptableOrUnknown(data['createdAt']!, _createdAtMeta),
       );
     }
-    if (data.containsKey('updated_at')) {
+    if (data.containsKey('updatedAt')) {
       context.handle(
         _updatedAtMeta,
-        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+        updatedAt.isAcceptableOrUnknown(data['updatedAt']!, _updatedAtMeta),
       );
     }
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('student_id')) {
+    if (data.containsKey('studentId')) {
       context.handle(
         _studentIdMeta,
-        studentId.isAcceptableOrUnknown(data['student_id']!, _studentIdMeta),
+        studentId.isAcceptableOrUnknown(data['studentId']!, _studentIdMeta),
       );
     } else if (isInserting) {
       context.missing(_studentIdMeta);
     }
-    if (data.containsKey('section_id')) {
+    if (data.containsKey('sectionId')) {
       context.handle(
         _sectionIdMeta,
-        sectionId.isAcceptableOrUnknown(data['section_id']!, _sectionIdMeta),
+        sectionId.isAcceptableOrUnknown(data['sectionId']!, _sectionIdMeta),
       );
     } else if (isInserting) {
       context.missing(_sectionIdMeta);
@@ -1841,26 +1841,26 @@ class $EnrollmentsTable extends Enrollments
     } else if (isInserting) {
       context.missing(_heightMeta);
     }
-    if (data.containsKey('shoe_size')) {
+    if (data.containsKey('shoeSize')) {
       context.handle(
         _shoeSizeMeta,
-        shoeSize.isAcceptableOrUnknown(data['shoe_size']!, _shoeSizeMeta),
+        shoeSize.isAcceptableOrUnknown(data['shoeSize']!, _shoeSizeMeta),
       );
     } else if (isInserting) {
       context.missing(_shoeSizeMeta);
     }
-    if (data.containsKey('pant_size')) {
+    if (data.containsKey('pantSize')) {
       context.handle(
         _pantSizeMeta,
-        pantSize.isAcceptableOrUnknown(data['pant_size']!, _pantSizeMeta),
+        pantSize.isAcceptableOrUnknown(data['pantSize']!, _pantSizeMeta),
       );
     } else if (isInserting) {
       context.missing(_pantSizeMeta);
     }
-    if (data.containsKey('shirt_size')) {
+    if (data.containsKey('shirtSize')) {
       context.handle(
         _shirtSizeMeta,
-        shirtSize.isAcceptableOrUnknown(data['shirt_size']!, _shirtSizeMeta),
+        shirtSize.isAcceptableOrUnknown(data['shirtSize']!, _shirtSizeMeta),
       );
     } else if (isInserting) {
       context.missing(_shirtSizeMeta);
@@ -1876,11 +1876,11 @@ class $EnrollmentsTable extends Enrollments
     return Enrollment(
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
-        data['${effectivePrefix}created_at'],
+        data['${effectivePrefix}createdAt'],
       )!,
       updatedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
-        data['${effectivePrefix}updated_at'],
+        data['${effectivePrefix}updatedAt'],
       )!,
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
@@ -1888,11 +1888,11 @@ class $EnrollmentsTable extends Enrollments
       )!,
       studentId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}student_id'],
+        data['${effectivePrefix}studentId'],
       )!,
       sectionId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}section_id'],
+        data['${effectivePrefix}sectionId'],
       )!,
       weight: attachedDatabase.typeMapping.read(
         DriftSqlType.double,
@@ -1904,15 +1904,15 @@ class $EnrollmentsTable extends Enrollments
       )!,
       shoeSize: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}shoe_size'],
+        data['${effectivePrefix}shoeSize'],
       )!,
       pantSize: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}pant_size'],
+        data['${effectivePrefix}pantSize'],
       )!,
       shirtSize: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}shirt_size'],
+        data['${effectivePrefix}shirtSize'],
       )!,
     );
   }
@@ -1949,16 +1949,16 @@ class Enrollment extends DataClass implements Insertable<Enrollment> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['created_at'] = Variable<DateTime>(createdAt);
-    map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['createdAt'] = Variable<DateTime>(createdAt);
+    map['updatedAt'] = Variable<DateTime>(updatedAt);
     map['id'] = Variable<int>(id);
-    map['student_id'] = Variable<int>(studentId);
-    map['section_id'] = Variable<int>(sectionId);
+    map['studentId'] = Variable<int>(studentId);
+    map['sectionId'] = Variable<int>(sectionId);
     map['weight'] = Variable<double>(weight);
     map['height'] = Variable<double>(height);
-    map['shoe_size'] = Variable<int>(shoeSize);
-    map['pant_size'] = Variable<int>(pantSize);
-    map['shirt_size'] = Variable<int>(shirtSize);
+    map['shoeSize'] = Variable<int>(shoeSize);
+    map['pantSize'] = Variable<int>(pantSize);
+    map['shirtSize'] = Variable<int>(shirtSize);
     return map;
   }
 
@@ -2150,16 +2150,16 @@ class EnrollmentsCompanion extends UpdateCompanion<Enrollment> {
     Expression<int>? shirtSize,
   }) {
     return RawValuesInsertable({
-      if (createdAt != null) 'created_at': createdAt,
-      if (updatedAt != null) 'updated_at': updatedAt,
+      if (createdAt != null) 'createdAt': createdAt,
+      if (updatedAt != null) 'updatedAt': updatedAt,
       if (id != null) 'id': id,
-      if (studentId != null) 'student_id': studentId,
-      if (sectionId != null) 'section_id': sectionId,
+      if (studentId != null) 'studentId': studentId,
+      if (sectionId != null) 'sectionId': sectionId,
       if (weight != null) 'weight': weight,
       if (height != null) 'height': height,
-      if (shoeSize != null) 'shoe_size': shoeSize,
-      if (pantSize != null) 'pant_size': pantSize,
-      if (shirtSize != null) 'shirt_size': shirtSize,
+      if (shoeSize != null) 'shoeSize': shoeSize,
+      if (pantSize != null) 'pantSize': pantSize,
+      if (shirtSize != null) 'shirtSize': shirtSize,
     });
   }
 
@@ -2193,19 +2193,19 @@ class EnrollmentsCompanion extends UpdateCompanion<Enrollment> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
+      map['createdAt'] = Variable<DateTime>(createdAt.value);
     }
     if (updatedAt.present) {
-      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+      map['updatedAt'] = Variable<DateTime>(updatedAt.value);
     }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
     if (studentId.present) {
-      map['student_id'] = Variable<int>(studentId.value);
+      map['studentId'] = Variable<int>(studentId.value);
     }
     if (sectionId.present) {
-      map['section_id'] = Variable<int>(sectionId.value);
+      map['sectionId'] = Variable<int>(sectionId.value);
     }
     if (weight.present) {
       map['weight'] = Variable<double>(weight.value);
@@ -2214,13 +2214,13 @@ class EnrollmentsCompanion extends UpdateCompanion<Enrollment> {
       map['height'] = Variable<double>(height.value);
     }
     if (shoeSize.present) {
-      map['shoe_size'] = Variable<int>(shoeSize.value);
+      map['shoeSize'] = Variable<int>(shoeSize.value);
     }
     if (pantSize.present) {
-      map['pant_size'] = Variable<int>(pantSize.value);
+      map['pantSize'] = Variable<int>(pantSize.value);
     }
     if (shirtSize.present) {
-      map['shirt_size'] = Variable<int>(shirtSize.value);
+      map['shirtSize'] = Variable<int>(shirtSize.value);
     }
     return map;
   }
@@ -2274,7 +2274,7 @@ class $RepresentativesTable extends Representatives
   );
   @override
   late final GeneratedColumn<String> lastNames = GeneratedColumn<String>(
-    'last_names',
+    'lastNames',
     aliasedName,
     false,
     additionalChecks: GeneratedColumn.checkTextLength(),
@@ -2295,7 +2295,7 @@ class $RepresentativesTable extends Representatives
   );
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-    'created_at',
+    'createdAt',
     aliasedName,
     false,
     type: DriftSqlType.dateTime,
@@ -2307,7 +2307,7 @@ class $RepresentativesTable extends Representatives
   );
   @override
   late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-    'updated_at',
+    'updatedAt',
     aliasedName,
     false,
     type: DriftSqlType.dateTime,
@@ -2365,7 +2365,7 @@ class $RepresentativesTable extends Representatives
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'representatives';
+  static const String $name = 'Representatives';
   @override
   VerificationContext validateIntegrity(
     Insertable<Representative> instance, {
@@ -2389,24 +2389,24 @@ class $RepresentativesTable extends Representatives
     } else if (isInserting) {
       context.missing(_namesMeta);
     }
-    if (data.containsKey('last_names')) {
+    if (data.containsKey('lastNames')) {
       context.handle(
         _lastNamesMeta,
-        lastNames.isAcceptableOrUnknown(data['last_names']!, _lastNamesMeta),
+        lastNames.isAcceptableOrUnknown(data['lastNames']!, _lastNamesMeta),
       );
     } else if (isInserting) {
       context.missing(_lastNamesMeta);
     }
-    if (data.containsKey('created_at')) {
+    if (data.containsKey('createdAt')) {
       context.handle(
         _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+        createdAt.isAcceptableOrUnknown(data['createdAt']!, _createdAtMeta),
       );
     }
-    if (data.containsKey('updated_at')) {
+    if (data.containsKey('updatedAt')) {
       context.handle(
         _updatedAtMeta,
-        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+        updatedAt.isAcceptableOrUnknown(data['updatedAt']!, _updatedAtMeta),
       );
     }
     if (data.containsKey('id')) {
@@ -2443,7 +2443,7 @@ class $RepresentativesTable extends Representatives
       )!,
       lastNames: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}last_names'],
+        data['${effectivePrefix}lastNames'],
       )!,
       sex: $RepresentativesTable.$convertersex.fromSql(
         attachedDatabase.typeMapping.read(
@@ -2453,11 +2453,11 @@ class $RepresentativesTable extends Representatives
       ),
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
-        data['${effectivePrefix}created_at'],
+        data['${effectivePrefix}createdAt'],
       )!,
       updatedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
-        data['${effectivePrefix}updated_at'],
+        data['${effectivePrefix}updatedAt'],
       )!,
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
@@ -2509,14 +2509,14 @@ class Representative extends DataClass implements Insertable<Representative> {
     final map = <String, Expression>{};
     map['cedula'] = Variable<int>(cedula);
     map['names'] = Variable<String>(names);
-    map['last_names'] = Variable<String>(lastNames);
+    map['lastNames'] = Variable<String>(lastNames);
     {
       map['sex'] = Variable<String>(
         $RepresentativesTable.$convertersex.toSql(sex),
       );
     }
-    map['created_at'] = Variable<DateTime>(createdAt);
-    map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['createdAt'] = Variable<DateTime>(createdAt);
+    map['updatedAt'] = Variable<DateTime>(updatedAt);
     map['id'] = Variable<int>(id);
     if (!nullToAbsent || phone != null) {
       map['phone'] = Variable<String>(phone);
@@ -2709,10 +2709,10 @@ class RepresentativesCompanion extends UpdateCompanion<Representative> {
     return RawValuesInsertable({
       if (cedula != null) 'cedula': cedula,
       if (names != null) 'names': names,
-      if (lastNames != null) 'last_names': lastNames,
+      if (lastNames != null) 'lastNames': lastNames,
       if (sex != null) 'sex': sex,
-      if (createdAt != null) 'created_at': createdAt,
-      if (updatedAt != null) 'updated_at': updatedAt,
+      if (createdAt != null) 'createdAt': createdAt,
+      if (updatedAt != null) 'updatedAt': updatedAt,
       if (id != null) 'id': id,
       if (phone != null) 'phone': phone,
       if (address != null) 'address': address,
@@ -2753,7 +2753,7 @@ class RepresentativesCompanion extends UpdateCompanion<Representative> {
       map['names'] = Variable<String>(names.value);
     }
     if (lastNames.present) {
-      map['last_names'] = Variable<String>(lastNames.value);
+      map['lastNames'] = Variable<String>(lastNames.value);
     }
     if (sex.present) {
       map['sex'] = Variable<String>(
@@ -2761,10 +2761,10 @@ class RepresentativesCompanion extends UpdateCompanion<Representative> {
       );
     }
     if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
+      map['createdAt'] = Variable<DateTime>(createdAt.value);
     }
     if (updatedAt.present) {
-      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+      map['updatedAt'] = Variable<DateTime>(updatedAt.value);
     }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
@@ -2823,13 +2823,13 @@ class $RepresentativesStudentsTable extends RepresentativesStudents
   );
   @override
   late final GeneratedColumn<int> representativeId = GeneratedColumn<int>(
-    'representative_id',
+    'representativeId',
     aliasedName,
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES representatives (id) ON DELETE CASCADE',
+      'REFERENCES Representatives (id) ON DELETE CASCADE',
     ),
   );
   static const VerificationMeta _studentIdMeta = const VerificationMeta(
@@ -2837,13 +2837,13 @@ class $RepresentativesStudentsTable extends RepresentativesStudents
   );
   @override
   late final GeneratedColumn<int> studentId = GeneratedColumn<int>(
-    'student_id',
+    'studentId',
     aliasedName,
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES students (id) ON DELETE CASCADE',
+      'REFERENCES Students (id) ON DELETE CASCADE',
     ),
   );
   @override
@@ -2852,7 +2852,7 @@ class $RepresentativesStudentsTable extends RepresentativesStudents
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'representatives_students';
+  static const String $name = 'RepresentativesStudents';
   @override
   VerificationContext validateIntegrity(
     Insertable<StudentRepresentativeRelation> instance, {
@@ -2863,21 +2863,21 @@ class $RepresentativesStudentsTable extends RepresentativesStudents
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('representative_id')) {
+    if (data.containsKey('representativeId')) {
       context.handle(
         _representativeIdMeta,
         representativeId.isAcceptableOrUnknown(
-          data['representative_id']!,
+          data['representativeId']!,
           _representativeIdMeta,
         ),
       );
     } else if (isInserting) {
       context.missing(_representativeIdMeta);
     }
-    if (data.containsKey('student_id')) {
+    if (data.containsKey('studentId')) {
       context.handle(
         _studentIdMeta,
-        studentId.isAcceptableOrUnknown(data['student_id']!, _studentIdMeta),
+        studentId.isAcceptableOrUnknown(data['studentId']!, _studentIdMeta),
       );
     } else if (isInserting) {
       context.missing(_studentIdMeta);
@@ -2900,11 +2900,11 @@ class $RepresentativesStudentsTable extends RepresentativesStudents
       )!,
       representativeId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}representative_id'],
+        data['${effectivePrefix}representativeId'],
       )!,
       studentId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}student_id'],
+        data['${effectivePrefix}studentId'],
       )!,
     );
   }
@@ -2929,8 +2929,8 @@ class StudentRepresentativeRelation extends DataClass
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['representative_id'] = Variable<int>(representativeId);
-    map['student_id'] = Variable<int>(studentId);
+    map['representativeId'] = Variable<int>(representativeId);
+    map['studentId'] = Variable<int>(studentId);
     return map;
   }
 
@@ -3028,8 +3028,8 @@ class RepresentativesStudentsCompanion
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (representativeId != null) 'representative_id': representativeId,
-      if (studentId != null) 'student_id': studentId,
+      if (representativeId != null) 'representativeId': representativeId,
+      if (studentId != null) 'studentId': studentId,
     });
   }
 
@@ -3052,10 +3052,10 @@ class RepresentativesStudentsCompanion
       map['id'] = Variable<int>(id.value);
     }
     if (representativeId.present) {
-      map['representative_id'] = Variable<int>(representativeId.value);
+      map['representativeId'] = Variable<int>(representativeId.value);
     }
     if (studentId.present) {
-      map['student_id'] = Variable<int>(studentId.value);
+      map['studentId'] = Variable<int>(studentId.value);
     }
     return map;
   }
@@ -3101,28 +3101,24 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
     WritePropagation(
       on: TableUpdateQuery.onTableName(
-        'students',
+        'Students',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [TableUpdate('enrollments', kind: UpdateKind.delete)],
+      result: [TableUpdate('Enrollments', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
-        'representatives',
+        'Representatives',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [
-        TableUpdate('representatives_students', kind: UpdateKind.delete),
-      ],
+      result: [TableUpdate('RepresentativesStudents', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
-        'students',
+        'Students',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [
-        TableUpdate('representatives_students', kind: UpdateKind.delete),
-      ],
+      result: [TableUpdate('RepresentativesStudents', kind: UpdateKind.delete)],
     ),
   ]);
 }
@@ -3663,7 +3659,7 @@ final class $$SectionsTableReferences
   );
 
   $$GradesTableProcessedTableManager get gradeId {
-    final $_column = $_itemColumn<int>('grade_id')!;
+    final $_column = $_itemColumn<int>('gradeId')!;
 
     final manager = $$GradesTableTableManager(
       $_db,
@@ -4544,7 +4540,7 @@ final class $$EnrollmentsTableReferences
       );
 
   $$StudentsTableProcessedTableManager get studentId {
-    final $_column = $_itemColumn<int>('student_id')!;
+    final $_column = $_itemColumn<int>('studentId')!;
 
     final manager = $$StudentsTableTableManager(
       $_db,
@@ -4563,7 +4559,7 @@ final class $$EnrollmentsTableReferences
       );
 
   $$SectionsTableProcessedTableManager get sectionId {
-    final $_column = $_itemColumn<int>('section_id')!;
+    final $_column = $_itemColumn<int>('sectionId')!;
 
     final manager = $$SectionsTableTableManager(
       $_db,
@@ -5434,7 +5430,7 @@ final class $$RepresentativesStudentsTableReferences
       );
 
   $$RepresentativesTableProcessedTableManager get representativeId {
-    final $_column = $_itemColumn<int>('representative_id')!;
+    final $_column = $_itemColumn<int>('representativeId')!;
 
     final manager = $$RepresentativesTableTableManager(
       $_db,
@@ -5456,7 +5452,7 @@ final class $$RepresentativesStudentsTableReferences
       );
 
   $$StudentsTableProcessedTableManager get studentId {
-    final $_column = $_itemColumn<int>('student_id')!;
+    final $_column = $_itemColumn<int>('studentId')!;
 
     final manager = $$StudentsTableTableManager(
       $_db,
