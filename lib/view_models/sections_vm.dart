@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:sistema_escolar_bnl/constants/sections_constants.dart';
 import 'package:sistema_escolar_bnl/repositories/sections_repo.dart';
 import 'package:sistema_escolar_bnl/core/db/db.dart';
-import 'package:sistema_escolar_bnl/shared/mutations/index.dart';
 import 'package:sistema_escolar_bnl/shared/mutations/single_delete.dart';
 import 'package:sistema_escolar_bnl/shared/mutations/single_update.dart';
 import 'package:sistema_escolar_bnl/shared/table/table_vm.dart';
@@ -12,7 +11,13 @@ class SectionsVm extends TableVm {
   @override
   final SectionsRepo repository;
 
-  SectionsVm({required this.repository});
+  SectionsVm({
+    required this.repository,
+    super.mutSuccessName = 'sección',
+    super.mutUnauthPluralName = 'secciones',
+    super.mutSuccessMsgVocal = 'a',
+    super.queryKey = kSectionsKey,
+  });
 
   static final instance = Provider((ctx) {
     final AppDatabase db = AppDatabase.instance.of(ctx);
@@ -21,30 +26,15 @@ class SectionsVm extends TableVm {
     return SectionsVm(repository: sectionsRepository);
   });
 
-  MutationCommonParams<S> _params<S extends Function>(
-    BuildContext context, {
-    S? onSuccess,
-    S? onError,
-  }) => MutationCommonParams<S>(
-    context,
-    queryKey: kSectionsKey,
-    getStateManager: getStateManager,
-    successName: 'sección',
-    unauthPluralName: 'secciones',
-    successMsgVocal: 'a',
-    onSuccess: onSuccess,
-    onError: onError,
-  );
-
   SingleDeleteMutation createDeleteMutation(BuildContext context) {
     return createSingleDeleteMutation(
-      .fromCommonParams(_params(context), repository.deleteSection),
+      .fromCommonParams(mutParams(context), repository.deleteSection),
     );
   }
 
   SingleUpdateMutation createUpdateMutation(BuildContext context) {
     return createSingleUpdateMutation(
-      _params(
+      mutParams(
         context,
         onSuccess: (event, ctx) {
           final column = event.column.field;
