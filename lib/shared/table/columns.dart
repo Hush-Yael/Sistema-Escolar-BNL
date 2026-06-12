@@ -24,7 +24,6 @@ class TableColumn extends TrinaColumn {
     super.titleTextAlign,
     super.enableColumnDrag,
     super.enableDropToResize,
-    super.enableSorting,
     super.enableRowDrag,
     super.enableFilterMenuItem,
     super.enableAutoEditing,
@@ -34,6 +33,7 @@ class TableColumn extends TrinaColumn {
          title: column.title,
          field: column.name,
          enableEditingMode: editable,
+         enableSorting: false,
        );
 
   TableColumn.text(
