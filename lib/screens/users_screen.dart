@@ -71,16 +71,16 @@ class _Table extends HookWidget {
         );
       },
       getColumns: (context) => [
-        TableColumn.text(UsersTableColumns.name, editable: false),
+        .text(UsersTableColumns.name, editable: false),
 
-        TableColumn.text(UsersTableColumns.username, editable: false),
+        .text(UsersTableColumns.username, editable: false),
 
         TableColumn(
           UsersTableColumns.role,
           type: .select(UserRole.values.map((role) => role.label).toList()),
         ),
 
-        TableColumn.date(UsersTableColumns.lastLogin, editable: false),
+        .date(UsersTableColumns.lastLogin, editable: false),
       ],
     );
   }

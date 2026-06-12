@@ -3,20 +3,19 @@ import 'package:sistema_escolar_bnl/shared/table/constants.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/no_filter_field.dart';
 import 'package:trina_grid/trina_grid.dart';
 
-TrinaColumn actionsColumn({
+TableColumn actionsColumn({
   double width = 90,
   required Widget Function(TrinaColumnRendererContext)? renderer,
 }) {
   return .new(
-    title: 'Acciones',
-    field: kActionsColumnName,
+    TableSpecialCols.actions,
     titleTextAlign: .center,
     type: .custom(),
     width: width,
     minWidth: width,
     suppressedAutoSize: true,
+    editable: false,
     enableSorting: false,
-    enableEditingMode: false,
     enableColumnDrag: false,
     enableContextMenu: false,
     enableDropToResize: false,

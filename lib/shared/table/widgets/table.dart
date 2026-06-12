@@ -90,10 +90,11 @@ class QueryTable<Item extends dynamic, TError extends Exception>
 
             final cells = showIndexColumn || actionsRenderer != null
                 ? {
-                    if (showIndexColumn) kIndexColumnField: TrinaCell(),
+                    if (showIndexColumn)
+                      TableSpecialCols.Index.name: TrinaCell(),
 
                     if (actionsRenderer != null)
-                      kActionsColumnName: TrinaCell(),
+                      TableSpecialCols.actions.name: TrinaCell(),
 
                     ...getCells!(item),
                   }
@@ -156,6 +157,14 @@ class QueryTable<Item extends dynamic, TError extends Exception>
               );
             },
       createFooter: createFooter,
+      onValidationFailed: (e) {
+        toast(
+          context: context,
+          message: e.errorMessage,
+          destructive: true,
+          alignment: .bottomLeft,
+        );
+      },
       onBeforeActiveCellChange: _onBeforeActiveCellChange,
       onChanged: onChanged,
       onSelected: onSelected,

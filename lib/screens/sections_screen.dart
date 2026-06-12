@@ -4,7 +4,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/constants/sections_constants.dart';
 import 'package:sistema_escolar_bnl/constants/shared_constants.dart';
-import 'package:sistema_escolar_bnl/shared/table/columns.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/buttons.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/table.dart';
 import 'package:sistema_escolar_bnl/view_models/sections_vm.dart';
@@ -63,7 +62,7 @@ class ListGrades extends HookWidget {
         };
       },
       getColumns: (context) => [
-        TableColumn.text(
+        .text(
           SectionsTableColumns.grade,
           width: 150,
           autoSize: false,
@@ -71,7 +70,7 @@ class ListGrades extends HookWidget {
           editable: false,
         ),
 
-        TableColumn.text(
+        .text(
           SectionsTableColumns.letter,
           titleTextAlign: .center,
           textAlign: .center,
@@ -83,19 +82,19 @@ class ListGrades extends HookWidget {
           validator: (value, ctx) => SectionValidators.letter(value),
         ),
 
-        TableColumn.number(
+        .number(
           SectionsTableColumns.capacity,
           textAlign: .right,
           validator: (value, ctx) => SectionValidators.capacity(value),
         ),
 
-        TableColumn.number(
+        .number(
           SectionsTableColumns.studentsCount,
           textAlign: .right,
           editable: false,
         ),
 
-        TableColumn(
+        .new(
           SectionsTableColumns.enrollment,
           type: .custom(),
           editable: false,
