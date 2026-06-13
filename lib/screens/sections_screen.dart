@@ -90,6 +90,15 @@ class ListGrades extends HookWidget {
           SectionsTableColumns.studentsCount,
           textAlign: .right,
           editable: false,
+          renderer: (context) => Row(
+            mainAxisAlignment: .spaceBetween,
+            spacing: 10,
+            children: [
+              Text(context.cell.value.toString(), style: tabularNums),
+
+              SeeBtn(),
+            ],
+          ),
         ),
 
         .new(
