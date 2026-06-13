@@ -51,18 +51,10 @@ class SectionsVm extends TableVm {
           }
         },
       ),
-      cb: (column, id, newValue) {
-        if (column == SectionsTableColumns.letter.name) {
-          return repository.updateLetter(id, newValue);
-        }
-
-        if (column == SectionsTableColumns.capacity.name) {
-          return repository.updateCapacity(id, newValue);
-        }
-
-        throw ErrorDescription('La columna $column no es editable');
-      },
-      getValue: (event, ctx) => event.value,
+      cb: (column, id, dynamic newValue) =>
+          column == SectionsTableColumns.letter.name
+          ? repository.patch<String>(column, id, newValue)
+          : repository.patch<int>(column, id, newValue),
     );
   }
 }

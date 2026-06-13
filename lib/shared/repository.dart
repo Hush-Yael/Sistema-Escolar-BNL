@@ -4,6 +4,7 @@ import 'package:drift/native.dart';
 import 'package:sistema_escolar_bnl/core/db/db.dart';
 import 'package:sistema_escolar_bnl/core/utils/fn.dart';
 import 'package:meta/meta.dart';
+import 'package:sistema_escolar_bnl/shared/table/columns.dart';
 import 'package:sistema_escolar_bnl/types/shared_types.dart';
 
 /// All the services used in the app must have a db dependency
@@ -174,6 +175,28 @@ class Repository<TT extends Table, DC extends DataClass> {
       final (expression, order) = term!;
       return (dynamic _) => OrderingTerm(expression: expression, mode: order);
     }).toList();
+  }
+
+  @protected
+  Future<int> patchSingle<T>(
+    int id, {
+    required T newValue,
+    required CompanionWithId companion,
+    required List<ColumnsEnum> fields,
+    required String field,
+    String? uniqueFailMsg,
+  }) async {
+    final columnEnum = fields.byName(field);
+
+    return updateSingle(
+      id,
+      companion,
+      Function.apply(companion, null, {Symbol(field): Value(newValue)}),
+      defaultFailMsg: switch (columnEnum) {
+        _ => 'No se pudo actualizar el campo ${columnEnum.title}',
+      },
+      uniqueFailMsg: uniqueFailMsg,
+    );
   }
 }
 

@@ -72,4 +72,17 @@ class SectionsRepo extends Repository {
     companion(capacity: Value(capacity)),
     defaultFailMsg: 'No se pudo actualizar la sección',
   );
+
+  Future<int> patch<T>(String column, int id, T newValue) async {
+    return await patchSingle(
+      id,
+      field: column,
+      fields: SectionsTableColumns.values,
+      newValue: newValue,
+      companion: companion,
+      uniqueFailMsg: column == SectionsTableColumns.letter.name
+          ? 'Este grado ya tiene una sección con esa letra'
+          : null,
+    );
+  }
 }
