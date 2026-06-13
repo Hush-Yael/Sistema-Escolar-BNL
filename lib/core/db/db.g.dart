@@ -1203,6 +1203,47 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _indigenousMeta = const VerificationMeta(
+    'indigenous',
+  );
+  @override
+  late final GeneratedColumn<bool> indigenous = GeneratedColumn<bool>(
+    'indigenous',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("indigenous" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _disfunctionMeta = const VerificationMeta(
+    'disfunction',
+  );
+  @override
+  late final GeneratedColumn<String> disfunction = GeneratedColumn<String>(
+    'disfunction',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _hasCanaimaMeta = const VerificationMeta(
+    'hasCanaima',
+  );
+  @override
+  late final GeneratedColumn<bool> hasCanaima = GeneratedColumn<bool>(
+    'hasCanaima',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("hasCanaima" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     cedula,
@@ -1214,6 +1255,9 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
     id,
     birthDate,
     birthPlace,
+    indigenous,
+    disfunction,
+    hasCanaima,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1282,6 +1326,27 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
     } else if (isInserting) {
       context.missing(_birthPlaceMeta);
     }
+    if (data.containsKey('indigenous')) {
+      context.handle(
+        _indigenousMeta,
+        indigenous.isAcceptableOrUnknown(data['indigenous']!, _indigenousMeta),
+      );
+    }
+    if (data.containsKey('disfunction')) {
+      context.handle(
+        _disfunctionMeta,
+        disfunction.isAcceptableOrUnknown(
+          data['disfunction']!,
+          _disfunctionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('hasCanaima')) {
+      context.handle(
+        _hasCanaimaMeta,
+        hasCanaima.isAcceptableOrUnknown(data['hasCanaima']!, _hasCanaimaMeta),
+      );
+    }
     return context;
   }
 
@@ -1329,6 +1394,18 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
         DriftSqlType.string,
         data['${effectivePrefix}birthPlace'],
       )!,
+      indigenous: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}indigenous'],
+      )!,
+      disfunction: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}disfunction'],
+      ),
+      hasCanaima: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}hasCanaima'],
+      )!,
     );
   }
 
@@ -1351,6 +1428,9 @@ class Student extends DataClass implements Insertable<Student> {
   final int id;
   final DateTime birthDate;
   final String birthPlace;
+  final bool indigenous;
+  final String? disfunction;
+  final bool hasCanaima;
   const Student({
     required this.cedula,
     required this.names,
@@ -1361,6 +1441,9 @@ class Student extends DataClass implements Insertable<Student> {
     required this.id,
     required this.birthDate,
     required this.birthPlace,
+    required this.indigenous,
+    this.disfunction,
+    required this.hasCanaima,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1376,6 +1459,11 @@ class Student extends DataClass implements Insertable<Student> {
     map['id'] = Variable<int>(id);
     map['birthDate'] = Variable<DateTime>(birthDate);
     map['birthPlace'] = Variable<String>(birthPlace);
+    map['indigenous'] = Variable<bool>(indigenous);
+    if (!nullToAbsent || disfunction != null) {
+      map['disfunction'] = Variable<String>(disfunction);
+    }
+    map['hasCanaima'] = Variable<bool>(hasCanaima);
     return map;
   }
 
@@ -1390,6 +1478,11 @@ class Student extends DataClass implements Insertable<Student> {
       id: Value(id),
       birthDate: Value(birthDate),
       birthPlace: Value(birthPlace),
+      indigenous: Value(indigenous),
+      disfunction: disfunction == null && nullToAbsent
+          ? const Value.absent()
+          : Value(disfunction),
+      hasCanaima: Value(hasCanaima),
     );
   }
 
@@ -1410,6 +1503,9 @@ class Student extends DataClass implements Insertable<Student> {
       id: serializer.fromJson<int>(json['id']),
       birthDate: serializer.fromJson<DateTime>(json['birthDate']),
       birthPlace: serializer.fromJson<String>(json['birthPlace']),
+      indigenous: serializer.fromJson<bool>(json['indigenous']),
+      disfunction: serializer.fromJson<String?>(json['disfunction']),
+      hasCanaima: serializer.fromJson<bool>(json['hasCanaima']),
     );
   }
   @override
@@ -1427,6 +1523,9 @@ class Student extends DataClass implements Insertable<Student> {
       'id': serializer.toJson<int>(id),
       'birthDate': serializer.toJson<DateTime>(birthDate),
       'birthPlace': serializer.toJson<String>(birthPlace),
+      'indigenous': serializer.toJson<bool>(indigenous),
+      'disfunction': serializer.toJson<String?>(disfunction),
+      'hasCanaima': serializer.toJson<bool>(hasCanaima),
     };
   }
 
@@ -1440,6 +1539,9 @@ class Student extends DataClass implements Insertable<Student> {
     int? id,
     DateTime? birthDate,
     String? birthPlace,
+    bool? indigenous,
+    Value<String?> disfunction = const Value.absent(),
+    bool? hasCanaima,
   }) => Student(
     cedula: cedula ?? this.cedula,
     names: names ?? this.names,
@@ -1450,6 +1552,9 @@ class Student extends DataClass implements Insertable<Student> {
     id: id ?? this.id,
     birthDate: birthDate ?? this.birthDate,
     birthPlace: birthPlace ?? this.birthPlace,
+    indigenous: indigenous ?? this.indigenous,
+    disfunction: disfunction.present ? disfunction.value : this.disfunction,
+    hasCanaima: hasCanaima ?? this.hasCanaima,
   );
   Student copyWithCompanion(StudentsCompanion data) {
     return Student(
@@ -1464,6 +1569,15 @@ class Student extends DataClass implements Insertable<Student> {
       birthPlace: data.birthPlace.present
           ? data.birthPlace.value
           : this.birthPlace,
+      indigenous: data.indigenous.present
+          ? data.indigenous.value
+          : this.indigenous,
+      disfunction: data.disfunction.present
+          ? data.disfunction.value
+          : this.disfunction,
+      hasCanaima: data.hasCanaima.present
+          ? data.hasCanaima.value
+          : this.hasCanaima,
     );
   }
 
@@ -1478,7 +1592,10 @@ class Student extends DataClass implements Insertable<Student> {
           ..write('updatedAt: $updatedAt, ')
           ..write('id: $id, ')
           ..write('birthDate: $birthDate, ')
-          ..write('birthPlace: $birthPlace')
+          ..write('birthPlace: $birthPlace, ')
+          ..write('indigenous: $indigenous, ')
+          ..write('disfunction: $disfunction, ')
+          ..write('hasCanaima: $hasCanaima')
           ..write(')'))
         .toString();
   }
@@ -1494,6 +1611,9 @@ class Student extends DataClass implements Insertable<Student> {
     id,
     birthDate,
     birthPlace,
+    indigenous,
+    disfunction,
+    hasCanaima,
   );
   @override
   bool operator ==(Object other) =>
@@ -1507,7 +1627,10 @@ class Student extends DataClass implements Insertable<Student> {
           other.updatedAt == this.updatedAt &&
           other.id == this.id &&
           other.birthDate == this.birthDate &&
-          other.birthPlace == this.birthPlace);
+          other.birthPlace == this.birthPlace &&
+          other.indigenous == this.indigenous &&
+          other.disfunction == this.disfunction &&
+          other.hasCanaima == this.hasCanaima);
 }
 
 class StudentsCompanion extends UpdateCompanion<Student> {
@@ -1520,6 +1643,9 @@ class StudentsCompanion extends UpdateCompanion<Student> {
   final Value<int> id;
   final Value<DateTime> birthDate;
   final Value<String> birthPlace;
+  final Value<bool> indigenous;
+  final Value<String?> disfunction;
+  final Value<bool> hasCanaima;
   const StudentsCompanion({
     this.cedula = const Value.absent(),
     this.names = const Value.absent(),
@@ -1530,6 +1656,9 @@ class StudentsCompanion extends UpdateCompanion<Student> {
     this.id = const Value.absent(),
     this.birthDate = const Value.absent(),
     this.birthPlace = const Value.absent(),
+    this.indigenous = const Value.absent(),
+    this.disfunction = const Value.absent(),
+    this.hasCanaima = const Value.absent(),
   });
   StudentsCompanion.insert({
     required int cedula,
@@ -1541,6 +1670,9 @@ class StudentsCompanion extends UpdateCompanion<Student> {
     this.id = const Value.absent(),
     required DateTime birthDate,
     required String birthPlace,
+    this.indigenous = const Value.absent(),
+    this.disfunction = const Value.absent(),
+    this.hasCanaima = const Value.absent(),
   }) : cedula = Value(cedula),
        names = Value(names),
        lastNames = Value(lastNames),
@@ -1557,6 +1689,9 @@ class StudentsCompanion extends UpdateCompanion<Student> {
     Expression<int>? id,
     Expression<DateTime>? birthDate,
     Expression<String>? birthPlace,
+    Expression<bool>? indigenous,
+    Expression<String>? disfunction,
+    Expression<bool>? hasCanaima,
   }) {
     return RawValuesInsertable({
       if (cedula != null) 'cedula': cedula,
@@ -1568,6 +1703,9 @@ class StudentsCompanion extends UpdateCompanion<Student> {
       if (id != null) 'id': id,
       if (birthDate != null) 'birthDate': birthDate,
       if (birthPlace != null) 'birthPlace': birthPlace,
+      if (indigenous != null) 'indigenous': indigenous,
+      if (disfunction != null) 'disfunction': disfunction,
+      if (hasCanaima != null) 'hasCanaima': hasCanaima,
     });
   }
 
@@ -1581,6 +1719,9 @@ class StudentsCompanion extends UpdateCompanion<Student> {
     Value<int>? id,
     Value<DateTime>? birthDate,
     Value<String>? birthPlace,
+    Value<bool>? indigenous,
+    Value<String?>? disfunction,
+    Value<bool>? hasCanaima,
   }) {
     return StudentsCompanion(
       cedula: cedula ?? this.cedula,
@@ -1592,6 +1733,9 @@ class StudentsCompanion extends UpdateCompanion<Student> {
       id: id ?? this.id,
       birthDate: birthDate ?? this.birthDate,
       birthPlace: birthPlace ?? this.birthPlace,
+      indigenous: indigenous ?? this.indigenous,
+      disfunction: disfunction ?? this.disfunction,
+      hasCanaima: hasCanaima ?? this.hasCanaima,
     );
   }
 
@@ -1627,6 +1771,15 @@ class StudentsCompanion extends UpdateCompanion<Student> {
     if (birthPlace.present) {
       map['birthPlace'] = Variable<String>(birthPlace.value);
     }
+    if (indigenous.present) {
+      map['indigenous'] = Variable<bool>(indigenous.value);
+    }
+    if (disfunction.present) {
+      map['disfunction'] = Variable<String>(disfunction.value);
+    }
+    if (hasCanaima.present) {
+      map['hasCanaima'] = Variable<bool>(hasCanaima.value);
+    }
     return map;
   }
 
@@ -1641,7 +1794,10 @@ class StudentsCompanion extends UpdateCompanion<Student> {
           ..write('updatedAt: $updatedAt, ')
           ..write('id: $id, ')
           ..write('birthDate: $birthDate, ')
-          ..write('birthPlace: $birthPlace')
+          ..write('birthPlace: $birthPlace, ')
+          ..write('indigenous: $indigenous, ')
+          ..write('disfunction: $disfunction, ')
+          ..write('hasCanaima: $hasCanaima')
           ..write(')'))
         .toString();
   }
@@ -1770,6 +1926,15 @@ class $EnrollmentsTable extends Enrollments
     requiredDuringInsert: true,
   );
   @override
+  late final GeneratedColumnWithTypeConverter<Condition, String> condition =
+      GeneratedColumn<String>(
+        'condition',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      ).withConverter<Condition>($EnrollmentsTable.$convertercondition);
+  @override
   List<GeneratedColumn> get $columns => [
     createdAt,
     updatedAt,
@@ -1781,6 +1946,7 @@ class $EnrollmentsTable extends Enrollments
     shoeSize,
     pantSize,
     shirtSize,
+    condition,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1914,6 +2080,12 @@ class $EnrollmentsTable extends Enrollments
         DriftSqlType.int,
         data['${effectivePrefix}shirtSize'],
       )!,
+      condition: $EnrollmentsTable.$convertercondition.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}condition'],
+        )!,
+      ),
     );
   }
 
@@ -1921,6 +2093,9 @@ class $EnrollmentsTable extends Enrollments
   $EnrollmentsTable createAlias(String alias) {
     return $EnrollmentsTable(attachedDatabase, alias);
   }
+
+  static JsonTypeConverter2<Condition, String, String> $convertercondition =
+      const EnumNameConverter<Condition>(Condition.values);
 }
 
 class Enrollment extends DataClass implements Insertable<Enrollment> {
@@ -1934,6 +2109,7 @@ class Enrollment extends DataClass implements Insertable<Enrollment> {
   final int shoeSize;
   final int pantSize;
   final int shirtSize;
+  final Condition condition;
   const Enrollment({
     required this.createdAt,
     required this.updatedAt,
@@ -1945,6 +2121,7 @@ class Enrollment extends DataClass implements Insertable<Enrollment> {
     required this.shoeSize,
     required this.pantSize,
     required this.shirtSize,
+    required this.condition,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1959,6 +2136,11 @@ class Enrollment extends DataClass implements Insertable<Enrollment> {
     map['shoeSize'] = Variable<int>(shoeSize);
     map['pantSize'] = Variable<int>(pantSize);
     map['shirtSize'] = Variable<int>(shirtSize);
+    {
+      map['condition'] = Variable<String>(
+        $EnrollmentsTable.$convertercondition.toSql(condition),
+      );
+    }
     return map;
   }
 
@@ -1974,6 +2156,7 @@ class Enrollment extends DataClass implements Insertable<Enrollment> {
       shoeSize: Value(shoeSize),
       pantSize: Value(pantSize),
       shirtSize: Value(shirtSize),
+      condition: Value(condition),
     );
   }
 
@@ -1993,6 +2176,9 @@ class Enrollment extends DataClass implements Insertable<Enrollment> {
       shoeSize: serializer.fromJson<int>(json['shoeSize']),
       pantSize: serializer.fromJson<int>(json['pantSize']),
       shirtSize: serializer.fromJson<int>(json['shirtSize']),
+      condition: $EnrollmentsTable.$convertercondition.fromJson(
+        serializer.fromJson<String>(json['condition']),
+      ),
     );
   }
   @override
@@ -2009,6 +2195,9 @@ class Enrollment extends DataClass implements Insertable<Enrollment> {
       'shoeSize': serializer.toJson<int>(shoeSize),
       'pantSize': serializer.toJson<int>(pantSize),
       'shirtSize': serializer.toJson<int>(shirtSize),
+      'condition': serializer.toJson<String>(
+        $EnrollmentsTable.$convertercondition.toJson(condition),
+      ),
     };
   }
 
@@ -2023,6 +2212,7 @@ class Enrollment extends DataClass implements Insertable<Enrollment> {
     int? shoeSize,
     int? pantSize,
     int? shirtSize,
+    Condition? condition,
   }) => Enrollment(
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
@@ -2034,6 +2224,7 @@ class Enrollment extends DataClass implements Insertable<Enrollment> {
     shoeSize: shoeSize ?? this.shoeSize,
     pantSize: pantSize ?? this.pantSize,
     shirtSize: shirtSize ?? this.shirtSize,
+    condition: condition ?? this.condition,
   );
   Enrollment copyWithCompanion(EnrollmentsCompanion data) {
     return Enrollment(
@@ -2047,6 +2238,7 @@ class Enrollment extends DataClass implements Insertable<Enrollment> {
       shoeSize: data.shoeSize.present ? data.shoeSize.value : this.shoeSize,
       pantSize: data.pantSize.present ? data.pantSize.value : this.pantSize,
       shirtSize: data.shirtSize.present ? data.shirtSize.value : this.shirtSize,
+      condition: data.condition.present ? data.condition.value : this.condition,
     );
   }
 
@@ -2062,7 +2254,8 @@ class Enrollment extends DataClass implements Insertable<Enrollment> {
           ..write('height: $height, ')
           ..write('shoeSize: $shoeSize, ')
           ..write('pantSize: $pantSize, ')
-          ..write('shirtSize: $shirtSize')
+          ..write('shirtSize: $shirtSize, ')
+          ..write('condition: $condition')
           ..write(')'))
         .toString();
   }
@@ -2079,6 +2272,7 @@ class Enrollment extends DataClass implements Insertable<Enrollment> {
     shoeSize,
     pantSize,
     shirtSize,
+    condition,
   );
   @override
   bool operator ==(Object other) =>
@@ -2093,7 +2287,8 @@ class Enrollment extends DataClass implements Insertable<Enrollment> {
           other.height == this.height &&
           other.shoeSize == this.shoeSize &&
           other.pantSize == this.pantSize &&
-          other.shirtSize == this.shirtSize);
+          other.shirtSize == this.shirtSize &&
+          other.condition == this.condition);
 }
 
 class EnrollmentsCompanion extends UpdateCompanion<Enrollment> {
@@ -2107,6 +2302,7 @@ class EnrollmentsCompanion extends UpdateCompanion<Enrollment> {
   final Value<int> shoeSize;
   final Value<int> pantSize;
   final Value<int> shirtSize;
+  final Value<Condition> condition;
   const EnrollmentsCompanion({
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
@@ -2118,6 +2314,7 @@ class EnrollmentsCompanion extends UpdateCompanion<Enrollment> {
     this.shoeSize = const Value.absent(),
     this.pantSize = const Value.absent(),
     this.shirtSize = const Value.absent(),
+    this.condition = const Value.absent(),
   });
   EnrollmentsCompanion.insert({
     this.createdAt = const Value.absent(),
@@ -2130,13 +2327,15 @@ class EnrollmentsCompanion extends UpdateCompanion<Enrollment> {
     required int shoeSize,
     required int pantSize,
     required int shirtSize,
+    required Condition condition,
   }) : studentId = Value(studentId),
        sectionId = Value(sectionId),
        weight = Value(weight),
        height = Value(height),
        shoeSize = Value(shoeSize),
        pantSize = Value(pantSize),
-       shirtSize = Value(shirtSize);
+       shirtSize = Value(shirtSize),
+       condition = Value(condition);
   static Insertable<Enrollment> custom({
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
@@ -2148,6 +2347,7 @@ class EnrollmentsCompanion extends UpdateCompanion<Enrollment> {
     Expression<int>? shoeSize,
     Expression<int>? pantSize,
     Expression<int>? shirtSize,
+    Expression<String>? condition,
   }) {
     return RawValuesInsertable({
       if (createdAt != null) 'createdAt': createdAt,
@@ -2160,6 +2360,7 @@ class EnrollmentsCompanion extends UpdateCompanion<Enrollment> {
       if (shoeSize != null) 'shoeSize': shoeSize,
       if (pantSize != null) 'pantSize': pantSize,
       if (shirtSize != null) 'shirtSize': shirtSize,
+      if (condition != null) 'condition': condition,
     });
   }
 
@@ -2174,6 +2375,7 @@ class EnrollmentsCompanion extends UpdateCompanion<Enrollment> {
     Value<int>? shoeSize,
     Value<int>? pantSize,
     Value<int>? shirtSize,
+    Value<Condition>? condition,
   }) {
     return EnrollmentsCompanion(
       createdAt: createdAt ?? this.createdAt,
@@ -2186,6 +2388,7 @@ class EnrollmentsCompanion extends UpdateCompanion<Enrollment> {
       shoeSize: shoeSize ?? this.shoeSize,
       pantSize: pantSize ?? this.pantSize,
       shirtSize: shirtSize ?? this.shirtSize,
+      condition: condition ?? this.condition,
     );
   }
 
@@ -2222,6 +2425,11 @@ class EnrollmentsCompanion extends UpdateCompanion<Enrollment> {
     if (shirtSize.present) {
       map['shirtSize'] = Variable<int>(shirtSize.value);
     }
+    if (condition.present) {
+      map['condition'] = Variable<String>(
+        $EnrollmentsTable.$convertercondition.toSql(condition.value),
+      );
+    }
     return map;
   }
 
@@ -2237,7 +2445,8 @@ class EnrollmentsCompanion extends UpdateCompanion<Enrollment> {
           ..write('height: $height, ')
           ..write('shoeSize: $shoeSize, ')
           ..write('pantSize: $pantSize, ')
-          ..write('shirtSize: $shirtSize')
+          ..write('shirtSize: $shirtSize, ')
+          ..write('condition: $condition')
           ..write(')'))
         .toString();
   }
@@ -4026,6 +4235,9 @@ typedef $$StudentsTableCreateCompanionBuilder =
       Value<int> id,
       required DateTime birthDate,
       required String birthPlace,
+      Value<bool> indigenous,
+      Value<String?> disfunction,
+      Value<bool> hasCanaima,
     });
 typedef $$StudentsTableUpdateCompanionBuilder =
     StudentsCompanion Function({
@@ -4038,6 +4250,9 @@ typedef $$StudentsTableUpdateCompanionBuilder =
       Value<int> id,
       Value<DateTime> birthDate,
       Value<String> birthPlace,
+      Value<bool> indigenous,
+      Value<String?> disfunction,
+      Value<bool> hasCanaima,
     });
 
 final class $$StudentsTableReferences
@@ -4146,6 +4361,21 @@ class $$StudentsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<bool> get indigenous => $composableBuilder(
+    column: $table.indigenous,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get disfunction => $composableBuilder(
+    column: $table.disfunction,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get hasCanaima => $composableBuilder(
+    column: $table.hasCanaima,
+    builder: (column) => ColumnFilters(column),
+  );
+
   Expression<bool> enrollmentsRefs(
     Expression<bool> Function($$EnrollmentsTableFilterComposer f) f,
   ) {
@@ -4251,6 +4481,21 @@ class $$StudentsTableOrderingComposer
     column: $table.birthPlace,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<bool> get indigenous => $composableBuilder(
+    column: $table.indigenous,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get disfunction => $composableBuilder(
+    column: $table.disfunction,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get hasCanaima => $composableBuilder(
+    column: $table.hasCanaima,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$StudentsTableAnnotationComposer
@@ -4288,6 +4533,21 @@ class $$StudentsTableAnnotationComposer
 
   GeneratedColumn<String> get birthPlace => $composableBuilder(
     column: $table.birthPlace,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get indigenous => $composableBuilder(
+    column: $table.indigenous,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get disfunction => $composableBuilder(
+    column: $table.disfunction,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get hasCanaima => $composableBuilder(
+    column: $table.hasCanaima,
     builder: (column) => column,
   );
 
@@ -4384,6 +4644,9 @@ class $$StudentsTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<DateTime> birthDate = const Value.absent(),
                 Value<String> birthPlace = const Value.absent(),
+                Value<bool> indigenous = const Value.absent(),
+                Value<String?> disfunction = const Value.absent(),
+                Value<bool> hasCanaima = const Value.absent(),
               }) => StudentsCompanion(
                 cedula: cedula,
                 names: names,
@@ -4394,6 +4657,9 @@ class $$StudentsTableTableManager
                 id: id,
                 birthDate: birthDate,
                 birthPlace: birthPlace,
+                indigenous: indigenous,
+                disfunction: disfunction,
+                hasCanaima: hasCanaima,
               ),
           createCompanionCallback:
               ({
@@ -4406,6 +4672,9 @@ class $$StudentsTableTableManager
                 Value<int> id = const Value.absent(),
                 required DateTime birthDate,
                 required String birthPlace,
+                Value<bool> indigenous = const Value.absent(),
+                Value<String?> disfunction = const Value.absent(),
+                Value<bool> hasCanaima = const Value.absent(),
               }) => StudentsCompanion.insert(
                 cedula: cedula,
                 names: names,
@@ -4416,6 +4685,9 @@ class $$StudentsTableTableManager
                 id: id,
                 birthDate: birthDate,
                 birthPlace: birthPlace,
+                indigenous: indigenous,
+                disfunction: disfunction,
+                hasCanaima: hasCanaima,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -4515,6 +4787,7 @@ typedef $$EnrollmentsTableCreateCompanionBuilder =
       required int shoeSize,
       required int pantSize,
       required int shirtSize,
+      required Condition condition,
     });
 typedef $$EnrollmentsTableUpdateCompanionBuilder =
     EnrollmentsCompanion Function({
@@ -4528,6 +4801,7 @@ typedef $$EnrollmentsTableUpdateCompanionBuilder =
       Value<int> shoeSize,
       Value<int> pantSize,
       Value<int> shirtSize,
+      Value<Condition> condition,
     });
 
 final class $$EnrollmentsTableReferences
@@ -4621,6 +4895,12 @@ class $$EnrollmentsTableFilterComposer
     column: $table.shirtSize,
     builder: (column) => ColumnFilters(column),
   );
+
+  ColumnWithTypeConverterFilters<Condition, Condition, String> get condition =>
+      $composableBuilder(
+        column: $table.condition,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
 
   $$StudentsTableFilterComposer get studentId {
     final $$StudentsTableFilterComposer composer = $composerBuilder(
@@ -4718,6 +4998,11 @@ class $$EnrollmentsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get condition => $composableBuilder(
+    column: $table.condition,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$StudentsTableOrderingComposer get studentId {
     final $$StudentsTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -4797,6 +5082,9 @@ class $$EnrollmentsTableAnnotationComposer
 
   GeneratedColumn<int> get shirtSize =>
       $composableBuilder(column: $table.shirtSize, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<Condition, String> get condition =>
+      $composableBuilder(column: $table.condition, builder: (column) => column);
 
   $$StudentsTableAnnotationComposer get studentId {
     final $$StudentsTableAnnotationComposer composer = $composerBuilder(
@@ -4883,6 +5171,7 @@ class $$EnrollmentsTableTableManager
                 Value<int> shoeSize = const Value.absent(),
                 Value<int> pantSize = const Value.absent(),
                 Value<int> shirtSize = const Value.absent(),
+                Value<Condition> condition = const Value.absent(),
               }) => EnrollmentsCompanion(
                 createdAt: createdAt,
                 updatedAt: updatedAt,
@@ -4894,6 +5183,7 @@ class $$EnrollmentsTableTableManager
                 shoeSize: shoeSize,
                 pantSize: pantSize,
                 shirtSize: shirtSize,
+                condition: condition,
               ),
           createCompanionCallback:
               ({
@@ -4907,6 +5197,7 @@ class $$EnrollmentsTableTableManager
                 required int shoeSize,
                 required int pantSize,
                 required int shirtSize,
+                required Condition condition,
               }) => EnrollmentsCompanion.insert(
                 createdAt: createdAt,
                 updatedAt: updatedAt,
@@ -4918,6 +5209,7 @@ class $$EnrollmentsTableTableManager
                 shoeSize: shoeSize,
                 pantSize: pantSize,
                 shirtSize: shirtSize,
+                condition: condition,
               ),
           withReferenceMapper: (p0) => p0
               .map(
