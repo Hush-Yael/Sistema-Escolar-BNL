@@ -9,6 +9,7 @@ class TableFetchError extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = ShadTheme.of(context);
+    print(error?.stackTrace);
 
     return Container(
       decoration: BoxDecoration(
