@@ -43,7 +43,8 @@ class TableColumn extends TrinaColumn {
          frozen: SharedPrefsService.getColPinState(column.name),
          hide: SharedPrefsService.getColHideState(column.name),
          validator: validate != null
-             ? (value, context) => validate(value)
+             ? (value, context) =>
+                   validate(value is! String ? value.toString() : value)
              : null,
        );
 
