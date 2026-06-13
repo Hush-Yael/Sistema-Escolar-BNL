@@ -137,7 +137,7 @@ class QueryTable<Item extends dynamic, TError extends Exception>
       return null;
     }, [query, state]);
 
-    if (query.isError) {
+    if (!query.isRefetching && query.isError) {
       return TableFetchError(
         query.error,
         'Error al cargar $pluralModelArticle $pluralModelName',
