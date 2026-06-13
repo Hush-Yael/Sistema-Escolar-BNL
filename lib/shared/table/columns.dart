@@ -9,11 +9,12 @@ abstract class ColumnsEnum implements Enum {
   final String title;
 }
 
-class TableColumn extends TrinaColumn {
+class TableColumn<Item> extends TrinaColumn {
   final ColumnsEnum column;
   bool? editable;
   bool? sortable;
   Validator? validate;
+  final dynamic Function(Item item) getCellValue;
 
   TableColumn(
     this.column, {
@@ -35,6 +36,7 @@ class TableColumn extends TrinaColumn {
     this.editable = true,
     this.sortable = true,
     this.validate,
+    required this.getCellValue,
   }) : super(
          title: column.title,
          field: column.name,
@@ -47,6 +49,8 @@ class TableColumn extends TrinaColumn {
                    validate(value is! String ? value.toString() : value)
              : null,
        );
+
+  TrinaCell getCell(Item item) => TrinaCell(value: getCellValue(item));
 
   TableColumn.text(
     ColumnsEnum column, {
@@ -63,6 +67,7 @@ class TableColumn extends TrinaColumn {
     bool enableColumnDrag = true,
     bool enableDropToResize = true,
     Validator validate,
+    required String Function(Item item) getCellValue,
   }) : this(
          column,
          type: .text(),
@@ -79,6 +84,7 @@ class TableColumn extends TrinaColumn {
          enableColumnDrag: enableColumnDrag,
          enableDropToResize: enableDropToResize,
          validate: validate,
+         getCellValue: getCellValue,
        );
 
   TableColumn.number(
@@ -91,6 +97,7 @@ class TableColumn extends TrinaColumn {
     bool autoSize = true,
     TrinaColumnTextAlign textAlign = TrinaColumnTextAlign.start,
     Validator? validate,
+    required num Function(Item item) getCellValue,
   }) : this(
          column,
          type: .number(),
@@ -102,6 +109,7 @@ class TableColumn extends TrinaColumn {
          width: width,
          suppressedAutoSize: !autoSize,
          validate: validate,
+         getCellValue: getCellValue,
        );
 
   TableColumn.date(
@@ -114,6 +122,7 @@ class TableColumn extends TrinaColumn {
     bool autoSize = true,
     TrinaColumnTextAlign textAlign = TrinaColumnTextAlign.start,
     Validator? validate,
+    required DateTime? Function(Item item) getCellValue,
   }) : this(
          column,
          type: formattedDateColumnType,

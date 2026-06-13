@@ -8,9 +8,9 @@ import 'package:sistema_escolar_bnl/shared/table/columns.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/columns_btn/col_toggle_btns.dart';
 import 'package:trina_grid/trina_grid.dart';
 
-class ColumnsBtn extends HookWidget {
+class ColumnsBtn<ColumnItem> extends HookWidget {
   final TrinaGridStateManager state;
-  final List<TableColumn> columns;
+  final List<TableColumn<ColumnItem>> columns;
 
   const ColumnsBtn({super.key, required this.state, required this.columns});
 

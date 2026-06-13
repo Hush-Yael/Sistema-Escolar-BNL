@@ -4,12 +4,12 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/constants/representative_constants.dart';
 import 'package:sistema_escolar_bnl/constants/shared_constants.dart';
+import 'package:sistema_escolar_bnl/models/representative_models.dart';
 import 'package:sistema_escolar_bnl/screens/representatives/widgets/representative_form.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/buttons.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/table.dart';
 import 'package:sistema_escolar_bnl/view_models/representative_form_vm.dart';
 import 'package:sistema_escolar_bnl/view_models/representatives_vm.dart';
-import 'package:trina_grid/trina_grid.dart';
 
 class RepresentativesScreen extends StatelessWidget {
   const RepresentativesScreen({super.key});
@@ -35,7 +35,7 @@ class _Table extends HookWidget {
 
     final format = NumberFormat.decimalPattern();
 
-    return QueryTable(
+    return QueryTable<RepresentativeWithDetails, Exception>(
       queryKey: kRepresentativesKey,
       queryFn: vm.repository.getRepresentatives,
       setStateManager: vm.setStateManager,
@@ -55,44 +55,35 @@ class _Table extends HookWidget {
           ),
         );
       },
-      getCells: (item) => {
-        RepresentativesTableColumns.cedula.name: TrinaCell(value: item.cedula),
-
-        RepresentativesTableColumns.names.name: TrinaCell(value: item.names),
-
-        RepresentativesTableColumns.lastNames.name: TrinaCell(
-          value: item.lastNames,
-        ),
-
-        RepresentativesTableColumns.phone.name: TrinaCell(value: item.phone),
-
-        RepresentativesTableColumns.studentsCount.name: TrinaCell(
-          value: item.studentsCount,
-        ),
-
-        RepresentativesTableColumns.address.name: TrinaCell(
-          value: item.address,
-        ),
-      },
       getColumns: (context) {
         return [
           .number(
             RepresentativesTableColumns.cedula,
             width: 100,
             autoSize: false,
+            validate: cedulaValidator,
+            getCellValue: (item) => item.cedula,
             renderer: (context) =>
                 Text(format.format(context.cell.value), style: tabularNums),
-            validate: cedulaValidator,
           ),
 
-          .text(RepresentativesTableColumns.names, validate: nameValidator),
+          .text(
+            RepresentativesTableColumns.names,
+            validate: nameValidator,
+            getCellValue: (item) => item.names,
+          ),
 
-          .text(RepresentativesTableColumns.lastNames, validate: nameValidator),
+          .text(
+            RepresentativesTableColumns.lastNames,
+            validate: nameValidator,
+            getCellValue: (item) => item.lastNames,
+          ),
 
           .text(
             RepresentativesTableColumns.phone,
-            renderer: (context) => Text(context.cell.value, style: tabularNums),
             validate: RepresentativeValidators.phone,
+            getCellValue: (item) => item.phone ?? '',
+            renderer: (context) => Text(context.cell.value, style: tabularNums),
           ),
 
           .number(
@@ -100,6 +91,7 @@ class _Table extends HookWidget {
             width: 140,
             autoSize: false,
             editable: false,
+            getCellValue: (item) => item.studentsCount,
             renderer: (context) => Row(
               mainAxisAlignment: .spaceBetween,
               spacing: 10,
@@ -111,7 +103,10 @@ class _Table extends HookWidget {
             ),
           ),
 
-          .text(RepresentativesTableColumns.address),
+          .text(
+            RepresentativesTableColumns.address,
+            getCellValue: (item) => item.address ?? '',
+          ),
         ];
       },
     );

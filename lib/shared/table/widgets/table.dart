@@ -29,7 +29,6 @@ class QueryTable<Item extends dynamic, TError extends Exception>
     required super.getColumns,
     required super.setStateManager,
     super.renderAddBtn,
-    super.getCells,
     super.getRow,
     super.createConfig,
     super.createFooter,
@@ -49,10 +48,7 @@ class QueryTable<Item extends dynamic, TError extends Exception>
     super.actionsRenderer,
     super.actionsWidth = 90,
     super.showIndexColumn = true,
-  }) : assert(
-         getCells != null || getRow != null,
-         'Either getCells or getRow must be provided',
-       );
+  });
 
   static final provider = Provider.withArgument(
     (_, QueryKey queryKey) => queryKey,
@@ -107,6 +103,13 @@ class QueryTable<Item extends dynamic, TError extends Exception>
           query.data!.map((item) {
             if (getRow != null) return getRow!(item);
 
+            final Map<String, TrinaCell> cellsMap = {
+              for (final col in columns)
+                if (col.field != TableSpecialCols.Index.name &&
+                    col.field != TableSpecialCols.actions.name)
+                  col.field: col.getCell(item),
+            };
+
             final cells = showIndexColumn || actionsRenderer != null
                 ? {
                     if (showIndexColumn)
@@ -115,9 +118,9 @@ class QueryTable<Item extends dynamic, TError extends Exception>
                     if (actionsRenderer != null)
                       TableSpecialCols.actions.name: TrinaCell(),
 
-                    ...getCells!(item),
+                    ...cellsMap,
                   }
-                : getCells!(item);
+                : cellsMap;
 
             return TrinaRow(metadata: {'id': item.id}, cells: cells);
           }).toList(),
@@ -179,7 +182,7 @@ class QueryTable<Item extends dynamic, TError extends Exception>
                   Row(
                     spacing: 10,
                     children: [
-                      ColumnsBtn(state: stateManager, columns: columns),
+                      ColumnsBtn<Item>(state: stateManager, columns: columns),
 
                       if (renderAddBtn != null) renderAddBtn!(),
                     ],

@@ -5,12 +5,12 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/constants/auth_constants.dart';
 import 'package:sistema_escolar_bnl/constants/users_constants.dart';
 import 'package:sistema_escolar_bnl/core/auth_state.dart';
+import 'package:sistema_escolar_bnl/core/db/db.dart';
 import 'package:sistema_escolar_bnl/core/utils/table_utils.dart';
 import 'package:sistema_escolar_bnl/shared/table/columns.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/buttons.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/table.dart';
 import 'package:sistema_escolar_bnl/view_models/users/users_vm.dart';
-import 'package:trina_grid/trina_grid.dart';
 
 class UsersScreen extends StatelessWidget {
   const UsersScreen({super.key});
@@ -33,20 +33,11 @@ class _Table extends HookWidget {
     final deleteMutation = vm.createDeleteMutation(context);
     final updateMutation = vm.createUpdateMutation(context);
 
-    return QueryTable(
+    return QueryTable<User, Exception>(
       queryKey: kUsersQueryKey,
       queryFn: vm.repository.getUsers,
       pluralModelArticle: 'los',
       pluralModelName: 'usuarios',
-      getCells: (user) => {
-        UsersTableColumns.name.name: TrinaCell(value: user.name),
-
-        UsersTableColumns.username.name: TrinaCell(value: user.username),
-
-        UsersTableColumns.role.name: TrinaCell(value: user.role.label),
-
-        UsersTableColumns.lastLogin.name: TrinaCell(value: user.lastLogin),
-      },
       setStateManager: vm.setStateManager,
       onBeforeActiveCellChange: (e) => e.newCell.row.$id != selfId,
       onChanged: updateMutation.mutate,
@@ -69,16 +60,29 @@ class _Table extends HookWidget {
         );
       },
       getColumns: (context) => [
-        .text(UsersTableColumns.name, editable: false),
+        .text(
+          UsersTableColumns.name,
+          editable: false,
+          getCellValue: (user) => user.name,
+        ),
 
-        .text(UsersTableColumns.username, editable: false),
+        .text(
+          UsersTableColumns.username,
+          editable: false,
+          getCellValue: (user) => user.username,
+        ),
 
         TableColumn(
           UsersTableColumns.role,
           type: .select(UserRole.values.map((role) => role.label).toList()),
+          getCellValue: (user) => user.role.label,
         ),
 
-        .date(UsersTableColumns.lastLogin, editable: false),
+        .date(
+          UsersTableColumns.lastLogin,
+          editable: false,
+          getCellValue: (user) => user.lastLogin,
+        ),
       ],
     );
   }

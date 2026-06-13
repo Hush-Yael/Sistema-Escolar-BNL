@@ -4,10 +4,10 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sistema_escolar_bnl/constants/sections_constants.dart';
 import 'package:sistema_escolar_bnl/constants/shared_constants.dart';
+import 'package:sistema_escolar_bnl/models/school_models.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/buttons.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/table.dart';
 import 'package:sistema_escolar_bnl/view_models/sections_vm.dart';
-import 'package:trina_grid/trina_grid.dart';
 
 class SectionsScreen extends HookWidget {
   const SectionsScreen({super.key});
@@ -32,41 +32,20 @@ class ListGrades extends HookWidget {
     final updateMutation = vm.createUpdateMutation(context);
     // final r = Random();
 
-    return QueryTable(
+    return QueryTable<SectionWithDetails, Exception>(
       queryKey: kSectionsKey,
       queryFn: vm.repository.getSections,
       setStateManager: vm.setStateManager,
       pluralModelArticle: 'las',
       pluralModelName: 'secciones',
       onChanged: updateMutation.mutate,
-      getCells: (section) {
-        // final studentCount = r.nextInt(section.capacity);
-        final studentCount = section.studentCount;
-
-        return {
-          SectionsTableColumns.grade.name: TrinaCell(value: section.gradeName),
-
-          SectionsTableColumns.letter.name: TrinaCell(value: section.letter),
-
-          SectionsTableColumns.capacity.name: TrinaCell(
-            value: section.capacity,
-          ),
-
-          SectionsTableColumns.studentsCount.name: TrinaCell(
-            value: studentCount,
-          ),
-
-          SectionsTableColumns.enrollment.name: TrinaCell(
-            value: section.capacity - studentCount,
-          ),
-        };
-      },
       getColumns: (context) => [
         .text(
           SectionsTableColumns.grade,
           width: 150,
           autoSize: false,
           editable: false,
+          getCellValue: (section) => section.gradeName,
         ),
 
         .text(
@@ -78,18 +57,21 @@ class ListGrades extends HookWidget {
           enableColumnDrag: false,
           enableDropToResize: false,
           validate: SectionValidators.letter,
+          getCellValue: (section) => section.letter,
         ),
 
         .number(
           SectionsTableColumns.capacity,
           textAlign: .right,
           validate: SectionValidators.capacity,
+          getCellValue: (section) => section.capacity,
         ),
 
         .number(
           SectionsTableColumns.studentsCount,
           textAlign: .right,
           editable: false,
+          getCellValue: (section) => section.studentCount,
           renderer: (context) => Row(
             mainAxisAlignment: .spaceBetween,
             spacing: 10,
@@ -107,6 +89,7 @@ class ListGrades extends HookWidget {
           editable: false,
           sortable: false,
           enableFilterMenuItem: false,
+          getCellValue: (section) => section.capacity - section.studentCount,
           renderer: (ctx) {
             final int left = ctx.cell.value;
             final capacity =

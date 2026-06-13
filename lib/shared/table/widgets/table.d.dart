@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:sistema_escolar_bnl/shared/mutations/single_delete.dart';
 import 'package:sistema_escolar_bnl/shared/table/columns.dart';
 import 'package:sistema_escolar_bnl/types/shared_types.dart';
 import 'package:trina_grid/trina_grid.dart';
@@ -14,9 +13,8 @@ abstract class IQueryTable<Item extends dynamic, TError extends Exception>
   final String pluralModelArticle;
   final Widget Function()? renderAddBtn;
 
-  final List<TableColumn> Function(BuildContext context) getColumns;
+  final List<TableColumn<Item>> Function(BuildContext context) getColumns;
   final TrinaRow Function(Item item)? getRow;
-  final Map<String, TrinaCell> Function(Item item)? getCells;
   final void Function(TrinaGridStateManager stateManager) setStateManager;
   final Widget Function(TrinaColumnRendererContext)? actionsRenderer;
   final double actionsWidth;
@@ -65,7 +63,6 @@ abstract class IQueryTable<Item extends dynamic, TError extends Exception>
     this.createFooter,
     this.renderAddBtn,
     this.getRow,
-    this.getCells,
     this.actionsRenderer,
     required this.actionsWidth,
     required this.showIndexColumn,

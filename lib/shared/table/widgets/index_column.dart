@@ -5,7 +5,7 @@ import 'package:sistema_escolar_bnl/shared/table/constants.dart';
 import 'package:sistema_escolar_bnl/shared/table/widgets/no_filter_field.dart';
 
 /// Returns a column that contains the index of the row, [listLength] is used to calculate the minimum width needed to fit longest number of the list length
-TableColumn indexColumn(int listLength) {
+TableColumn<T> indexColumn<T>(int listLength) {
   final span = TextSpan(text: listLength.toString());
   final painter = TextPainter(text: span, textDirection: .ltr, maxLines: 1);
 
@@ -24,6 +24,7 @@ TableColumn indexColumn(int listLength) {
     enableContextMenu: false,
     enableDropToResize: false,
     filterWidgetDelegate: noFilterField(),
+    getCellValue: (item) => throw UnimplementedError(),
     renderer: (rendererContext) {
       return Text(
         (rendererContext.rowIdx + 1).toString(),
