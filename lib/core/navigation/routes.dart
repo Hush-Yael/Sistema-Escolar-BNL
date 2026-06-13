@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sistema_escolar_bnl/screens/representatives/representatives_screen.dart';
 import 'package:sistema_escolar_bnl/screens/sections_screen.dart';
 import 'package:sistema_escolar_bnl/screens/users_screen.dart';
 
@@ -11,6 +12,7 @@ enum AppRoutes<View extends StatelessWidget Function()> {
   representatives(
     '/representatives',
     label: 'Representantes',
+    view: RepresentativesScreen.new,
     icon: Icons.supervised_user_circle,
   ),
 
