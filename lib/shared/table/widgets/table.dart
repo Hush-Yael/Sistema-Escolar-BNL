@@ -31,7 +31,6 @@ class QueryTable<Item extends dynamic, TError extends Exception>
     super.renderAddBtn,
     super.getCells,
     super.getRow,
-    super.deleteMutation,
     super.createConfig,
     super.createFooter,
     super.onLoaded,

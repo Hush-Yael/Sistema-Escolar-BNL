@@ -18,7 +18,6 @@ abstract class IQueryTable<Item extends dynamic, TError extends Exception>
   final TrinaRow Function(Item item)? getRow;
   final Map<String, TrinaCell> Function(Item item)? getCells;
   final void Function(TrinaGridStateManager stateManager) setStateManager;
-  final SingleDeleteMutation? deleteMutation;
   final Widget Function(TrinaColumnRendererContext)? actionsRenderer;
   final double actionsWidth;
   final bool showIndexColumn;
@@ -67,7 +66,6 @@ abstract class IQueryTable<Item extends dynamic, TError extends Exception>
     this.renderAddBtn,
     this.getRow,
     this.getCells,
-    this.deleteMutation,
     this.actionsRenderer,
     required this.actionsWidth,
     required this.showIndexColumn,

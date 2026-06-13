@@ -48,7 +48,6 @@ class _Table extends HookWidget {
         UsersTableColumns.lastLogin.name: TrinaCell(value: user.lastLogin),
       },
       setStateManager: vm.setStateManager,
-      deleteMutation: deleteMutation,
       onLoaded: (e) => e.stateManager.setShowColumnFilter(true),
       onBeforeActiveCellChange: (e) => e.newCell.row.$id != selfId,
       onChanged: updateMutation.mutate,
